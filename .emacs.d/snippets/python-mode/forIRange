@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: forIRange
+# key: fori
+# --
+for i in range(len(${1:iterable})):
+    $0

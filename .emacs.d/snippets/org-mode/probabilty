@@ -1,0 +1,4 @@
+# key: prob
+# name: probabilty
+# --
+\\mathbb\{P\}\(${1:item}\) $0

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: densidad
+# key: dens
+# --
+f_{\mathcal{ X }} (x) 

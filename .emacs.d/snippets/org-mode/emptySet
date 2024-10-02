@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: emptySet
+# key: void
+# --
+\\emptyset

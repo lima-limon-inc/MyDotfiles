@@ -1,0 +1,4 @@
+# key: sum
+# name: sum
+# --
+\\displaystyle\{\sum^{${1:arriba}}_{${2:abajo}}\}\} $0

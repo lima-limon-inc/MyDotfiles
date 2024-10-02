@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: distribucion
+# key: dist
+# --
+\mathbb{ F }_{\mathcal{ X } }(x)

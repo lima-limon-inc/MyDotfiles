@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: condicional
+# key: condDis
+# --
+p_{\mathcal{ Y } | \mathcal{ X } =x} (y)

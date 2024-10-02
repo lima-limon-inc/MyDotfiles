@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: latexLetter
+# key: >lal
+# --
+
+\$\{\\mathbb{${1:latex}\}\}\$ $0

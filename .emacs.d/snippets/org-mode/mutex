@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: mutex
+# key: mutex
+# --
+mutuamente excluyente $0
