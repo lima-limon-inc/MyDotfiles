@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: transpetri
+# key: transpetri
+# --
+
+${1:nombre} [shape=box, style=filled, fillcolor=black, xlabel = \"${1}\"] 

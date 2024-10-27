@@ -5,6 +5,30 @@
 	'personal
 	'work))
 
+(setq languages-used (list
+      'python
+      'c
+      'cpp
+      'rust
+      'go
+      'tex
+      )
+      )
+
+(defun check-lang-used (lang)
+  (when (member lang languages-used)
+    't
+    )
+  )
+
+;; Check if the current profile requires installation
+(defun install-for (lang)
+  (and
+   (when (equal fabri-profile 'work) 't) 
+   (check-lang-used lang)
+   )
+  )
+
 ;; Email address
 (setq user-full-name "Tomas Fabrizio Orsi")
 (setq user-mail-address
@@ -130,12 +154,6 @@
 (zone-when-idle 300)
 (setq zone-programs (remove 'zone-pgm-random-life zone-programs))
 
-;; Which key
-(use-package which-key
-  :config
-  (which-key-mode)
-  )
-
 ;; Byte compile warnings
 (setq byte-compile-warnings nil)
 
@@ -231,7 +249,7 @@
 ;;;Switch buffer
 (evil-leader/set-key "r" 'switch-to-buffer)
 ;;;Open the terminal
-(evil-leader/set-key "9" 'term)
+(evil-leader/set-key "9" 'eshell)
 ;;;Close tab
 (evil-leader/set-key "4" 'tab-bar-close-tab)
 
@@ -261,15 +279,6 @@
 (define-key evil-normal-state-map (kbd "<left>") 'nothing-move)
 
 
-;; Drag stuff
-(use-package drag-stuff
-  :config
-  (progn
-    (drag-stuff-global-mode 1)
-    (define-key drag-stuff-mode-map (kbd "C-<up>") 'drag-stuff-up)
-    (define-key drag-stuff-mode-map (kbd "C-<down>") 'drag-stuff-down)
-    )
-  )
 
 ;; Global variables
 (setq college-directory "~/Documents/Facultad/")
@@ -294,6 +303,11 @@
 
 
 ; Auxiliary function
+(defun remove-all-advice (sym)
+  "Remove all advices from symbol SYM."
+  (interactive "aFunction symbol: ")
+  (advice-mapc (lambda (advice _props) (advice-remove sym advice)) sym))
+
 (defun isCharUpper (char)
   "Returns true if char is uppercase"
   (equal (upcase char) char)
@@ -479,6 +493,7 @@ The app is chosen from your OS's preference."
 
     (defalias 'magit-co-authored-by 'git-commit-co-authored)
     (defalias 'co-authored-by 'git-commit-co-authored)
+    (defalias 'mablame 'magit-blame)
 
     (defun my-wrap-lines ()
       "Disable `truncate-lines' in the current buffer."
@@ -626,6 +641,7 @@ The app is chosen from your OS's preference."
 
 ;;;Python
 (use-package lsp-pyright
+  :ensure (install-for 'python)
   :config
   (progn
     (add-hook 'python-mode-hook #'lsp)
@@ -640,6 +656,7 @@ The app is chosen from your OS's preference."
 (evil-leader/set-key-for-mode 'LaTeX-mode "c" 'projectile-compile-project)
 (evil-leader/set-key-for-mode 'LaTeX-mode "t" 'TeX-command-master)
 (use-package lsp-tex
+  :ensure (install-for 'tex)
   :config
   (progn
     (add-to-list 'lsp-language-id-configuration (cons 'LaTeX-mode "latex")) 
@@ -730,11 +747,18 @@ The app is chosen from your OS's preference."
     )
   )
 
+
+;; Info mode
+(evil-leader/set-key-for-mode 'Info-mode "w" 'Info-follow-nearest-node)
+
 ;; Grep mode
 (evil-leader/set-key-for-mode 'grep-mode "g" 'recompile)
+(evil-leader/set-key-for-mode 'grep-mode "n" 'next-error)
 
 ;; Compilation mode
 (evil-leader/set-key-for-mode 'compilation-mode "n" 'next-error)
+(evil-leader/set-key-for-mode 'compilation-mode "c" 'compile)
+(evil-leader/set-key-for-mode 'compilation-mode "g" 'recompile)
 
 ;; Proceed
 (defalias 'top 'proced)
@@ -862,7 +886,7 @@ X value, then the lambda value aka the mean."
 (evil-leader/set-key-for-mode 'org-mode "]" 'org-latex-preview)
 (evil-leader/set-key-for-mode 'org-mode "c" 'org-export-dispatch)
 (evil-leader/set-key-for-mode 'org-mode "8" 'org-insert-date)
-(evil-leader/set-key-for-mode 'org-mode "'" 'mozc-mode)
+;; (evil-leader/set-key-for-mode 'org-mode "'" 'mozc-mode)
 (evil-leader/set-key-for-mode 'org-mode "6" 'org-toggle-inline-images)
 (evil-leader/set-key-for-mode 'org-mode "0" 'hydra-clock/body)
 (evil-leader/set-key-for-mode 'org-mode "w" 'org-go-to-link)
@@ -954,12 +978,19 @@ DEADLINE: %^{DEADLINE}t ")
    ;; (cpp . t)
    (shell . t)
    (dot . t)
-   ;; (gnuplot . t)
+   (gnuplot . t)
    (latex . t)
    (python . t)
    (latex . t)
    (http . t)
    ))
+
+;; Hago que despues de ejecutar un bloque de codigo, se haga refresh de las imagenes.
+(advice-add 'org-babel-execute-src-block
+	  :after #'(lambda (a b) (progn
+			    ;; (message "Hello")))) 
+			    (org-remove-inline-images)
+			    (org-display-inline-images))))
 
 ;; Hago que minted sea el paquete que se use para syntax highlight
 (setq org-latex-listings 'minted)
@@ -984,6 +1015,7 @@ DEADLINE: %^{DEADLINE}t ")
 (setq org-image-max-width 'fill-column)
 
 (use-package org-alert
+  :ensure nil
   :config
   (progn
     (org-alert-enable)
@@ -1046,8 +1078,15 @@ DEADLINE: %^{DEADLINE}t ")
     (evil-leader/set-key-for-mode 'markdown-mode "6" 'markdown-toggle-inline-images) 
     (evil-leader/set-key-for-mode 'markdown-mode "w" 'markdown-follow-link-at-point)
     (setq markdown-enable-math t)
+    (add-hook 'markdown-mode-hook
+	    (lambda ()
+	      (local-set-key (kbd "C-<return>") 'markdown-insert-header-atx-1)))
+    ;; (advice-add 'markdown-insert-header-atx-1 :after #'(lambda () (kill-line)))
+    (setq markdown-asymmetric-header 't)
+    (defalias 'mabold 'markdown-insert-bold)
     )
   )
+
 
 ;; Yaml
 (use-package yaml-mode
@@ -1069,6 +1108,7 @@ DEADLINE: %^{DEADLINE}t ")
     (define-key yas-minor-mode-map (kbd "TAB") nil)
     (define-key yas-minor-mode-map (kbd "C-c k") #'yas-expand)
     (defalias 'yas-snippet-go-to-definition 'yas-visit-snippet-file)
+    (defalias 'yas-edit-snipet 'yas-visit-snippet-file)
     )
   )
 
@@ -1091,6 +1131,23 @@ DEADLINE: %^{DEADLINE}t ")
 
 
 ; Additional "non essential" extensions
+(setq use-package-always-ensure nil) 
+
+;; Drag stuff
+(use-package drag-stuff
+  :config
+  (progn
+    (drag-stuff-global-mode 1)
+    (define-key drag-stuff-mode-map (kbd "C-<up>") 'drag-stuff-up)
+    (define-key drag-stuff-mode-map (kbd "C-<down>") 'drag-stuff-down)
+    )
+  )
+
+;; Which key
+(use-package which-key
+  :config
+  (which-key-mode)
+  )
 
 ;;Dashboard
 (use-package dashboard
@@ -1112,15 +1169,15 @@ DEADLINE: %^{DEADLINE}t ")
   )
 
 ;;Gnuplot
-;; (setq use-package-always-ensure nil) 
-;; (use-package gnuplot
-;;   :config
-;;   (progn 
-;;     (setq gnuplot-use-context-sensitive-completion nil)
-;;     (autoload 'gnuplot-mode "gnuplot" "Gnuplot major mode" t)
-;;     (autoload 'gnuplot-make-buffer "gnuplot" "open a buffer in gnuplot-mode" t)
-;;     (setq auto-mode-alist (append '(("\\.gp$" . gnuplot-mode)) auto-mode-alist))
-;;     ))
+(use-package gnuplot
+  :init
+  (progn 
+    (setq gnuplot-use-context-sensitive-completion nil) 
+    (setq gnuplot-context-sensitive-mode nil)
+    (autoload 'gnuplot-mode "gnuplot" "Gnuplot major mode" t)
+    (autoload 'gnuplot-make-buffer "gnuplot" "open a buffer in gnuplot-mode" t)
+    (setq auto-mode-alist (append '(("\\.gp$" . gnuplot-mode)) auto-mode-alist))
+    ))
 
 ;; All the icons
 
@@ -1186,6 +1243,8 @@ DEADLINE: %^{DEADLINE}t ")
     (add-hook 'pdf-view-mode-hook (lambda () (local-set-key (kbd "SPC j") #'evil-window-down)))
     (add-hook 'pdf-view-mode-hook (lambda () (local-set-key (kbd "SPC r") #'switch-to-buffer)))
     (add-hook 'pdf-view-mode-hook (lambda () (local-set-key (kbd "SPC b") #'kill-this-buffer)))
+    (add-hook 'pdf-view-mode-hook (lambda () (local-set-key (kbd "SPC e") #'tab-new)))
+    (add-hook 'pdf-view-mode-hook (lambda () (local-set-key (kbd "SPC 4") #'tab-bar-close-tab)))
     (add-hook 'pdf-view-mode-hook (lambda () (local-set-key (kbd "SPC") #'nil)))
     (add-hook 'pdf-view-mode-hook (lambda () (local-set-key (kbd "j") 'pdf-view-next-line-or-next-page)))
     (add-hook 'pdf-view-mode-hook (lambda () (local-set-key (kbd "k") 'pdf-view-previous-line-or-previous-page)))
@@ -1199,7 +1258,6 @@ DEADLINE: %^{DEADLINE}t ")
     (add-hook 'pdf-view-mode-hook (lambda () (local-set-key (kbd "p") #'nil)))
     (add-hook 'pdf-view-mode-hook (lambda () (local-set-key (kbd "b") #'kill-this-buffer)))
     (add-hook 'pdf-view-mode-hook (lambda () (local-set-key (kbd "/") #'isearch-forward)))
-    (add-hook 'pdf-view-mode-hook (lambda () (local-set-key (kbd "e") #'tab-new)))
     )
   )
 
