@@ -1,0 +1,3 @@
+[submodule ".emacs.d/quick-search"]
+	path = .emacs.d/quick-search
+	url = git@github.com:lima-limon-inc/Emacs-Quick-Search.git
