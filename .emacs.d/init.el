@@ -152,6 +152,9 @@
 ;; Confirm before killing emacs
 (setq confirm-kill-emacs #'yes-or-no-p)
 
+;; Follow symblinks without asking
+(setq vc-follow-symlinks t)
+
 ;; World clock
 (setq zoneinfo-style-world-list '(
 			    ("Europe/Rome" "Rome")
@@ -688,16 +691,16 @@ The app is chosen from your OS's preference."
 
 ;;;Python
 (when (equal fabri-profile 'personal)
-(use-package lsp-pyright
-  ;; :ensure (install-for 'python)
-  :config
-  (progn
-    (add-hook 'python-mode-hook #'lsp)
-    (defalias 'ipython 'run-python)
-    (evil-leader/set-key-for-mode 'python-mode "i" 'lsp-treemacs-symbols)
+  (use-package lsp-pyright
+    ;; :ensure (install-for 'python)
+    :config
+    (progn
+      (add-hook 'python-mode-hook #'lsp)
+      (defalias 'ipython 'run-python)
+      (evil-leader/set-key-for-mode 'python-mode "i" 'lsp-treemacs-symbols)
+      )
     )
   )
-)
 (evil-leader/set-key-for-mode 'python-mode "p" 'run-python)
 (evil-leader/set-key-for-mode 'python-mode "c" 'python-shell-send-buffer)
 
@@ -706,16 +709,17 @@ The app is chosen from your OS's preference."
 (evil-leader/set-key-for-mode 'LaTeX-mode "t" 'TeX-command-master)
 
 (when (equal fabri-profile 'personal)
-(use-package lsp-tex
-  ;; :ensure (install-for 'tex)
-  :config
-  (progn
-    (add-to-list 'lsp-language-id-configuration (cons 'LaTeX-mode "latex")) 
-    (add-hook 'LaTeX-mode-hook #'lsp)
-    (setq lsp-tex-server 'texlab)
+  (use-package lsp-tex
+    ;; :ensure (install-for 'tex)
+    :config
+    (progn
+      (add-to-list 'lsp-language-id-configuration (cons 'LaTeX-mode "latex")) 
+      (add-hook 'LaTeX-mode-hook #'lsp)
+      (setq lsp-tex-server 'texlab)
+      )
     )
   )
-)
+
 (defun move-to-window-come-back (window-name)
   ;; (save-excursion
   ;; (move-beginning-of-line)
@@ -1067,7 +1071,7 @@ DEADLINE: %^{DEADLINE}t ")
 ;;; Org babel
 (org-babel-do-load-languages
  'org-babel-load-languages
- '(
+ `(
    (C . t) ;Usar C mayuscula en el source block. Esto en teoria sirve para c, c++ y d
    ;; (cpp . t)
    (shell . t)
@@ -1076,7 +1080,11 @@ DEADLINE: %^{DEADLINE}t ")
    (latex . t)
    (python . t)
    (latex . t)
-   (http . t)
+   ,(when (equal fabri-profile 'personal)
+      '(http . t)
+      )
+
+
    ))
 
 ;; Hago que despues de ejecutar un bloque de codigo, se haga refresh de las imagenes.
