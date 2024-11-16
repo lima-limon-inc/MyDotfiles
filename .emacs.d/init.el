@@ -1463,11 +1463,6 @@ DEADLINE: %^{DEADLINE}t ")
   )
 
 
-;; Svg clock
-(load-file "~/Scripts/Elisp/emacs-svg-clock/svg-analog-clock.el")
-(defalias 'analog-clock 'svg-analog-clock)
-
-
 ;; RFC
 (use-package rfc-mode 
   :config
