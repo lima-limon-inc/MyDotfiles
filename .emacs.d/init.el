@@ -1312,15 +1312,17 @@ DEADLINE: %^{DEADLINE}t ")
   )
 
 ;;Gnuplot
-(use-package gnuplot
-  :init
-  (progn 
-    (setq gnuplot-use-context-sensitive-completion nil) 
-    (setq gnuplot-context-sensitive-mode nil)
-    (autoload 'gnuplot-mode "gnuplot" "Gnuplot major mode" t)
-    (autoload 'gnuplot-make-buffer "gnuplot" "open a buffer in gnuplot-mode" t)
-    (setq auto-mode-alist (append '(("\\.gp$" . gnuplot-mode)) auto-mode-alist))
-    ))
+(when (equal fabri-profile 'personal)
+  (use-package gnuplot
+    :init
+    (progn 
+      (setq gnuplot-use-context-sensitive-completion nil) 
+      (setq gnuplot-context-sensitive-mode nil)
+      (autoload 'gnuplot-mode "gnuplot" "Gnuplot major mode" t)
+      (autoload 'gnuplot-make-buffer "gnuplot" "open a buffer in gnuplot-mode" t)
+      (setq auto-mode-alist (append '(("\\.gp$" . gnuplot-mode)) auto-mode-alist))
+      ))
+  )
 
 ;; All the icons
 
@@ -1346,31 +1348,36 @@ DEADLINE: %^{DEADLINE}t ")
 ;;   )
 
 ;; Calfw
-(use-package calfw
-  :config
-  (progn
-    (require 'calfw-org)
-    (require 'calfw-cal)
-    (setq calendar-week-start-day 1) ; 0:Sunday, 1:Monday
-    (defalias 'org-mode-calendar 'cfw:open-org-calendar)
-    (evil-leader/set-key "C-o" #'org-mode-calendar)
-    (add-hook 'cfw:calendar-mode-hook (lambda () (local-set-key (kbd "g t") 'tab-bar-switch-to-next-tab)))
-    (add-hook 'cfw:calendar-mode-hook (lambda () (local-set-key (kbd "g T") 'tab-bar-switch-to-prev-tab)))
-    (add-hook 'cfw:calendar-mode-hook (lambda () (local-set-key (kbd "g") #'nil)))
-    ))
+(when (equal fabri-profile 'personal)
+  (use-package calfw
+    :config
+    (progn
+      (require 'calfw-org)
+      (require 'calfw-cal)
+      (setq calendar-week-start-day 1) ; 0:Sunday, 1:Monday
+      (defalias 'org-mode-calendar 'cfw:open-org-calendar)
+      (evil-leader/set-key "C-o" #'org-mode-calendar)
+      (add-hook 'cfw:calendar-mode-hook (lambda () (local-set-key (kbd "g t") 'tab-bar-switch-to-next-tab)))
+      (add-hook 'cfw:calendar-mode-hook (lambda () (local-set-key (kbd "g T") 'tab-bar-switch-to-prev-tab)))
+      (add-hook 'cfw:calendar-mode-hook (lambda () (local-set-key (kbd "g") #'nil)))
+      ))
+  )
 
 ;; Graphviz
-(use-package graphviz-dot-mode
-  :config
-  (progn
-    (setq graphviz-dot-indent-width 4)
-    (add-hook 'graphviz-dot-mode-hook 'company-mode)
-    (evil-leader/set-key-for-mode 'graphviz-dot-mode "p" 'graphviz-dot-preview)
-    (evil-leader/set-key-for-mode 'graphviz-dot-mode "c" 'compile)
+(when (equal fabri-profile 'personal)
+  (use-package graphviz-dot-mode
+    :config
+    (progn
+      (setq graphviz-dot-indent-width 4)
+      (add-hook 'graphviz-dot-mode-hook 'company-mode)
+      (evil-leader/set-key-for-mode 'graphviz-dot-mode "p" 'graphviz-dot-preview)
+      (evil-leader/set-key-for-mode 'graphviz-dot-mode "c" 'compile)
+      )
     )
   )
 
 ;; PDF TOOLS
+(when (equal fabri-profile 'personal)
 (use-package pdf-tools
   :config
   (progn
@@ -1403,6 +1410,7 @@ DEADLINE: %^{DEADLINE}t ")
     (add-hook 'pdf-view-mode-hook (lambda () (local-set-key (kbd "/") #'isearch-forward)))
     )
   )
+)
 
 ;; Hydra
 (use-package hydra
