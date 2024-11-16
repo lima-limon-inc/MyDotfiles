@@ -17,14 +17,14 @@
 
 (defun check-lang-used (lang)
   (when (member lang languages-used)
-    't
+    t
     )
   )
 
 ;; Check if the current profile requires installation
 (defun install-for (lang)
   (and
-   (when (equal fabri-profile 'work) 't) 
+   (when (equal fabri-profile 'work) t) 
    (check-lang-used lang)
    )
   )
@@ -34,8 +34,15 @@
 (setq user-mail-address
       (if (equal fabri-profile 'personal)
       "torsi@fi.uba.ar"
-      "mail empresa"
+      "tomas.orsi@lambdaclass.com"
       ))
+
+
+;;; Work notes
+;;;; Get current-day format
+(when (equal fabri-profile 'work)
+  (setq org-agenda-files '("~/Documents/LearningPath/"))
+  )
 
 
 ; Package manager settings
@@ -49,14 +56,17 @@
 
 (setq use-package-always-ensure
       (when (equal fabri-profile 'work)
-        't) 
+        t) 
       )
 
 ; Global look and feel
 
 ;; Font
-(add-to-list 'default-frame-alist
-             '(font . "-1ASC-Liberation Mono-regular-normal-normal-*-16-*-*-*-m-0-iso10646-1"))
+(if (equal fabri-profile 'personal)
+    (add-to-list 'default-frame-alist
+                 '(font . "-1ASC-Liberation Mono-regular-normal-normal-*-16-*-*-*-m-0-iso10646-1"))
+  (set-face-attribute 'default nil :height 160)
+  )
 
 ;; Theme
 (use-package gruvbox-theme
@@ -107,11 +117,11 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; Get string for subdirectory in emacs directory
-(defun emacs-dir (directory)
+(defun my-emacs-dir (directory)
   (concat user-emacs-directory directory))
 
 ;; Write backups to ~/.emacs.d/backup/
-(setq backup-directory-alist '((".*" . (emacs-dir "backup")))
+(setq backup-directory-alist `((".*" . ,(my-emacs-dir "backup")))
       backup-by-copying      t  ; Don't de-link hard links
       version-control        t  ; Use version numbers on backups
       delete-old-versions    t  ; Automatically delete excess backups:
@@ -126,7 +136,7 @@
 
 
 ;; Different custom set variables files
-(setq custom-file (emacs-dir "custom.el"))
+(setq custom-file (my-emacs-dir "custom.el"))
 (load custom-file 'noerror)
 
 ;; Confirm before killing emacs
@@ -139,6 +149,13 @@
 			    ("America/Buenos_Aires" "Buenos Aires")
 			    ("America/Montevideo" "Montevideo")
 			    ))
+
+;; Set calendar style
+(require 'calendar) 
+(calendar-set-date-style 'european)
+
+;; Add newlines at the end of the file
+(setq require-final-newline 'visit-save)
 
 ;; Misc alias
 ;;; Undefine
@@ -171,6 +188,7 @@
       (rename-uniquely))))
 (ad-activate 'shell-command)
 (evil-leader/set-key "&" 'async-shell-command)
+
 
 
 ; Global keybindings
@@ -218,6 +236,11 @@
 (evil-leader/set-key "l" 'evil-window-right)
 (evil-leader/set-key "k" 'evil-window-up)
 (evil-leader/set-key "j" 'evil-window-down)
+
+;; Macos Maximize
+(when (equal fabri-profile 'work)
+  (evil-leader/set-key "=" 'toggle-frame-maximized)
+  )
 
 
 ;;; Run :wa with les typing
@@ -289,7 +312,7 @@
 
 ;;Registers
 ;;; Register with files I open often
-(set-register ?e (cons 'file (emacs-dir "init.el")))
+(set-register ?e (cons 'file (my-emacs-dir "init.el")))
 
 ;;;Register with directories to college subject
 (defun TPSdir (materia)
@@ -304,6 +327,9 @@
 (set-register ?p (cons 'file "~/Documents/Personal/daily.org"))
 (set-register ?b (cons 'file "~/Scripts/Orgmode/"))
 (set-register ?r (cons 'file "~/Documents/Personal/Radio/")) 
+(when (equal fabri-profile 'work)
+(set-register ?t (cons 'file (current-day-file)))
+)
 
 
 ; Auxiliary function
@@ -339,6 +365,16 @@ thisIsAWord -> this Is A Word
     )
   )
 
+(defun current-day ()
+  (format-time-string "%Y-%m-%d" (current-time))
+  )
+
+(defun current-day-file ()
+  (interactive)
+  (concat org-agenda-files (current-day) ".org")
+  )
+
+
 (defun org-mode-auto-insert (title tag)
   (interactive
    (list
@@ -359,6 +395,7 @@ thisIsAWord -> this Is A Word
     (insert org-title)
   )
   )
+
 
 ;; Create temporary dir
 (defun tmp-dir ()
@@ -564,6 +601,10 @@ The app is chosen from your OS's preference."
     )
   )
 
+;; Flycheck for ui
+(use-package flycheck
+  )
+
 ;; LSP
 (use-package lsp-mode
   :init
@@ -713,14 +754,14 @@ The app is chosen from your OS's preference."
 (defun check-file-exists-warn (file)
   (let
       (
-       (diary-dir (emacs-dir "diary")))
+       (diary-dir (my-emacs-dir "diary")))
     (unless (file-exists-p diary-dir)
       (display-warning 'warning (format "No hay archivo en %s" diary-dir)))
     )
   )
 
 (advice-add 'config-is-done
-	  :after #'(lambda () (check-file-exists-warn (emacs-dir "diary"))))
+	  :after #'(lambda () (check-file-exists-warn (my-emacs-dir "diary"))))
 
 ;; Dired
 (setq dired-listing-switches "-alhF")
@@ -904,6 +945,9 @@ X value, then the lambda value aka the mean."
 ;;; Org agenda
 (setq org-agenda-span 60)
 
+;;; Org agenda clockreport
+(setq org-agenda-clockreport-parameter-plist '(:link t :maxlevel 4))
+
 ;;; Dont show done
 (setq org-agenda-skip-function-global '(org-agenda-skip-entry-if 'todo 'done))
 
@@ -1073,6 +1117,40 @@ DEADLINE: %^{DEADLINE}t ")
 (add-to-list 'auto-insert-alist '(org-mode . (lambda ()
 				       (interactive)
 				       (call-interactively 'org-mode-auto-insert))))
+
+;; Turn org mode notes into markdown lists
+(defun format-md-item (level spaces-num title)
+  (let
+      (
+       (spaces (* (- level 1) spaces-num))
+       )
+    (format "%s- %s"(make-string spaces ? ) title)
+    )
+  )
+
+
+(defun org-format-headings (indicator spaces-num filter)
+  (let (
+        (title-depth (org-map-entries (lambda () (cons (org-current-level) (substring-no-properties (org-get-heading))))))
+        )
+    (mapcar (lambda (pair) (format-md-item (car pair) spaces-num (cdr pair))) title-depth)
+    )
+  )
+
+
+
+(defun org-format-headings-markdown ()
+  (interactive)
+  (let (
+        (text "")
+        )
+    (mapcar (lambda (entry)
+	    (setq text (concat text entry "\n")))
+	  (org-format-headings "-" 4 (lambda () t)) 
+	  )
+    (insert text)
+    )
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;Org mode end;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1371,7 +1449,7 @@ DEADLINE: %^{DEADLINE}t ")
 (use-package rfc-mode 
   :config
   (progn
-    (setq rfc-mode-directory (expand-file-name (emacs-dir "rfc")))
+    (setq rfc-mode-directory (expand-file-name (my-emacs-dir "rfc")))
 
     (evil-leader/set-key-for-mode 'rfc-mode "n" 'rfc-mode-next-section)
     (evil-leader/set-key-for-mode 'rfc-mode "p" 'rfc-mode-previous-section)
