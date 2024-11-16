@@ -378,28 +378,47 @@ thisIsAWord -> this Is A Word
   )
 
 
-
-(defun org-mode-auto-insert (title tag)
-  (interactive
-   (list
-    (read-string "Title (default is file name): ")
-    (read-string "Filetag (if any): ")
-    )
-   )
-  (let
-      (
-       (org-title (if (equal title "")
-		  (concat "#+title: " (separateCaptial (file-name-sans-extension (buffer-name))) "")
-		  (concat "#+title: " title "")))
+(if (equal fabri-profile 'personal)
+    (defun org-mode-auto-insert (title tag)
+      (interactive
+       (list
+        (read-string "Title (default is file name): ")
+        (read-string "Filetag (if any): ")
+        )
        )
-    (if (equal tag "")
-        nil
-      (insert (concat "#+FILETAGS: " ":" tag ":")))
-    (insert "\n")
-    (insert org-title)
+      (let
+	(
+	 (org-title (if (equal title "")
+		      (concat "#+title: " (separateCaptial (file-name-sans-extension (buffer-name))) "")
+		    (concat "#+title: " title "")))
+	 )
+        (if (equal tag "")
+	  nil
+	(insert (concat "#+FILETAGS: " ":" tag ":")))
+        (insert "\n")
+        (insert org-title)
+        )
+      )
+  (defun org-mode-auto-insert (title)
+    (interactive
+     (list
+      (read-string "Title (default is date): ")
+      )
+     )
+    (let
+        (
+         (org-title (if (equal title "")
+		    (concat "* " (current-day) "")
+		  (concat "* " title "")))
+         )
+      (insert org-title)
+      (insert "\n")
+      (insert "** Misc ")
+      (insert "\n")
+      (insert "*** TODO Daily Meeting ")
+      )
+    )
   )
-  )
-
 
 ;; Create temporary dir
 (defun tmp-dir ()
@@ -1049,21 +1068,37 @@ DEADLINE: %^{DEADLINE}t ")
 (setq org-todo-keywords
       '((sequence "TODO(t)" "Marchando(m)" "Waiting(w)" "|" "Waiting but done(b)" "DONE(d)")
         ))
-(setq org-tag-alist '(
-		  (:startgroup . nil)
-		  ;;Categoria
-                      ("facultad" . ?f) ("personal" . ?p)
-                      (:endgroup . nil)
+(if (equal fabri-profile 'personal)
+    (setq org-tag-alist '(
+		      (:startgroup . nil)
+		      ;;Categoria
+                          ("facultad" . ?f) ("personal" . ?p)
+                          (:endgroup . nil)
 
-		  ;;Hobbies
-		  (:startgroup . nil)
-		  ("emacs" . ?e) ("linux" . ?l)
-                      (:newline)
-		  (:endgroup . nil)
+		      ;;Hobbies
+		      (:startgroup . nil)
+		      ("emacs" . ?e) ("linux" . ?l)
+                          (:newline)
+		      (:endgroup . nil)
 
-		  ;;Misc
-		  ("someday" . ?s) ("aprendizaje" . ?a)
-		  ))
+		      ;;Misc
+		      ("someday" . ?s) ("aprendizaje" . ?a)
+		      ))
+  (setq org-tag-alist '(
+		    (:startgroup . nil)
+		    ;;Projectos
+                        ("polygon" . ?p) ("aligned" . ?a)
+                        (:endgroup . nil)
+		    ;;Misc
+		    (:startgroup . nil)
+		    ("exposicion" . ?e) ("charlar" . ?c) ("notes" . ?n)
+                        (:newline)
+		    (:endgroup . nil)
+		    ;; ;;Misc
+		    ;; ("someday" . ?s) ("aprendizaje" . ?a)
+		    ))
+
+  )
 
 
 ;;; Log done
