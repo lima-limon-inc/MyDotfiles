@@ -39,6 +39,7 @@
 
 
 
+
 ;;; Get current-day format
 (defun current-day ()
   (format-time-string "%Y-%m-%d" (current-time))
@@ -46,13 +47,9 @@
 
 (defun current-day-file ()
   (interactive)
-  (concat org-agenda-files (current-day) ".org")
+  (concat "~/Documents/LearningPath/" (current-day) ".org")
   )
 
-;;; Work notes
-(when (equal fabri-profile 'work)
-  (setq org-agenda-files "~/Documents/LearningPath/")
-  )
 
 
 ; Package manager settings
@@ -333,6 +330,7 @@
 
 (set-register ?d (cons 'file "~/Downloads/"))
 
+(when (equal fabri-profile 'personal)
 (set-register ?u (cons 'file (TPSdir "Concu")))
 (set-register ?h (cons 'file "~/Documents/Obsidian-Vaults/Hobbies"))
 (set-register ?n (cons 'file "~/Documents/Personal/Notas/notes.org"))
@@ -340,9 +338,10 @@
 (set-register ?p (cons 'file "~/Documents/Personal/daily.org"))
 (set-register ?b (cons 'file "~/Scripts/Orgmode/"))
 (set-register ?r (cons 'file "~/Documents/Personal/Radio/")) 
-(when (equal fabri-profile 'work)
-(set-register ?t (cons 'file (current-day-file)))
 )
+(when (equal fabri-profile 'work)
+  (set-register ?t (cons 'file (current-day-file)))
+  )
 
 
 ; Auxiliary function
@@ -940,8 +939,15 @@ X value, then the lambda value aka the mean."
 ;; Org mode
 ;;;;;;;;;;;;;;;;;;;;;Org mode begin;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Set org mode default directory
-(setq org-directory "~/Documents/Personal/Notas")
-(setq org-default-notes-file (concat org-directory "/notes.org"))
+(when (equal fabri-profile 'personal)
+  (setq org-directory "~/Documents/Personal/Notas")
+  (setq org-default-notes-file (concat org-directory "/notes.org"))
+  )
+
+;;; Work notes
+(when (equal fabri-profile 'work)
+  (setq org-agenda-files '("~/Documents/LearningPath/")) 
+  )
 
 ;;;Makes lines wrap
 (add-hook 'org-mode-hook 'visual-line-mode)
@@ -1480,3 +1486,4 @@ DEADLINE: %^{DEADLINE}t ")
 ;; WARNING KEEP AT THE BOTTOM 
 ;; NOTE: Meant to add advice to this function
 (config-is-done)
+
