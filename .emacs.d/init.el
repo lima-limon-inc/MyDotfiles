@@ -38,10 +38,20 @@
       ))
 
 
+
+;;; Get current-day format
+(defun current-day ()
+  (format-time-string "%Y-%m-%d" (current-time))
+  )
+
+(defun current-day-file ()
+  (interactive)
+  (concat org-agenda-files (current-day) ".org")
+  )
+
 ;;; Work notes
-;;;; Get current-day format
 (when (equal fabri-profile 'work)
-  (setq org-agenda-files '("~/Documents/LearningPath/"))
+  (setq org-agenda-files "~/Documents/LearningPath/")
   )
 
 
@@ -365,14 +375,6 @@ thisIsAWord -> this Is A Word
     )
   )
 
-(defun current-day ()
-  (format-time-string "%Y-%m-%d" (current-time))
-  )
-
-(defun current-day-file ()
-  (interactive)
-  (concat org-agenda-files (current-day) ".org")
-  )
 
 
 (defun org-mode-auto-insert (title tag)
@@ -685,6 +687,7 @@ The app is chosen from your OS's preference."
 (evil-leader/set-key-for-mode 'makefile-gmake-mode "c" 'projectile-compile-project)
 
 ;;;Python
+(when (equal fabri-profile 'personal)
 (use-package lsp-pyright
   ;; :ensure (install-for 'python)
   :config
@@ -694,12 +697,15 @@ The app is chosen from your OS's preference."
     (evil-leader/set-key-for-mode 'python-mode "i" 'lsp-treemacs-symbols)
     )
   )
+)
 (evil-leader/set-key-for-mode 'python-mode "p" 'run-python)
 (evil-leader/set-key-for-mode 'python-mode "c" 'python-shell-send-buffer)
 
 ;;;Latex
 (evil-leader/set-key-for-mode 'LaTeX-mode "c" 'projectile-compile-project)
 (evil-leader/set-key-for-mode 'LaTeX-mode "t" 'TeX-command-master)
+
+(when (equal fabri-profile 'personal)
 (use-package lsp-tex
   ;; :ensure (install-for 'tex)
   :config
@@ -709,6 +715,7 @@ The app is chosen from your OS's preference."
     (setq lsp-tex-server 'texlab)
     )
   )
+)
 (defun move-to-window-come-back (window-name)
   ;; (save-excursion
   ;; (move-beginning-of-line)
