@@ -41,7 +41,7 @@
 ; Package manager settings
 (when (equal fabri-profile 'work)
   (progn
-    (require 'package)
+    (require 'package) 
     (add-to-list 'package-archives
 	      '("melpa-stable" . "https://stable.melpa.org/packages/") t)
     )
@@ -119,6 +119,10 @@
       kept-old-versions      1) ; and how many of the old
 
 (setq make-backup-files nil) ; stop creating ~ files
+
+
+;; "Forbidden 80-column number"
+(setq fill-column 80)
 
 
 ;; Different custom set variables files
@@ -641,7 +645,7 @@ The app is chosen from your OS's preference."
 
 ;;;Python
 (use-package lsp-pyright
-  :ensure (install-for 'python)
+  ;; :ensure (install-for 'python)
   :config
   (progn
     (add-hook 'python-mode-hook #'lsp)
@@ -656,7 +660,7 @@ The app is chosen from your OS's preference."
 (evil-leader/set-key-for-mode 'LaTeX-mode "c" 'projectile-compile-project)
 (evil-leader/set-key-for-mode 'LaTeX-mode "t" 'TeX-command-master)
 (use-package lsp-tex
-  :ensure (install-for 'tex)
+  ;; :ensure (install-for 'tex)
   :config
   (progn
     (add-to-list 'lsp-language-id-configuration (cons 'LaTeX-mode "latex")) 
@@ -748,6 +752,37 @@ The app is chosen from your OS's preference."
   )
 
 
+
+
+;; Whitespace-mode
+;; (use-package whitespace
+;;   :config
+;;   (progn
+;;     (setq whitespace-style (remove 'space-mark whitespace-style))
+;;     ;; (setq whitespace-style (remove 'trailing whitespace-style))
+;;     (setq whitespace-line-column (* fill-column 2)) ;; Highlight lines if twice the amount of fill-column
+;;     ;; (setq whitespace-space-regexp "\\(^ +\\| +$\\)") ;; visualize only leading SPACEs.
+;;     ;; (setq whitespace-hspace-regexp "\\(^\xA0+\\|\xA0+$\\)")
+;;     (setq whitespace-display-mappings (assq-delete-all 'newline-mark whitespace-display-mappings))
+;;     (add-to-list 'whitespace-display-mappings '(newline-mark ?\n [92 ?n ?\n][?$ ?\n]))
+;;     (setq show-trailing-whitespace t)
+
+;;     (add-hook 'prog-mode-hook #'whitespace-mode)
+;;     ;; (add-hook 'text-mode-hook #'whitespace-mode)
+;;     )
+;;   )
+
+;; Makes company-mode windows "gui-like". Helps with whitespace-mode's windows
+;; (use-package company-posframe
+;;   :config
+;;   (progn
+;;     (when (display-graphic-p)
+;;       (company-posframe-mode 1) 
+;;       )
+;;     )
+;;   )
+
+
 ;; Info mode
 (evil-leader/set-key-for-mode 'Info-mode "w" 'Info-follow-nearest-node)
 
@@ -767,9 +802,17 @@ The app is chosen from your OS's preference."
 (setq proced-enable-color-flag t)
 
 ;; Artist mode
-(advice-add 'artist-mode :after #'(lambda (x) (turn-off-evil-mode)))
+(advice-add 'artist-mode :before #'(lambda (x) (progn
+				         (when (bound-and-true-p whitespace-mode)
+					 (whitespace-mode))
+				         (turn-off-evil-mode)
+				         )))
 
-(advice-add 'artist-mode-off :after #'(lambda () (turn-on-evil-mode)))
+(advice-add 'artist-mode-off :before #'(lambda () (progn
+					  (when (bound-and-true-p whitespace-mode)
+					    (whitespace-mode))
+					  (turn-on-evil-mode)
+					  )))
 
 ;; Emacs - Calc
 (evil-leader/set-key "C-c" 'calc)
@@ -1081,6 +1124,12 @@ DEADLINE: %^{DEADLINE}t ")
     (add-hook 'markdown-mode-hook
 	    (lambda ()
 	      (local-set-key (kbd "C-<return>") 'markdown-insert-header-atx-1)))
+    (add-hook 'markdown-mode-hook
+	    (lambda ()
+	      (local-set-key (kbd "M-<right>") 'markdown-demote)))
+    (add-hook 'markdown-mode-hook
+	    (lambda ()
+	      (local-set-key (kbd "M-<left>") 'markdown-promote)))
     ;; (advice-add 'markdown-insert-header-atx-1 :after #'(lambda () (kill-line)))
     (setq markdown-asymmetric-header 't)
     (defalias 'mabold 'markdown-insert-bold)
@@ -1132,6 +1181,7 @@ DEADLINE: %^{DEADLINE}t ")
 
 ; Additional "non essential" extensions
 (setq use-package-always-ensure nil) 
+
 
 ;; Drag stuff
 (use-package drag-stuff
