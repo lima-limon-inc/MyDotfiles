@@ -1255,7 +1255,7 @@ DEADLINE: %^{DEADLINE}t ")
   )
 
 ;; Search on browser
-(load-file (concat user-emacs-directory "quick-search.el"))
+(load-file (concat user-emacs-directory "quick-search/quick-search.el"))
 
 (quick-search/set-preferred-browser "firefox-bin" "")
 (quick-search/add-search-engine "Google" "https://google.com/search?q=" nil)
