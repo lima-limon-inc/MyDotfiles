@@ -566,6 +566,20 @@ The app is chosen from your OS's preference."
 
     (add-hook 'magit-status-mode-hook #'my-wrap-lines)
     (add-hook 'magit-diff-mode-hook #'my-wrap-lines)
+
+    ;; Protect against accident pushes to main
+    (defun query-magit-push-upstream (args)
+      (when-let ((branch (magit-get-current-branch)))
+        (when (or (string-equal branch "master") (string-equal branch "main"))
+	(unless (yes-or-no-p (format "WARNING: ARE YOU SURE YOU WANT TO PUSH \"%s\" BRANCH TO \"%s\"? "
+                                       branch
+                                       (magit-get "branch" branch "remote")))
+	  (user-error "Pushed aborted")))))
+
+    (advice-add 'magit-push-current-to-upstream :before #'query-magit-push-upstream)
+
+    (advice-add 'magit-push-current-to-pushremote :before #'query-magit-push-upstream)
+
     )
   )
 
@@ -694,9 +708,9 @@ The app is chosen from your OS's preference."
 ;;;; Shows colors in buffers
 (projectile-register-project-type 'rust-cargo '("Cargo.toml")
                                   :project-file "Cargo.toml"
-                                  :compile "RUSTFLAGS=-Awarnings cargo build"
+                                  ;; :compile "RUSTFLAGS=-Awarnings cargo build"
                                   :test "cargo test"
-                                  :run "cargo run")
+                                  :run "cargo run") 
 (add-hook 'rust-mode-hook #'lsp)
 (evil-leader/set-key-for-mode 'rust-mode "c" 'projectile-compile-project)
 (evil-leader/set-key-for-mode 'conf-toml-mode "c" 'projectile-compile-project) 
@@ -1523,3 +1537,4 @@ DEADLINE: %^{DEADLINE}t ")
 ;; NOTE: Meant to add advice to this function
 (config-is-done)
 
+(setq compilation-skip-threshold 2)
