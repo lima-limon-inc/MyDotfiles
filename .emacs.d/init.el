@@ -338,7 +338,7 @@
   (set-register ?p (cons 'file "~/Documents/Personal/daily.org"))
   (set-register ?b (cons 'file "~/Scripts/Orgmode/"))
   (set-register ?r (cons 'file "~/Documents/Personal/Radio/")) 
-  (set-register ?g (cons 'file "~/Documents/Personal/Finanzas/")) 
+  (set-register ?g (cons 'file "~/Documents/Personal/Finanzas/"))  
   )
 (when (equal fabri-profile 'work)
   (set-register ?t (cons 'file (current-day-file)))
@@ -879,6 +879,8 @@ The app is chosen from your OS's preference."
 (evil-leader/set-key-for-mode 'compilation-mode "n" 'next-error)
 (evil-leader/set-key-for-mode 'compilation-mode "c" 'compile)
 (evil-leader/set-key-for-mode 'compilation-mode "g" 'recompile)
+;; "Next" will go to errors, will skip warnings
+(setq compilation-skip-threshold 2)
 
 ;; Proceed
 (defalias 'top 'proced)
@@ -1528,6 +1530,12 @@ DEADLINE: %^{DEADLINE}t ")
     (evil-leader/set-key-for-mode 'rfc-mode "n" 'rfc-mode-next-section)
     (evil-leader/set-key-for-mode 'rfc-mode "p" 'rfc-mode-previous-section)
     (evil-leader/set-key-for-mode 'rfc-mode "t" 'rfc-mode-goto-section)
+    ))
+
+(use-package ledger-mode
+  :config
+  (progn
+    (evil-leader/set-key-for-mode 'ledger-mode "a" 'ledger-add-transaction) 
     ))
 
 
