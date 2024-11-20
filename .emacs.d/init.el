@@ -1536,5 +1536,3 @@ DEADLINE: %^{DEADLINE}t ")
 ;; WARNING KEEP AT THE BOTTOM 
 ;; NOTE: Meant to add advice to this function
 (config-is-done)
-
-(setq compilation-skip-threshold 2)
