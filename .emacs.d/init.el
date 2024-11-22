@@ -81,6 +81,9 @@
   (load-theme 'gruvbox-dark-hard t)
   )
 
+;; Don't use tabs, only use spaces
+(setq-default indent-tabs-mode nil)
+
 ;; Post
 (defun config-is-done ()
   (message "All done")
