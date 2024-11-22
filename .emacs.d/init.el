@@ -905,7 +905,7 @@ The app is chosen from your OS's preference."
 				         (turn-off-evil-mode)
 				         )))
 
-(advice-add 'artist-mode-off :before #'(lambda () (progn
+(advice-add 'artist-mode-off :after #'(lambda () (progn
 					  (when (bound-and-true-p whitespace-mode)
 					    (whitespace-mode))
 					  (turn-on-evil-mode)
