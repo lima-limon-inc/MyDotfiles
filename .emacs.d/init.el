@@ -620,6 +620,7 @@ The app is chosen from your OS's preference."
 	  ("STUB"      . "#1E90FF")
 	  ("IWASHERE"  . "#C60CFA")
 	  ("QUESTION"  . "#12E6DB")
+	  ("IMPORTANT" . "#FF0019")
 	  ("NOTE"      . "#1A02EB")
 	  )) 
     (add-hook 'prog-mode-hook #'hl-todo-mode)
@@ -653,6 +654,7 @@ The app is chosen from your OS's preference."
   :config
   (progn
     (add-hook 'lsp-mode-hook 'lsp-diagnostics-mode)
+    ;; (setq lsp-enable-indentation nil)
    )
   )
 ;;; Lsp UI
@@ -715,6 +717,9 @@ The app is chosen from your OS's preference."
 (evil-leader/set-key-for-mode 'rust-mode "c" 'projectile-compile-project)
 (evil-leader/set-key-for-mode 'conf-toml-mode "c" 'projectile-compile-project) 
 (evil-leader/set-key-for-mode 'rust-mode "t" 'projectile-test-project)
+
+;; Apply format on save
+(setq rust-format-on-save t)
 
 ;;;Cmake
 (evil-leader/set-key-for-mode 'cmake-mode "c" 'projectile-compile-project)
