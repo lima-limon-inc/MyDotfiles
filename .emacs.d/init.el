@@ -1542,11 +1542,13 @@ DEADLINE: %^{DEADLINE}t ")
     (evil-leader/set-key-for-mode 'rfc-mode "t" 'rfc-mode-goto-section)
     ))
 
-(use-package ledger-mode
-  :config
-  (progn
-    (evil-leader/set-key-for-mode 'ledger-mode "a" 'ledger-add-transaction) 
-    ))
+(when (equal fabri-profile 'personal)
+  (use-package ledger-mode
+    :config
+    (progn
+      (evil-leader/set-key-for-mode 'ledger-mode "a" 'ledger-add-transaction) 
+      ))
+  )
 
 
 ; Final details
