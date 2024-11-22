@@ -579,9 +579,11 @@ The app is chosen from your OS's preference."
                                        (magit-get "branch" branch "remote")))
 	  (user-error "Pushed aborted")))))
 
-    (advice-add 'magit-push-current-to-upstream :before #'query-magit-push-upstream)
+    (when (equal fabri-profile 'work)
+      (advice-add 'magit-push-current-to-upstream :before #'query-magit-push-upstream)
 
-    (advice-add 'magit-push-current-to-pushremote :before #'query-magit-push-upstream)
+      (advice-add 'magit-push-current-to-pushremote :before #'query-magit-push-upstream)
+      )
 
     )
   )
