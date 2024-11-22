@@ -1277,6 +1277,7 @@ DEADLINE: %^{DEADLINE}t ")
 (use-package markdown-mode
   :config
   (progn
+    (evil-leader/set-key-for-mode 'markdown-mode "a" 'markdown-insert-gfm-code-block) 
     (evil-leader/set-key-for-mode 'markdown-mode "o" 'markdown-insert-link)
     (evil-leader/set-key-for-mode 'markdown-mode "i" 'markdown-toggle-gfm-checkbox)
     (evil-leader/set-key-for-mode 'markdown-mode "6" 'markdown-toggle-inline-images) 
