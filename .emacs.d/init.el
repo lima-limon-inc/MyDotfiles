@@ -711,8 +711,11 @@ The app is chosen from your OS's preference."
 (projectile-register-project-type 'rust-cargo '("Cargo.toml")
                                   :project-file "Cargo.toml"
                                   ;; :compile "RUSTFLAGS=-Awarnings cargo build"
+			    :compile (if (equal fabri-profile 'work)
+				     "make"
+				     "cargo build")
                                   :test "cargo test"
-                                  :run "cargo run") 
+                                  :run "cargo run")  
 (add-hook 'rust-mode-hook #'lsp)
 (evil-leader/set-key-for-mode 'rust-mode "c" 'projectile-compile-project)
 (evil-leader/set-key-for-mode 'conf-toml-mode "c" 'projectile-compile-project) 
@@ -726,6 +729,8 @@ The app is chosen from your OS's preference."
 
 ;;;Makefile
 (evil-leader/set-key-for-mode 'makefile-gmake-mode "c" 'projectile-compile-project)
+(evil-leader/set-key-for-mode 'make-mode "c" 'projectile-compile-project) 
+(evil-leader/set-key-for-mode 'makefile-mode "c" 'projectile-compile-project)  
 
 ;;;Python
 (when (equal fabri-profile 'personal)
