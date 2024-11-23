@@ -600,6 +600,22 @@ The app is chosen from your OS's preference."
       (advice-add 'magit-push-current-to-upstream :before #'query-magit-push-upstream)
 
       (advice-add 'magit-push-current-to-pushremote :before #'query-magit-push-upstream)
+
+      (defun work-collegues (arg)
+        (interactive (list (completing-read "Who? "
+                                            '(
+                                              ("Tomas Fabrizio Orsi <tomas.orsi@lambdaclass>" 0)
+                                              ("Leandro Serra <leandro.serra@lambdaclass.com>" 1)
+                                              ("Damian Ramirez <damian.ramirez@lambdaclass.com>" 2)
+                                              ("Dylan Socolobsky <dylan.socolobsky@lambdaclass.com>" 3)
+                                              ("Tomás Grüner <tomas.gruner@lambdaclass.com>" 4)
+                                              )
+                                            ))
+                     )
+        (insert arg)
+        )
+
+      (define-key git-commit-mode-map (kbd "C-c C-n") 'work-collegues)
       )
 
     )
@@ -1587,3 +1603,4 @@ DEADLINE: %^{DEADLINE}t ")
 ;; WARNING KEEP AT THE BOTTOM 
 ;; NOTE: Meant to add advice to this function
 (config-is-done)
+
