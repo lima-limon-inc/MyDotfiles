@@ -563,7 +563,7 @@ The app is chosen from your OS's preference."
 
 ;;Magit
 (use-package magit
-  :init 
+  :init
   (setq transient-default-level 5)
   :config
   (progn
@@ -619,6 +619,9 @@ The app is chosen from your OS's preference."
       )
 
     )
+  )
+
+(use-package git-modes
   )
 
 ;; Raibow delimiters
