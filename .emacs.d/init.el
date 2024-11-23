@@ -1594,6 +1594,7 @@ DEADLINE: %^{DEADLINE}t ")
     :config
     (progn
       (evil-leader/set-key-for-mode 'ledger-mode "a" 'ledger-add-transaction) 
+      (evil-leader/set-key-for-mode 'ledger-mode "d" 'ledger-report) 
       ))
   )
 
