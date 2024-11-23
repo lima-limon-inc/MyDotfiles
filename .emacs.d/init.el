@@ -733,8 +733,11 @@ The app is chosen from your OS's preference."
 (projectile-register-project-type 'rust-cargo '("Cargo.toml")
                                   :project-file "Cargo.toml"
                                   ;; :compile "RUSTFLAGS=-Awarnings cargo build"
+			    :compile (if (equal fabri-profile 'work)
+				     "make"
+				     "cargo build")
                                   :test "cargo test"
-                                  :run "cargo run") 
+                                  :run "cargo run")  
 (add-hook 'rust-mode-hook #'lsp)
 (evil-leader/set-key-for-mode 'rust-mode "c" 'projectile-compile-project)
 (evil-leader/set-key-for-mode 'conf-toml-mode "c" 'projectile-compile-project) 
@@ -748,6 +751,8 @@ The app is chosen from your OS's preference."
 
 ;;;Makefile
 (evil-leader/set-key-for-mode 'makefile-gmake-mode "c" 'projectile-compile-project)
+(evil-leader/set-key-for-mode 'make-mode "c" 'projectile-compile-project) 
+(evil-leader/set-key-for-mode 'makefile-mode "c" 'projectile-compile-project)  
 
 ;;;Python
 (when (equal fabri-profile 'personal)
@@ -930,7 +935,7 @@ The app is chosen from your OS's preference."
 				         (turn-off-evil-mode)
 				         )))
 
-(advice-add 'artist-mode-off :before #'(lambda () (progn
+(advice-add 'artist-mode-off :after #'(lambda () (progn
 					  (when (bound-and-true-p whitespace-mode)
 					    (whitespace-mode))
 					  (turn-on-evil-mode)
@@ -1302,6 +1307,7 @@ DEADLINE: %^{DEADLINE}t ")
 (use-package markdown-mode
   :config
   (progn
+    (evil-leader/set-key-for-mode 'markdown-mode "a" 'markdown-insert-gfm-code-block) 
     (evil-leader/set-key-for-mode 'markdown-mode "o" 'markdown-insert-link)
     (evil-leader/set-key-for-mode 'markdown-mode "i" 'markdown-toggle-gfm-checkbox)
     (evil-leader/set-key-for-mode 'markdown-mode "6" 'markdown-toggle-inline-images) 
@@ -1567,11 +1573,13 @@ DEADLINE: %^{DEADLINE}t ")
     (evil-leader/set-key-for-mode 'rfc-mode "t" 'rfc-mode-goto-section)
     ))
 
-(use-package ledger-mode
-  :config
-  (progn
-    (evil-leader/set-key-for-mode 'ledger-mode "a" 'ledger-add-transaction) 
-    ))
+(when (equal fabri-profile 'personal)
+  (use-package ledger-mode
+    :config
+    (progn
+      (evil-leader/set-key-for-mode 'ledger-mode "a" 'ledger-add-transaction) 
+      ))
+  )
 
 
 ; Final details
