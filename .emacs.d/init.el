@@ -899,14 +899,6 @@ The app is chosen from your OS's preference."
     (setq whitespace-display-mappings (assq-delete-all 'newline-mark whitespace-display-mappings))
     (add-to-list 'whitespace-display-mappings '(newline-mark ?\n [92 ?n ?\n][?$ ?\n]))
 
-    ;; (defface trailing-whitespace '((((class color) (background light)) :background "red1")
-    ;;     (((class color) (background dark))
-    ;;      :background "red1")
-    ;;     (t :inverse-video t))
-    ;;   "Basic face for highlighting trailing whitespace."
-    ;;   :version "21.1"
-    ;;   :group 'basic-faces)
-
     (add-hook 'prog-mode-hook #'whitespace-mode)
     (add-hook 'markdown-mode-hook #'whitespace-mode)
     ;; (add-hook 'text-mode-hook #'whitespace-mode)
@@ -1593,8 +1585,8 @@ DEADLINE: %^{DEADLINE}t ")
   (use-package ledger-mode
     :config
     (progn
-      (evil-leader/set-key-for-mode 'ledger-mode "a" 'ledger-add-transaction) 
-      (evil-leader/set-key-for-mode 'ledger-mode "d" 'ledger-report) 
+      (evil-leader/set-key-for-mode 'ledger-mode "a" 'ledger-add-transaction)
+      (evil-leader/set-key-for-mode 'ledger-mode "d" 'ledger-report)
       ))
   )
 
