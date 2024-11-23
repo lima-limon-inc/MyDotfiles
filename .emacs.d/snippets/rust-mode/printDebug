@@ -1,0 +1,4 @@
+# key: pnd
+# name: printDebug
+# --
+println!("DEBUG: ${1:explain}\{:?\}", ${2:variableName});
