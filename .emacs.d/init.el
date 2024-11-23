@@ -55,7 +55,7 @@
 ; Package manager settings
 (when (equal fabri-profile 'work)
   (progn
-    (require 'package) 
+    (require 'package)
     (add-to-list 'package-archives
 	      '("melpa-stable" . "https://stable.melpa.org/packages/") t)
     )
@@ -63,7 +63,7 @@
 
 (setq use-package-always-ensure
       (when (equal fabri-profile 'work)
-        t) 
+        t)
       )
 
 ; Global look and feel
@@ -83,6 +83,23 @@
 
 ;; Don't use tabs, only use spaces
 (setq-default indent-tabs-mode nil)
+
+;; Show trailing whitespace
+(setq-default show-trailing-whitespace t)   
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+
+ ;; This variable is for the emacs-specifc trailing-whitespace
+ '(trailing-whitespace ((t (:background "#fb4933" :distant-foreground "red" :foreground "red"))))
+
+
+ ;; This is for whitespace mod
+ '(whitespace-trailing ((t (:background "#fb4933" :distant-foreground "red" :foreground "red"))))
+ )
+
 
 ;; Post
 (defun config-is-done ()
@@ -847,35 +864,43 @@ The app is chosen from your OS's preference."
   )
 
 
-
-
 ;; Whitespace-mode
-;; (use-package whitespace
-;;   :config
-;;   (progn
-;;     (setq whitespace-style (remove 'space-mark whitespace-style))
-;;     ;; (setq whitespace-style (remove 'trailing whitespace-style))
-;;     (setq whitespace-line-column (* fill-column 2)) ;; Highlight lines if twice the amount of fill-column
-;;     ;; (setq whitespace-space-regexp "\\(^ +\\| +$\\)") ;; visualize only leading SPACEs.
-;;     ;; (setq whitespace-hspace-regexp "\\(^\xA0+\\|\xA0+$\\)")
-;;     (setq whitespace-display-mappings (assq-delete-all 'newline-mark whitespace-display-mappings))
-;;     (add-to-list 'whitespace-display-mappings '(newline-mark ?\n [92 ?n ?\n][?$ ?\n]))
-;;     (setq show-trailing-whitespace t)
+(use-package whitespace 
+  :config
+  (progn
+    (setq whitespace-style (remove 'space-mark whitespace-style))
+    ;; (setq whitespace-style (remove 'trailing whitespace-style))
+    ;; (setq whitespace-style (remove 'space-mark))
+    ;; (setq whitespace-style (remove 'trailing whitespace-style))
+    (setq whitespace-line-column (* fill-column 2)) ;; Highlight lines if twice the amount of fill-column
+    ;; (setq whitespace-space-regexp "\\(^ +\\| +$\\)") ;; visualize only leading SPACEs.
+    ;; (setq whitespace-hspace-regexp "\\(^\xA0+\\|\xA0+$\\)")
+    (setq whitespace-display-mappings (assq-delete-all 'newline-mark whitespace-display-mappings))
+    (add-to-list 'whitespace-display-mappings '(newline-mark ?\n [92 ?n ?\n][?$ ?\n]))
 
-;;     (add-hook 'prog-mode-hook #'whitespace-mode)
-;;     ;; (add-hook 'text-mode-hook #'whitespace-mode)
-;;     )
-;;   )
+    ;; (defface trailing-whitespace '((((class color) (background light)) :background "red1")
+    ;;     (((class color) (background dark))
+    ;;      :background "red1")
+    ;;     (t :inverse-video t))
+    ;;   "Basic face for highlighting trailing whitespace."
+    ;;   :version "21.1"
+    ;;   :group 'basic-faces)
+
+    (add-hook 'prog-mode-hook #'whitespace-mode)
+    (add-hook 'markdown-mode-hook #'whitespace-mode)
+    ;; (add-hook 'text-mode-hook #'whitespace-mode)
+    )
+  )
 
 ;; Makes company-mode windows "gui-like". Helps with whitespace-mode's windows
-;; (use-package company-posframe
-;;   :config
-;;   (progn
-;;     (when (display-graphic-p)
-;;       (company-posframe-mode 1) 
-;;       )
-;;     )
-;;   )
+(use-package company-posframe
+  :config
+  (progn
+    (when (display-graphic-p)
+      (company-posframe-mode 1) 
+      )
+    )
+  )
 
 
 ;; Info mode
