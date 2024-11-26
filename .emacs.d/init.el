@@ -622,6 +622,7 @@ The app is chosen from your OS's preference."
   )
 
 (use-package git-modes
+  :ensure t
   )
 
 ;; Raibow delimiters
@@ -772,6 +773,7 @@ The app is chosen from your OS's preference."
 (evil-leader/set-key-for-mode 'makefile-gmake-mode "c" 'projectile-compile-project)
 (evil-leader/set-key-for-mode 'make-mode "c" 'projectile-compile-project) 
 (evil-leader/set-key-for-mode 'makefile-mode "c" 'projectile-compile-project)  
+(evil-leader/set-key-for-mode 'makefile-bsdmake-mode "c" 'projectile-compile-project)
 
 ;;;Python
 (when (equal fabri-profile 'personal)
@@ -1567,6 +1569,7 @@ DEADLINE: %^{DEADLINE}t ")
       ("b" ispell "ispell buffer")
       )
     (defalias 'ispell-full 'hydra-ispell/body)
+    (defalias 'spellcheck-full 'hydra-ispell/body)
 
     )
 
