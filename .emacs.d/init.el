@@ -747,21 +747,25 @@ The app is chosen from your OS's preference."
 ;;;Go
 (add-hook 'go-mode-hook #'lsp)
 (evil-leader/set-key-for-mode 'go-mode "i" 'lsp-treemacs-symbols)
+;;; ASM
+(evil-leader/set-key-for-mode 'asm-mode "c" 'projectile-compile-project)
 
 ;;;Rust
 ;;;; Shows colors in buffers
 (projectile-register-project-type 'rust-cargo '("Cargo.toml")
                                   :project-file "Cargo.toml"
                                   ;; :compile "RUSTFLAGS=-Awarnings cargo build"
-			    :compile (if (equal fabri-profile 'work)
-				     "make"
-				     "cargo build")
+                                  :compile (if (equal fabri-profile 'work)
+                                             "make"
+                                             "cargo build")
                                   :test "cargo test"
                                   :run "cargo run")  
 (add-hook 'rust-mode-hook #'lsp)
 (evil-leader/set-key-for-mode 'rust-mode "c" 'projectile-compile-project)
 (evil-leader/set-key-for-mode 'conf-toml-mode "c" 'projectile-compile-project) 
 (evil-leader/set-key-for-mode 'rust-mode "t" 'projectile-test-project)
+(setq lsp-rust-clippy-preference "on") 
+(setq lsp-rust-analyzer-cargo-watch-command "clippy")
 
 ;; Apply format on save
 (setq rust-format-on-save t)
