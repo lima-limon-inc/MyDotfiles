@@ -434,9 +434,9 @@ thisIsAWord -> this Is A Word
          )
       (insert org-title)
       (insert "\n")
-      (insert "** Misc ")
+      (insert "** Misc")
       (insert "\n")
-      (insert "*** TODO Daily Meeting ")
+      (insert "*** TODO Daily Meeting")
       )
     )
   )
@@ -839,8 +839,9 @@ The app is chosen from your OS's preference."
 
 (setq TeX-auto-untabify 't)
 
-(add-hook 'LaTeX-mode-hook (lambda () (set-input-method "spanish-postfix")))
-
+(when (equal fabri-profile 'work)
+  (add-hook 'LaTeX-mode-hook (lambda () (set-input-method "spanish-postfix")))
+  )
 
 
 ;; Editorconfig
@@ -1044,7 +1045,9 @@ X value, then the lambda value aka the mean."
 
 ;;;Makes lines wrap
 (add-hook 'org-mode-hook 'visual-line-mode)
-(add-hook 'org-mode-hook (lambda () (set-input-method "spanish-postfix")))
+(when (equal fabri-profile 'work) 
+  (add-hook 'org-mode-hook (lambda () (set-input-method "spanish-postfix")))
+  )
 
 ;;; defalias
 (defalias 'org-go-to-link 'org-open-at-point)
