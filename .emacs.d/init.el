@@ -839,7 +839,7 @@ The app is chosen from your OS's preference."
 
 (setq TeX-auto-untabify 't)
 
-(when (equal fabri-profile 'work)
+(when (equal fabri-profile 'personal)
   (add-hook 'LaTeX-mode-hook (lambda () (set-input-method "spanish-postfix")))
   )
 
@@ -1045,7 +1045,7 @@ X value, then the lambda value aka the mean."
 
 ;;;Makes lines wrap
 (add-hook 'org-mode-hook 'visual-line-mode)
-(when (equal fabri-profile 'work) 
+(when (equal fabri-profile 'personal) 
   (add-hook 'org-mode-hook (lambda () (set-input-method "spanish-postfix")))
   )
 
