@@ -1376,19 +1376,35 @@ DEADLINE: %^{DEADLINE}t ")
 ;; Search on browser
 (load-file (concat user-emacs-directory "quick-search/quick-search.el"))
 
-(quick-search/set-preferred-browser "firefox-bin" "")
-(quick-search/add-search-engine "Google" "https://google.com/search?q=" nil)
-(quick-search/add-search-engine "Zugaina" "http://gpo.zugaina.org/Search?search=" nil)
-(quick-search/add-search-engine "Wikipedia" "https://en.wikipedia.org/w/index.php?search=" nil)
-(quick-search/add-search-engine "Gentoo wiki" "https://wiki.gentoo.org/index.php?search=" nil)
-(quick-search/add-search-engine "Arch wiki" "https://wiki.archlinux.org/index.php?search=" nil)
-(quick-search/add-search-engine "Python" "https://docs.python.org/3/search.html?q=" '(python-mode))
-(quick-search/add-search-engine "Oxford Dictionary" "https://www.oxfordlearnersdictionaries.com/definition/english/" '(org-mode latex-mode LaTeX-mode tex-mode markdown-mode))
-(quick-search/add-search-engine "Youtube" "https://www.youtube.com/results?search_query=" nil)
-(quick-search/add-search-engine "C plus plus" "https://cplusplus.com/search.do?q=" '(c++-mode c-mode))
-(quick-search/add-search-engine "Rust" "https://doc.rust-lang.org/std/?search=" '(rust-mode))
+(if (equal fabri-profile 'personal)
+    (progn
+      (quick-search/set-preferred-browser "firefox-bin" "")
+      (quick-search/add-search-engine "Google" "https://google.com/search?q=" nil)
+      (quick-search/add-search-engine "Zugaina" "http://gpo.zugaina.org/Search?search=" nil)
+      (quick-search/add-search-engine "Wikipedia" "https://en.wikipedia.org/w/index.php?search=" nil)
+      (quick-search/add-search-engine "Gentoo wiki" "https://wiki.gentoo.org/index.php?search=" nil)
+      (quick-search/add-search-engine "Arch wiki" "https://wiki.archlinux.org/index.php?search=" nil)
+      (quick-search/add-search-engine "Python" "https://docs.python.org/3/search.html?q=" '(python-mode))
+      (quick-search/add-search-engine "Oxford Dictionary" "https://www.oxfordlearnersdictionaries.com/definition/english/" '(org-mode latex-mode LaTeX-mode tex-mode markdown-mode))
+      (quick-search/add-search-engine "Youtube" "https://www.youtube.com/results?search_query=" nil)
+      (quick-search/add-search-engine "C plus plus" "https://cplusplus.com/search.do?q=" '(c++-mode c-mode))
+      (quick-search/add-search-engine "Rust" "https://doc.rust-lang.org/std/?search=" '(rust-mode))
+      )
+  (progn
 
-(evil-leader/set-key "5" 'quick-search)
+    (require 'webjump)
+
+    (setq webjump-sites
+          (append '(
+                    ("Google" . [simple-query "www.google.com" "https://google.com/search?q=" ""])
+                    )
+                  webjump-sample-sites))
+
+    )
+  (quick-search/set-preferred-browser "open /Applications/Firefox.app" "-n --args ")
+  )
+
+(evil-leader/set-key "5" 'webjump)
 
 
 ; Additional "non essential" extensions
@@ -1609,4 +1625,6 @@ DEADLINE: %^{DEADLINE}t ")
 ;; WARNING KEEP AT THE BOTTOM 
 ;; NOTE: Meant to add advice to this function
 (config-is-done)
+
+
 
