@@ -763,9 +763,84 @@ The app is chosen from your OS's preference."
 (add-hook 'rust-mode-hook #'lsp)
 (evil-leader/set-key-for-mode 'rust-mode "c" 'projectile-compile-project)
 (evil-leader/set-key-for-mode 'conf-toml-mode "c" 'projectile-compile-project) 
-(evil-leader/set-key-for-mode 'rust-mode "t" 'projectile-test-project)
 (setq lsp-rust-clippy-preference "on") 
 (setq lsp-rust-analyzer-cargo-watch-command "clippy")
+
+(defun function-return-area ()
+  (save-excursion
+    (progn
+      (beginning-of-defun)
+      (let*
+          (
+           (end (- (search-forward "{") 1))
+           (start (+ 1 (search-backward ")")))
+           (return-text (buffer-substring start end))
+
+           (arrow-relative-pos (string-match-p (regexp-quote "->") return-text))
+           (arrow-offset (if arrow-relative-pos arrow-relative-pos 0))
+           (arrow-pos (+ arrow-offset start))
+           )
+        (list start end arrow-pos)
+        )
+      )
+    )
+  )
+
+(defun filter-last-spaces (text)
+  (let*
+      (
+       (text (reverse text))
+       (found-non-space nil)
+       (reversed (mapcar (lambda (current) (if (and (not found-non-space)
+                                                    (equal current ? ))
+                                               ? 
+                                             (progn
+                                               (setq found-non-space t)
+                                               (char-to-string current)
+                                               current
+                                               )))
+                         text)
+                 )
+       (reversed (mapconcat (lambda (current) (char-to-string current)) reversed))
+       )
+    (format "%s" (reverse reversed))
+    )
+  )
+
+(defun change-rust-return (new-return start end)
+  (interactive
+   (save-excursion
+     (let*
+         (
+          (function-limits (function-return-area))
+          (start (nth 0 function-limits))
+          (end (nth 1 function-limits))
+          (arrow-pos (nth 2 function-limits))
+
+          (function-start (if arrow-pos arrow-pos start))
+          (return-text (buffer-substring function-start end))
+          (return-text (string-replace "\n" "" return-text))
+
+          (filter-text (filter-last-spaces return-text))
+          )
+       (list
+        (read-string "Return value: " (format "%s" filter-text))
+        start
+        end)
+       )
+     )
+   )
+  (save-excursion
+    (progn
+      (delete-region start end)
+      (goto-char start)
+      (insert " ")
+      (insert new-return)
+      (insert " ")
+      )
+    )
+  )
+(evil-leader/set-key-for-mode 'rust-mode "t" 'change-rust-return)
 
 ;; Apply format on save
 (setq rust-format-on-save t)
@@ -1628,77 +1703,3 @@ DEADLINE: %^{DEADLINE}t ")
 (config-is-done)
 
 
-(defun function-return-area ()
-  (save-excursion
-    (progn
-      (beginning-of-defun)
-      (let*
-          (
-           (end (- (search-forward "{") 1))
-           (start (+ 1 (search-backward ")")))
-           (return-text (buffer-substring start end))
-
-           (arrow-relative-pos (string-match-p (regexp-quote "->") return-text))
-           (arrow-offset (if arrow-relative-pos arrow-relative-pos 0))
-           (arrow-pos (+ arrow-offset start))
-           )
-        (list start end arrow-pos)
-        )
-      )
-    )
-  )
-
-(defun filter-last-spaces (text)
-  (let*
-      (
-       (text (reverse text))
-       (found-non-space nil)
-       (reversed (mapcar (lambda (current) (if (and (not found-non-space)
-                                                    (equal current ? ))
-                                               ? 
-                                             (progn
-                                               (setq found-non-space t)
-                                               (char-to-string current)
-                                               current
-                                               )))
-                         text)
-                 )
-       (reversed (mapconcat (lambda (current) (char-to-string current)) reversed))
-       )
-    (format "%s" (reverse reversed))
-    )
-  )
-
-(defun change-rust-return (new-return start end)
-  (interactive
-   (save-excursion
-     (let*
-         (
-          (function-limits (function-return-area))
-          (start (nth 0 function-limits))
-          (end (nth 1 function-limits))
-          (arrow-pos (nth 2 function-limits))
-
-          (function-start (if arrow-pos arrow-pos start))
-          (return-text (buffer-substring function-start end))
-          (return-text (string-replace "\n" "" return-text))
-
-          (filter-text (filter-last-spaces return-text))
-          )
-       (list
-        (read-string "Return value: " (format "%s" filter-text))
-        start
-        end)
-       )
-     )
-   )
-  (save-excursion
-    (progn
-      (delete-region start end)
-      (goto-char start)
-      (insert " ")
-      (insert new-return)
-      (insert " ")
-      )
-    )
-  )
