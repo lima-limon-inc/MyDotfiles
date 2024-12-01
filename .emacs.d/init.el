@@ -684,6 +684,10 @@ The app is chosen from your OS's preference."
 
 ;; Flycheck for ui
 (use-package flycheck
+  :config
+  (progn
+    (defalias 'show-errors 'flycheck-list-errors)
+    )
   )
 
 ;; LSP
@@ -971,6 +975,16 @@ The app is chosen from your OS's preference."
   )
 
 
+;; Makes company-mode windows "gui-like". Helps with whitespace-mode's windows
+(use-package company-posframe
+  :config
+  (progn
+    (when (display-graphic-p)
+      (company-posframe-mode 1)
+      )
+    )
+  )
+
 ;; Whitespace-mode
 (use-package whitespace 
   :config
@@ -988,16 +1002,6 @@ The app is chosen from your OS's preference."
     (add-hook 'prog-mode-hook #'whitespace-mode)
     (add-hook 'markdown-mode-hook #'whitespace-mode)
     ;; (add-hook 'text-mode-hook #'whitespace-mode)
-    )
-  )
-
-;; Makes company-mode windows "gui-like". Helps with whitespace-mode's windows
-(use-package company-posframe
-  :config
-  (progn
-    (when (display-graphic-p)
-      (company-posframe-mode 1) 
-      )
     )
   )
 
@@ -1703,3 +1707,27 @@ DEADLINE: %^{DEADLINE}t ")
 (config-is-done)
 
 
+
+
+(defun flycheck-copy-errors-as-kill-3 (pos &optional formatter)
+  "Copy each error at POS into kill ring, using FORMATTER.
+
+FORMATTER is a function to turn an error into a string,
+defaulting to `flycheck-error-message'.
+
+Interactively, use `flycheck-error-format-message-and-id' as
+FORMATTER with universal prefix arg, and `flycheck-error-id' with
+normal prefix arg, i.e. copy the message and the ID with
+universal prefix arg, and only the id with normal prefix arg."
+  (interactive (list (point)
+                     (pcase current-prefix-arg
+                       ((pred not) #'flycheck-error-message)
+                       ((pred consp) #'flycheck-error-format-message-and-id)
+                       (_ #'flycheck-error-id))))
+  (let ((messages (delq nil (seq-map (or formatter #'flycheck-error-message)
+                                     (flycheck-overlay-errors-at pos)))))
+    (when messages
+      (let ((full-message (string-join messages "\n"))
+      (kill-new full-message)
+      (message full-message)
+      )))))
