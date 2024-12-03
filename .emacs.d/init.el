@@ -790,27 +790,6 @@ The app is chosen from your OS's preference."
     )
   )
 
-(defun filter-last-spaces (text)
-  (let*
-      (
-       (text (reverse text))
-       (found-non-space nil)
-       (reversed (mapcar (lambda (current) (if (and (not found-non-space)
-                                                    (equal current ? ))
-                                               ? 
-                                             (progn
-                                               (setq found-non-space t)
-                                               (char-to-string current)
-                                               current
-                                               )))
-                         text)
-                 )
-       (reversed (mapconcat (lambda (current) (char-to-string current)) reversed))
-       )
-    (format "%s" (reverse reversed))
-    )
-  )
-
 (defun change-rust-return (new-return start end)
   (interactive
    (save-excursion
@@ -825,7 +804,7 @@ The app is chosen from your OS's preference."
           (return-text (buffer-substring function-start end))
           (return-text (string-replace "\n" "" return-text))
 
-          (filter-text (filter-last-spaces return-text))
+          (filter-text (string-trim-right return-text))
           )
        (list
         (read-string "Return value: " (format "%s" filter-text))
