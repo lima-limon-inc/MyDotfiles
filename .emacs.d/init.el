@@ -1105,6 +1105,9 @@ X value, then the lambda value aka the mean."
   (setq org-agenda-files '("~/Documents/LearningPath/")) 
   )
 
+;; Adds diary entries in org agenda
+(setq org-agenda-include-diary t)
+
 ;;;Makes lines wrap
 (add-hook 'org-mode-hook 'visual-line-mode)
 (when (equal fabri-profile 'personal) 
