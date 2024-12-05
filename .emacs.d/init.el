@@ -362,6 +362,7 @@
   )
 (when (equal fabri-profile 'work)
   (set-register ?t (cons 'file (current-day-file)))
+  (set-register ?r (cons 'file "~/Repositories/ethrex-fork/"))
   )
 
 
@@ -609,6 +610,8 @@ The app is chosen from your OS's preference."
                                               ("Damian Ramirez <damian.ramirez@lambdaclass.com>" 2)
                                               ("Dylan Socolobsky <dylan.socolobsky@lambdaclass.com>" 3)
                                               ("Tomás Grüner <tomas.gruner@lambdaclass.com>" 4)
+                                              ("Juan Bono <juan.bono@lambdaclass.com>" 5)
+                                              ("Joaquin Carletti <joaquin.carletti@lambdaclass.com>" 6)
                                               )
                                             ))
                      )
@@ -824,7 +827,8 @@ The app is chosen from your OS's preference."
       )
     )
   )
-(evil-leader/set-key-for-mode 'rust-mode "t" 'change-rust-return)
+(evil-leader/set-key-for-mode 'rust-mode "t" 'projectile-test-project)
+(evil-leader/set-key-for-mode 'rust-mode "y" 'change-rust-return)
 
 ;; Apply format on save
 (setq rust-format-on-save t)
@@ -1190,7 +1194,7 @@ DEADLINE: %^{DEADLINE}t ")
 %^{IDEA}")
 	  )
         '(
-	("t" "Task" entry (file+headline "" "Tasks")
+	("t" "Task" entry (file+headline "~/Documents/LearningPath/notes.org" "Tasks")
 	 "* TODO %?\n  %u\n  %a")
 	)
         )
@@ -1237,7 +1241,11 @@ DEADLINE: %^{DEADLINE}t ")
 
 
 ;;; Log done
-(setq org-log-done 'time)
+(if (equal fabri-profile 'personal)
+    (setq org-log-done 'time)
+    (setq org-log-done nil)
+  )
+
 (with-eval-after-load 'org
   (add-to-list 'org-modules 'org-habit t))
 
