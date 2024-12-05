@@ -180,9 +180,6 @@
 			    ("America/Montevideo" "Montevideo")
 			    ))
 
-;; Set calendar style
-(require 'calendar) 
-(calendar-set-date-style 'european)
 
 ;; Add newlines at the end of the file
 (setq require-final-newline 'visit-save)
@@ -925,6 +922,18 @@ The app is chosen from your OS's preference."
 
 (advice-add 'config-is-done
 	  :after #'(lambda () (check-file-exists-warn (my-emacs-dir "diary"))))
+
+;; Calendar
+
+;;; Set calendar style
+(require 'calendar) 
+(calendar-set-date-style 'european)
+
+;;; Set sunset times
+(setq calendar-latitude -34.37)
+(setq calendar-longitude -58.38)
+(setq calendar-location-name "Buenos Aires, Argentina")
+
 
 ;; Dired
 (setq dired-listing-switches "-alhF")
