@@ -777,6 +777,7 @@ The app is chosen from your OS's preference."
       (let*
           (
            (end (- (search-forward "{") 1))
+           ;; TODO: Change to search backwards regex that's ")" and not "(*)"
            (start (+ 1 (search-backward ")")))
            (return-text (buffer-substring start end))
 
@@ -838,15 +839,13 @@ The app is chosen from your OS's preference."
 (evil-leader/set-key-for-mode 'makefile-bsdmake-mode "c" 'projectile-compile-project)
 
 ;;;Python
-(when (equal fabri-profile 'personal)
-  (use-package lsp-pyright
-    ;; :ensure (install-for 'python)
-    :config
-    (progn
-      (add-hook 'python-mode-hook #'lsp)
-      (defalias 'ipython 'run-python)
-      (evil-leader/set-key-for-mode 'python-mode "i" 'lsp-treemacs-symbols)
-      )
+(use-package lsp-pyright
+  ;; :ensure (install-for 'python)
+  :config
+  (progn
+    (add-hook 'python-mode-hook #'lsp)
+    (defalias 'ipython 'run-python)
+    (evil-leader/set-key-for-mode 'python-mode "i" 'lsp-treemacs-symbols)
     )
   )
 (evil-leader/set-key-for-mode 'python-mode "p" 'run-python)
@@ -1710,3 +1709,4 @@ universal prefix arg, and only the id with normal prefix arg."
       (kill-new full-message)
       (message full-message)
       )))))
+
