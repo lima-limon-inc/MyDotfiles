@@ -776,7 +776,8 @@ The app is chosen from your OS's preference."
       (beginning-of-defun)
       (let*
           (
-           (end (- (search-forward "{") 1))
+           (fn-beginning (point))
+           (end (- (search-forward "{" fn-beginning) 1))
            ;; TODO: Change to search backwards regex that's ")" and not "(*)"
            (start (+ 1 (search-backward ")")))
            (return-text (buffer-substring start end))
