@@ -359,7 +359,7 @@
   )
 (when (equal fabri-profile 'work)
   (set-register ?t (cons 'file (current-day-file)))
-  (set-register ?r (cons 'file "~/Repositories/ethrex-fork/"))
+  (set-register ?r (cons 'file "~/Repositories/ethrex/"))
   )
 
 
@@ -609,6 +609,8 @@ The app is chosen from your OS's preference."
                                               ("Tomás Grüner <tomas.gruner@lambdaclass.com>" 4)
                                               ("Juan Bono <juan.bono@lambdaclass.com>" 5)
                                               ("Joaquin Carletti <joaquin.carletti@lambdaclass.com>" 6)
+                                              ("Maximo Palopoli <maximo.palopoli@lambdaclass.com>" 7)
+                                              ("Jeremias Salomon <jeremias.salomon@lambdaclass.com>" 8)
                                               )
                                             ))
                      )
@@ -707,6 +709,9 @@ The app is chosen from your OS's preference."
 (use-package lsp-ui
   :config
   (setq lsp-completion-enable-additional-text-edit nil)
+  )
+
+(use-package lsp-ivy
   )
 
 ;; Projectile
@@ -1166,7 +1171,7 @@ X value, then the lambda value aka the mean."
 ;; (evil-leader/set-key-for-mode 'org-mode "x" 'flyspell-auto-correct-word)
 (evil-leader/set-key-for-mode 'org-mode "]" 'org-latex-preview)
 (evil-leader/set-key-for-mode 'org-mode "c" 'org-export-dispatch)
-(evil-leader/set-key-for-mode 'org-mode "8" 'org-insert-date)
+;; (evil-leader/set-key-for-mode 'org-mode "8" 'org-insert-date)
 ;; (evil-leader/set-key-for-mode 'org-mode "'" 'mozc-mode)
 (evil-leader/set-key-for-mode 'org-mode "6" 'org-toggle-inline-images)
 (evil-leader/set-key-for-mode 'org-mode "0" 'hydra-clock/body)
@@ -1668,6 +1673,14 @@ DEADLINE: %^{DEADLINE}t ")
       ("j" org-footnote-new "include")
       ("k" org-footnote-normalize "normalize")
       )
+
+    (defhydra hydra-move-buffers ()
+      "Move between buffers"
+      ("n" next-buffer "Next buffer")
+      ("p" previous-buffer "Previous buffer")
+      )
+
+    (evil-leader/set-key "8" 'hydra-move-buffers/body)
 
     (defhydra hydra-ispell ()
       "Ispell actions"
