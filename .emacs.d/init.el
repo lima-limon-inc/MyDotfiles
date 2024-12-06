@@ -934,6 +934,9 @@ The app is chosen from your OS's preference."
 (setq calendar-longitude -58.38)
 (setq calendar-location-name "Buenos Aires, Argentina")
 
+;; Start the week on monday
+(setq calendar-week-start-day 1) ; 0:Sunday, 1:Monday
+
 
 ;; Dired
 (setq dired-listing-switches "-alhF")
@@ -1567,7 +1570,6 @@ DEADLINE: %^{DEADLINE}t ")
     (progn
       (require 'calfw-org)
       (require 'calfw-cal)
-      (setq calendar-week-start-day 1) ; 0:Sunday, 1:Monday
       (defalias 'org-mode-calendar 'cfw:open-org-calendar)
       (evil-leader/set-key "C-o" #'org-mode-calendar)
       (add-hook 'cfw:calendar-mode-hook (lambda () (local-set-key (kbd "g t") 'tab-bar-switch-to-next-tab)))
