@@ -780,7 +780,9 @@ The app is chosen from your OS's preference."
            (fn-ending (save-excursion (progn (end-of-defun) (point))))
            (end (- (search-forward "{" fn-ending) 1))
            ;; TODO: Change to search backwards regex that's ")" and not "(*)"
-           (start (+ 1 (search-backward ")")))
+           (start (+ 2 (re-search-backward
+        (rx (not "(") ")")
+                           )))
            (return-text (buffer-substring start end))
 
            (arrow-relative-pos (string-match-p (regexp-quote "->") return-text))
@@ -1734,3 +1736,13 @@ universal prefix arg, and only the id with normal prefix arg."
       (message full-message)
       )))))
 
+
+;; (defun foo () (interactive)
+;;        (re-search-backward
+;;         (rx (or
+;;              ;; ")"
+;;              (sequence (not "(") ")")
+;;              ))
+;;         ;; (rx (not "(") ")")
+;;        )
+;;        )
