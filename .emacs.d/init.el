@@ -568,8 +568,8 @@ The app is chosen from your OS's preference."
     (evil-leader/set-key "." 'magit-status)
     (setq magit-blame-styles
           '((margin
-             (margin-width . 32)
-             (margin-format . ("%C %c %f"))
+             (margin-width . 52)
+             (margin-format . ("%H %a %f"))
              (margin-face . magit-blame-margin)
              (margin-body-face . magit-blame-dimmed)
              (show-message . t))))
@@ -656,6 +656,7 @@ The app is chosen from your OS's preference."
     (setq hl-todo-keyword-faces
 	'(("TODO"      . "#FF0000")
 	  ("FIXME"     . "#FF0000")
+	  ("ERROR"     . "#FF0000")
 	  ("DEBUG"     . "#A020F0")
 	  ("GOTCHA"    . "#FF4500")
 	  ("HELP"      . "#F5601B")
