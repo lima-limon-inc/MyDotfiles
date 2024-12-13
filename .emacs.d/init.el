@@ -354,8 +354,9 @@
   (set-register ?f (cons 'file "~/Documents/Facultad/facultad.org"))
   (set-register ?p (cons 'file "~/Documents/Personal/daily.org"))
   (set-register ?b (cons 'file "~/Scripts/Orgmode/"))
-  (set-register ?r (cons 'file "~/Documents/Personal/Radio/")) 
-  (set-register ?g (cons 'file "~/Documents/Personal/Finanzas/"))  
+  (set-register ?r (cons 'file "~/Documents/Personal/Radio/"))
+  (set-register ?g (cons 'file "~/Documents/Personal/Finanzas/"))
+  (set-register ?c (cons 'file "~/Documents/Personal/Cosas/"))
   )
 (when (equal fabri-profile 'work)
   (set-register ?t (cons 'file (current-day-file)))
@@ -713,6 +714,7 @@ The app is chosen from your OS's preference."
   )
 
 (use-package lsp-ivy
+  :ensure t
   )
 
 ;; Projectile
@@ -785,10 +787,13 @@ The app is chosen from your OS's preference."
            (fn-beginning (point))
            (fn-ending (save-excursion (progn (end-of-defun) (point))))
            (end (- (search-forward "{" fn-ending) 1))
-           ;; TODO: Change to search backwards regex that's ")" and not "(*)"
-           (start (+ 2 (re-search-backward
-        (rx (not "(") ")")
-                           )))
+           (start (+ 3
+                     (re-search-backward
+                      (rx 
+                           ;; (sequence (and (not "<") (not "("))
+                           (sequence (not "(")
+                                     ")")
+                           ))))
            (return-text (buffer-substring start end))
 
            (arrow-relative-pos (string-match-p (regexp-quote "->") return-text))
@@ -1397,6 +1402,10 @@ DEADLINE: %^{DEADLINE}t ")
       (setq ivy-initial-inputs-alist nil))
     ))
 
+;; WGrep mode - Edit grep buffer
+(use-package wgrep
+  )
+
 ;; Swiper
 (use-package swiper 
   :config
@@ -1718,6 +1727,7 @@ DEADLINE: %^{DEADLINE}t ")
   )
 
 
+
 ; Final details
 
 ;; WARNING KEEP AT THE BOTTOM 
@@ -1755,7 +1765,7 @@ universal prefix arg, and only the id with normal prefix arg."
 ;;        (re-search-backward
 ;;         (rx (or
 ;;              ;; ")"
-;;              (sequence (not "(") ")")
+;;              (sequence (and (not "<") (not "(")) ")")
 ;;              ))
 ;;         ;; (rx (not "(") ")")
 ;;        )
