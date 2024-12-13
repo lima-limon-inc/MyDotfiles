@@ -739,6 +739,9 @@ The app is chosen from your OS's preference."
 
 ;; Language specific configuration
 
+;; Text mode
+(evil-leader/set-key-for-mode 'text-mode "6" 'reload-file)
+
 ;;;C++
 (evil-leader/set-key-for-mode 'c++-mode "c" 'projectile-compile-project)
 (evil-leader/set-key-for-mode 'c++-mode "t" 'gdb)
@@ -1700,6 +1703,14 @@ DEADLINE: %^{DEADLINE}t ")
       )
     (defalias 'ispell-full 'hydra-ispell/body)
     (defalias 'spellcheck-full 'hydra-ispell/body)
+
+    (defhydra hydra-adjust-windows ()
+      "Adjust window size"
+      ("h" shrink-window-horizontally "Shrink horizontally")
+      ("l" enlarge-window-horizontally "Enlarge horizontally")
+      ("k" enlarge-window "Enlarge vertically")
+      ("j" (enlarge-window -1) "Shrkink vertically")
+      )
 
     )
 
