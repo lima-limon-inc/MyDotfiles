@@ -197,6 +197,8 @@
 (defalias 'ispell-change-language 'ispell-change-dictionary)
 (defalias 'set-ispell-language 'ispell-change-dictionary)
 
+(defalias 'unix-find 'find-name-dired)
+
 ;; Zone when idle
 (require 'zone)
 (zone-when-idle 300)
