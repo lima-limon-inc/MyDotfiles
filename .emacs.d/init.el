@@ -196,7 +196,7 @@
 ;;; Ispell
 (defalias 'ispell-change-language 'ispell-change-dictionary)
 (defalias 'set-ispell-language 'ispell-change-dictionary)
-
+;; Dired
 (defalias 'unix-find 'find-name-dired)
 
 ;; Zone when idle
@@ -1713,6 +1713,17 @@ DEADLINE: %^{DEADLINE}t ")
       ("k" enlarge-window "Enlarge vertically")
       ("j" (enlarge-window -1) "Shrkink vertically")
       )
+
+    ;; Narrow-to-region
+    (defalias 'select-region-start 'narrow-to-region)
+    (defalias 'select-region-stop 'widen)
+
+    (defhydra hydra-select-region ()
+      "Select some text from a buffer"
+      ("j" select-region-start "Select a region")
+      ("f" select-region-stop "Show entire buffer")
+      )
+    (evil-leader/set-key "C-e" 'hydra-select-region/body)
 
     )
 
