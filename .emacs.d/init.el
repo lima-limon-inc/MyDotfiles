@@ -174,6 +174,8 @@
 
 ;; World clock
 (setq zoneinfo-style-world-list '(
+                                  ("Europe/Berlin" "Berlin")
+                                  ("Europe/Paris" "Paris")
 			    ("Europe/Rome" "Rome")
 			    ("Europe/Madrid" "Madrid")
 			    ("America/Buenos_Aires" "Buenos Aires")
@@ -649,6 +651,14 @@ The app is chosen from your OS's preference."
     (add-hook 'c-mode-hook 'rainbow-mode)
     (add-hook 'rust-mode-hook 'rainbow-mode)
     (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
+    )
+  )
+
+(use-package beacon
+  :ensure t
+  :config
+  (progn
+    (beacon-mode 1)
     )
   )
 
@@ -1713,6 +1723,8 @@ DEADLINE: %^{DEADLINE}t ")
       ("k" enlarge-window "Enlarge vertically")
       ("j" (enlarge-window -1) "Shrkink vertically")
       )
+
+    (evil-leader/set-key "C-t" 'hydra-adjust-windows/bodyiik)
 
     ;; Narrow-to-region
     (defalias 'select-region-start 'narrow-to-region)
