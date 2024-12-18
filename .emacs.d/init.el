@@ -616,6 +616,8 @@ The app is chosen from your OS's preference."
                                               ("Joaquin Carletti <joaquin.carletti@lambdaclass.com>" 6)
                                               ("Maximo Palopoli <maximo.palopoli@lambdaclass.com>" 7)
                                               ("Jeremias Salomon <jeremias.salomon@lambdaclass.com>" 8)
+                                              ("Lucas Delgado <lucas.delgado@lambdaclass.com>" 9)
+                                              ("Tomas Paradelo <tomas.paradelo@lambdaclass.com>" 10)
                                               )
                                             ))
                      )
@@ -651,14 +653,6 @@ The app is chosen from your OS's preference."
     (add-hook 'c-mode-hook 'rainbow-mode)
     (add-hook 'rust-mode-hook 'rainbow-mode)
     (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
-    )
-  )
-
-(use-package beacon
-  :ensure t
-  :config
-  (progn
-    (beacon-mode 1)
     )
   )
 
