@@ -982,6 +982,10 @@ The app is chosen from your OS's preference."
 ;; Term
 (evil-leader/set-key-for-mode 'term-mode "p" 'term-paste)
 
+;; Shell mode
+(evil-leader/set-key-for-mode 'shell-mode "p" 'comint-previous-input)
+(evil-leader/set-key-for-mode 'shell-mode "n" 'comint-next-input)
+
 ;; Woman mode
 (use-package man
   :config
@@ -1155,6 +1159,7 @@ X value, then the lambda value aka the mean."
 (defalias 'org-mode-insert-date 'org-time-stamp) 
 (defalias 'org-insert-date 'org-mode-insert-date)
 (defalias 'org-time-difference 'org-evaluate-time-range)
+(defalias 'delete-lines 'flush-lines)
 
 ;;; Org agenda
 (setq org-agenda-span 60)
