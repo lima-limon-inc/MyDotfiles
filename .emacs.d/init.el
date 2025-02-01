@@ -1500,6 +1500,10 @@ DEADLINE: %^{DEADLINE}t ")
 (use-package dockerfile-mode
   )
 
+;; Solidy
+(use-package solidity-mode
+  )
+
 ;; Yas snippets
 (use-package yasnippet
   :config
