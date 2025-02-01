@@ -218,7 +218,6 @@
     (with-current-buffer "*Async Shell Command*"
       (rename-uniquely))))
 (ad-activate 'shell-command)
-(evil-leader/set-key "&" 'async-shell-command)
 
 
 
@@ -267,6 +266,8 @@
 (evil-leader/set-key "l" 'evil-window-right)
 (evil-leader/set-key "k" 'evil-window-up)
 (evil-leader/set-key "j" 'evil-window-down)
+;;; Shell
+(evil-leader/set-key "&" 'async-shell-command)
 
 ;; Macos Maximize
 (when (equal fabri-profile 'work)
@@ -1625,7 +1626,7 @@ DEADLINE: %^{DEADLINE}t ")
   )
 
 ;; PDF TOOLS
-(when (equal fabri-profile 'personal)
+(when (and (equal fabri-profile 'personal) (display-graphic-p))
 (use-package pdf-tools
   :config
   (progn
