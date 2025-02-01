@@ -557,6 +557,30 @@ The app is chosen from your OS's preference."
         (mapc (lambda (fPath) (let ((process-connection-type nil)) (start-process "" nil "xdg-open" fPath)) ) myFileList) ) ) ) ) )
 (defalias 'open-with 'xah-open-in-external-app)
 
+;; Comment delimiter
+(defun pretty-comment-delimiter (message)
+  (interactive
+   (list
+    (read-string "Comment message: ")
+    )
+   )
+  (let* (
+        (message (concat " " message " "))
+        (column-limit fill-column )
+        (message-length (length message))
+        (comment-length (length comment-start))
+        (empty-space (- column-limit message-length))
+        (right-space (/ empty-space 2))
+        (left-space (- right-space comment-length))
+        )
+    (progn
+      (insert comment-start)
+      (insert (make-string left-space ?=))
+      (insert message)
+      (insert (make-string right-space ?=))
+      )
+    )
+  )
 
 ; Programming configuration
 ;; Color line
@@ -619,6 +643,8 @@ The app is chosen from your OS's preference."
                                               ("Jeremias Salomon <jeremias.salomon@lambdaclass.com>" 8)
                                               ("Lucas Delgado <lucas.delgado@lambdaclass.com>" 9)
                                               ("Tomas Paradelo <tomas.paradelo@lambdaclass.com>" 10)
+                                              ("Ivan Litteri <ivan.litteri@lambdaclass.com>" 11)
+                                              ("Federico Borello <federico.borello@lambdaclass.com" 12)
                                               )
                                             ))
                      )
@@ -1020,7 +1046,7 @@ The app is chosen from your OS's preference."
     ;; (setq whitespace-space-regexp "\\(^ +\\| +$\\)") ;; visualize only leading SPACEs.
     ;; (setq whitespace-hspace-regexp "\\(^\xA0+\\|\xA0+$\\)")
     (setq whitespace-display-mappings (assq-delete-all 'newline-mark whitespace-display-mappings))
-    (add-to-list 'whitespace-display-mappings '(newline-mark ?\n [92 ?n ?\n][?$ ?\n]))
+    ;; (add-to-list 'whitespace-display-mappings '(newline-mark ?\n [92 ?n ?\n][?$ ?\n]))
 
     (add-hook 'prog-mode-hook #'whitespace-mode)
     (add-hook 'markdown-mode-hook #'whitespace-mode)
@@ -1724,7 +1750,7 @@ DEADLINE: %^{DEADLINE}t ")
       ("j" (enlarge-window -1) "Shrkink vertically")
       )
 
-    (evil-leader/set-key "C-t" 'hydra-adjust-windows/bodyiik)
+    (evil-leader/set-key "C-t" 'hydra-adjust-windows/body)
 
     ;; Narrow-to-region
     (defalias 'select-region-start 'narrow-to-region)
