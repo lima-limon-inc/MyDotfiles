@@ -81,6 +81,10 @@
   (load-theme 'gruvbox-dark-hard t)
   )
 
+(use-package go-mode
+  :ensure t
+)
+
 ;; Don't use tabs, only use spaces
 (setq-default indent-tabs-mode nil)
 
@@ -200,6 +204,8 @@
 (defalias 'set-ispell-language 'ispell-change-dictionary)
 ;; Dired
 (defalias 'unix-find 'find-name-dired)
+;; Find file
+(defalias 'find-file-recursive 'find-name-dired)
 
 ;; Zone when idle
 (require 'zone)
@@ -365,7 +371,7 @@
   )
 (when (equal fabri-profile 'work)
   (set-register ?t (cons 'file (current-day-file)))
-  (set-register ?r (cons 'file "~/Repositories/ethrex/"))
+  (set-register ?r (cons 'file "~/Repositories/ethrex-nuevo"))
   )
 
 
@@ -449,6 +455,28 @@ thisIsAWord -> this Is A Word
 (defun tmp-dir ()
   (interactive)
     (find-file (make-temp-file (user-real-login-name) 't))
+  )
+
+;; Stop and delete docker container
+(defun docker-alv (hash)
+  (interactive
+   (list (read-string "Enter docker hash name"))
+   )
+  (progn
+    (async-shell-command (format "docker stop %s ; docker rm %s" hash hash))
+    )
+  )
+
+(defalias 'docker-a-la-verga 'docker-alv)
+
+;; Remove all comments from current buffer
+(defun remove-comments ()
+  (interactive)
+  (progn 
+    (goto-char (point-min))
+    (let (kill-ring)
+      (comment-kill (count-lines (point-min) (point-max))))
+    )
   )
 
 ;; Spanish symbols
