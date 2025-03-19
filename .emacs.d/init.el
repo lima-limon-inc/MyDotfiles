@@ -24,7 +24,7 @@
 ;; Check if the current profile requires installation
 (defun install-for (lang)
   (and
-   (when (equal fabri-profile 'work) t) 
+   (when (equal fabri-profile 'work) t)
    (check-lang-used lang)
    )
   )
@@ -89,7 +89,7 @@
 (setq-default indent-tabs-mode nil)
 
 ;; Show trailing whitespace
-(setq-default show-trailing-whitespace t)   
+(setq-default show-trailing-whitespace t)
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -140,7 +140,7 @@
 (unless (server-running-p) (server-start))
 
 ;;Tab size
-(setq-default tab-width 10)
+(setq-default tab-width 5)
 (setq c-basic-offset 4)
 
 ;; Global general customizations
@@ -299,7 +299,7 @@
 ;;;Use leader key to jump to register
 (evil-leader/set-key "C-r" 'jump-to-register)
 ;;;Kill buffer
-(evil-leader/set-key "b" 'kill-this-buffer)
+(evil-leader/set-key "b" 'kill-current-buffer)
 ;;;Changes the search to swiper
 (define-key evil-normal-state-map (kbd "/") 'swiper)
 ;;;Map meta x to leader :. A sort of mix of vim and emacs
@@ -409,6 +409,17 @@ thisIsAWord -> this Is A Word
     )
   )
 
+
+(defun show-file-name ()
+  "Show the full path file name in the minibuffer."
+  (interactive)
+  (let (
+        (current-file (buffer-file-name))
+        )
+    (message current-file)
+    (kill-new current-file)
+    )
+  )
 
 (if (equal fabri-profile 'personal)
     (defun org-mode-auto-insert (title tag)
@@ -636,6 +647,7 @@ The app is chosen from your OS's preference."
     (defalias 'magit-co-authored-by 'git-commit-co-authored)
     (defalias 'co-authored-by 'git-commit-co-authored)
     (defalias 'mablame 'magit-blame)
+    (defalias 'ma-show-current-blame 'magit-show-commit)
 
     (defun my-wrap-lines ()
       "Disable `truncate-lines' in the current buffer."
