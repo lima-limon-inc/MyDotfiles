@@ -620,7 +620,7 @@ The app is chosen from your OS's preference."
 ;;Magit
 (use-package magit
   :init
-  (setq transient-default-level 5)
+  (setq transient-default-level 6)
   :config
   (progn
     (evil-leader/set-key "." 'magit-status)
@@ -1363,9 +1363,9 @@ DEADLINE: %^{DEADLINE}t ")
    (latex . t)
    (python . t)
    (latex . t)
-   ,(when (equal fabri-profile 'personal)
-      '(http . t)
-      )
+;  ,(when (equal fabri-profile 'personal)
+;     '(http . t)
+;     )
 
 
    ))
