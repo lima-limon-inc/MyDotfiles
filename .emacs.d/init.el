@@ -243,6 +243,7 @@
 
 ;;; enable global-evil-leader-mode before you enable evil-mode, otherwise evil-leader won’t be enabled in initial buffers (*scratch*, *Messages*, …).
 (use-package evil-leader
+  :ensure t
   :init
   (global-evil-leader-mode)
   )
@@ -363,7 +364,7 @@
   (set-register ?h (cons 'file "~/Documents/Obsidian-Vaults/Hobbies"))
   (set-register ?n (cons 'file "~/Documents/Personal/Notas/notes.org"))
   (set-register ?f (cons 'file "~/Documents/Facultad/facultad.org"))
-  (set-register ?p (cons 'file "~/Documents/Personal/daily.org"))
+  (set-register ?p (cons 'file "~/Documents/Personal/todo.org"))
   (set-register ?b (cons 'file "~/Scripts/Orgmode/"))
   (set-register ?r (cons 'file "~/Documents/Personal/Radio/"))
   (set-register ?g (cons 'file "~/Documents/Personal/Finanzas/"))
@@ -826,6 +827,9 @@ The app is chosen from your OS's preference."
 ;;; ASM
 (evil-leader/set-key-for-mode 'asm-mode "c" 'projectile-compile-project)
 
+;;;Elixir
+(evil-leader/set-key-for-mode 'elixir-mode "c" 'projectile-compile-project)
+
 ;;;Rust
 ;;;; Shows colors in buffers
 (projectile-register-project-type 'rust-cargo '("Cargo.toml")
@@ -920,6 +924,7 @@ The app is chosen from your OS's preference."
 
 ;;;Python
 (use-package lsp-pyright
+  :ensure t
   ;; :ensure (install-for 'python)
   :config
   (progn
@@ -1054,6 +1059,7 @@ The app is chosen from your OS's preference."
 
 ;; Makes company-mode windows "gui-like". Helps with whitespace-mode's windows
 (use-package company-posframe
+  :ensure t
   :config
   (progn
     (when (display-graphic-p)
@@ -1366,6 +1372,8 @@ DEADLINE: %^{DEADLINE}t ")
 ;  ,(when (equal fabri-profile 'personal)
 ;     '(http . t)
 ;     )
+   (sql . t)
+   ;(ledger . t)
 
 
    ))
@@ -1400,7 +1408,7 @@ DEADLINE: %^{DEADLINE}t ")
 (setq org-image-max-width 'fill-column)
 
 (use-package org-alert
-  :ensure nil
+  :ensure t
   :config
   (progn
     (org-alert-enable)
@@ -1456,6 +1464,7 @@ DEADLINE: %^{DEADLINE}t ")
 ; Additional extensions
 ;; Ivy
 (use-package ivy
+  :ensure t
   :config
   (progn
     (ivy-mode)
@@ -1464,6 +1473,7 @@ DEADLINE: %^{DEADLINE}t ")
 
 ;; Counsel
 (use-package counsel
+  :ensure t
   :config
   (progn
     (counsel-mode)
@@ -1473,6 +1483,7 @@ DEADLINE: %^{DEADLINE}t ")
 
 ;; WGrep mode - Edit grep buffer
 (use-package wgrep
+  :ensure t
   )
 
 ;; Swiper
@@ -1530,6 +1541,7 @@ DEADLINE: %^{DEADLINE}t ")
 
 ;; Solidy
 (use-package solidity-mode
+  :ensure t
   )
 
 ;; Yas snippets
@@ -1586,6 +1598,7 @@ DEADLINE: %^{DEADLINE}t ")
 
 ;; Drag stuff
 (use-package drag-stuff
+  :ensure t
   :config
   (progn
     (drag-stuff-global-mode 1)
@@ -1802,6 +1815,7 @@ DEADLINE: %^{DEADLINE}t ")
 
 ;; RFC
 (use-package rfc-mode 
+  :ensure t
   :config
   (progn
     (setq rfc-mode-directory (expand-file-name (my-emacs-dir "rfc")))
@@ -1817,6 +1831,16 @@ DEADLINE: %^{DEADLINE}t ")
     (progn
       (evil-leader/set-key-for-mode 'ledger-mode "a" 'ledger-add-transaction)
       (evil-leader/set-key-for-mode 'ledger-mode "d" 'ledger-report)
+      (setq ledger-reports
+            '(("bal" "%(binary) -f %(ledger-file) bal --price-db prices.db")
+             ("reg" "%(binary) -f %(ledger-file) reg --price-db prices.db -S -date")
+             ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+             ("account" "%(binary) -f %(ledger-file) reg %(account)")
+             ("budget" "%(binary) -f %(ledger-file) reg ^expenses -M -S T --budget -E")
+             ("monthly expenses" "%(binary) -f %(ledger-file) reg ^expenses -M --depth 3 -S -T")
+             ("real assets" "%(binary) -f %(ledger-file) bal --price-db prices.db ^assets ^liabilities")
+             )
+            )
       ))
   )
 
