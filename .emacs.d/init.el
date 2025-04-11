@@ -163,7 +163,7 @@
 
 
 ;; "Forbidden 80-column number"
-(setq fill-column 80)
+(setq-default fill-column 80)
 
 
 ;; Different custom set variables files
@@ -481,10 +481,22 @@ thisIsAWord -> this Is A Word
 
 (defalias 'docker-a-la-verga 'docker-alv)
 
+(defun docker-alv-all ()
+  (interactive)
+  (let*
+      (
+       (images (shell-command-to-string "docker ps | awk '{print $1}' | tail -n +2"))
+       (images-list (read (concat "(" (concat (replace-regexp-in-string "\n" " " images) ")"))))
+       )
+       images-list
+    )
+  )
+
+
 ;; Remove all comments from current buffer
 (defun remove-comments ()
   (interactive)
-  (progn 
+  (progn
     (goto-char (point-min))
     (let (kill-ring)
       (comment-kill (count-lines (point-min) (point-max))))
@@ -1068,6 +1080,17 @@ The app is chosen from your OS's preference."
     )
   )
 
+;; Ansi-color mode
+(use-package ansi-color
+  :config
+  (progn
+    (defun my/ansi-colorize-buffer ()
+      (let ((buffer-read-only nil))
+        (ansi-color-apply-on-region (point-min) (point-max))))
+
+    (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)
+    )
+  )
 
 ;; Makes company-mode windows "gui-like". Helps with whitespace-mode's windows
 (use-package company-posframe
