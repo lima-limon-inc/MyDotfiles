@@ -503,6 +503,25 @@ thisIsAWord -> this Is A Word
     )
   )
 
+;; Highlight sql words
+(defun point-in-comment ()
+  (let ((syn (syntax-ppss)))
+    (and (nth 8 syn)
+         (not (nth 3 syn)))))
+
+(defun my-capitalize-all-mysql-keywords ()
+  (interactive)
+  (require 'sql)
+  (save-excursion
+    (dolist (keywords sql-mode-mysql-font-lock-keywords) 
+      (goto-char (point-min))
+      (while (re-search-forward (car keywords) nil t)
+        (unless (point-in-comment)
+          (goto-char (match-beginning 0))
+          (upcase-word 1))))))
+
+(defalias 'sql-capitalize 'my-capitalize-all-mysql-keywords)
+
 ;; Spanish symbols
 (defun place-question-mark (symbolType)
   (interactive
@@ -1869,11 +1888,14 @@ DEADLINE: %^{DEADLINE}t ")
       (setq ledger-reports
             '(("bal" "%(binary) -f %(ledger-file) bal --price-db prices.db")
              ("reg" "%(binary) -f %(ledger-file) reg --price-db prices.db -S -date")
-             ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
+             ;; ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
              ("account" "%(binary) -f %(ledger-file) reg %(account)")
              ("budget" "%(binary) -f %(ledger-file) reg ^expenses -M -S T --budget -E")
-             ("monthly expenses" "%(binary) -f %(ledger-file) reg ^expenses -M --depth 3 -S -T")
+             ("this month's budget" "%(binary) -f %(ledger-file) reg ^expenses -M -S T --budget -E -p 'this month'")
+             ("monthly expenses" "%(binary) -f %(ledger-file) reg ^expenses -M --depth 1 -S -T")
+             ("monthly expenses vs monthly income" "%(binary) -f %(ledger-file) --price-db prices.db reg ^expense ^income -M --depth 3 -S -T -V")
              ("real assets" "%(binary) -f %(ledger-file) bal --price-db prices.db ^assets ^liabilities")
+             ("Income vs Expenses charts" "report -f %(ledger-file) -J reg ^income ^expenses --price-db prices.db -V --invert")
              )
             )
       ))
