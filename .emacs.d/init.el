@@ -178,10 +178,9 @@
 
 ;; World clock
 (setq zoneinfo-style-world-list '(
-                                  ("Europe/Berlin" "Berlin")
-                                  ("Europe/Paris" "Paris")
 			    ("Europe/Rome" "Rome")
 			    ("Europe/Madrid" "Madrid")
+			    ("America/New_York" "New York")
 			    ("America/Buenos_Aires" "Buenos Aires")
 			    ("America/Montevideo" "Montevideo")
 			    ))
@@ -206,6 +205,8 @@
 (defalias 'unix-find 'find-name-dired)
 ;; Find file
 (defalias 'find-file-recursive 'find-name-dired)
+;; Find file
+(defalias 'sort-region 'sort-lines)
 
 ;; Zone when idle
 (require 'zone)
@@ -456,9 +457,17 @@ thisIsAWord -> this Is A Word
          )
       (insert org-title)
       (insert "\n")
+      (insert "** Miden")
+      (insert "\n")
+      (insert "*** Compiler")
+      (insert "\n")
       (insert "** Misc")
       (insert "\n")
       (insert "*** TODO Daily Meeting")
+      (insert "\n")
+      (insert "*** Cocina")
+      (insert "\n")
+      (insert "*** Comer")
       )
     )
   )
