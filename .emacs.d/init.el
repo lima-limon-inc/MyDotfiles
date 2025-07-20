@@ -135,6 +135,9 @@
   (interactive)
   (customize-option 'display-line-numbers-type))
 
+;; Column
+(setq column-number-mode t)
+
 ;; Load server
 (load "server")
 (unless (server-running-p) (server-start))
@@ -461,9 +464,13 @@ thisIsAWord -> this Is A Word
       (insert "\n")
       (insert "*** Compiler")
       (insert "\n")
+      (insert "*** Midenup")
+      (insert "\n")
       (insert "** Misc")
       (insert "\n")
       (insert "*** TODO Daily Meeting")
+      (insert "\n")
+      (insert "**** TODO Plan daily meeting")
       (insert "\n")
       (insert "*** Cocina")
       (insert "\n")
@@ -814,6 +821,8 @@ The app is chosen from your OS's preference."
   (progn
     (setq lsp-keymap-prefix "s-l")
     (setq lsp-ui-sideline-show-diagnostics 1)
+    (defalias 'lsp-rest 'lsp-restart-workspace)
+    (evil-leader/set-key ">" 'lsp-execute-code-action)
     )
   :config
   (progn
@@ -839,6 +848,7 @@ The app is chosen from your OS's preference."
     (projectile-mode +1)
     (evil-leader/set-key "<up>" 'projectile-run-async-shell-command-in-root)
     (evil-leader/set-key "7" 'projectile-kill-buffers)
+    (evil-leader/set-key "y" 'projectile-grep)
     )
   )
 
@@ -888,10 +898,10 @@ The app is chosen from your OS's preference."
                                   :project-file "Cargo.toml"
                                   ;; :compile "RUSTFLAGS=-Awarnings cargo build"
                                   :compile (if (equal fabri-profile 'work)
-                                             "make"
+                                             "cargo make"
                                              "cargo build")
                                   :test "cargo test"
-                                  :run "cargo run")  
+                                  :run "cargo run")
 (add-hook 'rust-mode-hook #'lsp)
 (evil-leader/set-key-for-mode 'rust-mode "c" 'projectile-compile-project)
 (evil-leader/set-key-for-mode 'conf-toml-mode "c" 'projectile-compile-project) 
@@ -960,7 +970,8 @@ The app is chosen from your OS's preference."
     )
   )
 (evil-leader/set-key-for-mode 'rust-mode "t" 'projectile-test-project)
-(evil-leader/set-key-for-mode 'rust-mode "y" 'change-rust-return)
+(evil-leader/set-key-for-mode 'rust-mode "C-y" 'change-rust-return)
+(evil-leader/set-key-for-mode 'rust-mode "u" 'lsp-rust-analyzer-expand-macro)
 
 ;; Apply format on save
 (setq rust-format-on-save t)
