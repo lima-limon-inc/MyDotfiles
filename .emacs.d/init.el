@@ -62,8 +62,8 @@
 )
 
 (setq use-package-always-ensure
-      (when (equal fabri-profile 'work)
-        t)
+       (when (equal fabri-profile 'work)
+         t)
       )
 
 ; Global look and feel
@@ -77,6 +77,7 @@
 
 ;; Theme
 (use-package gruvbox-theme
+  :ensure t
   :config
   (load-theme 'gruvbox-dark-hard t)
   )
@@ -379,6 +380,12 @@
   (set-register ?r (cons 'file "~/Repositories/ethrex-nuevo"))
   )
 
+(defun new-day ()
+  "Function that runs every new day"
+  (interactive)
+  (progn
+    (set-register ?t (cons 'file (current-day-file)))))
+(run-at-time "01:00" nil #'new-day)
 
 ; Auxiliary function
 (defun remove-all-advice (sym)
@@ -468,9 +475,9 @@ thisIsAWord -> this Is A Word
       (insert "\n")
       (insert "** Misc")
       (insert "\n")
-      (insert "*** TODO Daily Meeting")
+      (insert "*** Daily Meeting")
       (insert "\n")
-      (insert "**** TODO Plan daily meeting")
+      (insert "**** Plan daily meeting")
       (insert "\n")
       (insert "*** Cocina")
       (insert "\n")
@@ -893,6 +900,9 @@ The app is chosen from your OS's preference."
 (evil-leader/set-key-for-mode 'elixir-mode "c" 'projectile-compile-project)
 
 ;;;Rust
+(use-package rust-mode
+  :ensure t
+  )
 ;;;; Shows colors in buffers
 (projectile-register-project-type 'rust-cargo '("Cargo.toml")
                                   :project-file "Cargo.toml"
@@ -1057,18 +1067,18 @@ The app is chosen from your OS's preference."
 
 ; Emacs built in gadgets 
 ;; Diary
-(appt-activate)
-(defun check-file-exists-warn (file)
-  (let
-      (
-       (diary-dir (my-emacs-dir "diary")))
-    (unless (file-exists-p diary-dir)
-      (display-warning 'warning (format "No hay archivo en %s" diary-dir)))
-    )
-  )
+;(appt-activate)
+;(defun check-file-exists-warn (file)
+;  (let
+;      (
+;       (diary-dir (my-emacs-dir "diary")))
+;    (unless (file-exists-p diary-dir)
+;      (display-warning 'warning (format "No hay archivo en %s" diary-dir)))
+;    )
+;  )
 
-(advice-add 'config-is-done
-	  :after #'(lambda () (check-file-exists-warn (my-emacs-dir "diary"))))
+;(advice-add 'config-is-done
+;	  :after #'(lambda () (check-file-exists-warn (my-emacs-dir "diary"))))
 
 ;; Calendar
 
@@ -1689,6 +1699,7 @@ DEADLINE: %^{DEADLINE}t ")
 
 ;;Dashboard
 (use-package dashboard
+  :ensure t
   :config
   (progn
     (dashboard-setup-startup-hook)
@@ -1723,9 +1734,11 @@ DEADLINE: %^{DEADLINE}t ")
 
 (when (display-graphic-p)
   (use-package all-the-icons
+    :ensure t
     )
 
   (use-package all-the-icons-dired
+    :ensure t
     :config
     ;;; Enable dashboard-dired
     (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
@@ -1808,6 +1821,7 @@ DEADLINE: %^{DEADLINE}t ")
 
 ;; Hydra
 (use-package hydra
+  :ensure t
   :config
   (progn
     (defhydra hydra-zoom ()
@@ -1835,6 +1849,9 @@ DEADLINE: %^{DEADLINE}t ")
       ("s" evil-numbers/dec-at-pt-incremental "decrement incremental")
       )
     (evil-leader/set-key "1" 'hydra-increment-number/body)
+    (use-package evil-numbers
+      :ensure t
+      )
 
 
     ;; Footnote
@@ -1898,6 +1915,13 @@ DEADLINE: %^{DEADLINE}t ")
     (evil-leader/set-key-for-mode 'rfc-mode "p" 'rfc-mode-previous-section)
     (evil-leader/set-key-for-mode 'rfc-mode "t" 'rfc-mode-goto-section)
     ))
+
+;; Use keybindings
+(use-package grip-mode
+  :ensure t
+  :config (setq grip-command 'auto) ;; auto, grip, go-grip or mdopen
+  :bind (:map markdown-mode-command-map
+         ("g" . grip-mode)))
 
 (when (equal fabri-profile 'personal)
   (use-package ledger-mode
