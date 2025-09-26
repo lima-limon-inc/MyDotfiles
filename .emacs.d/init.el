@@ -84,6 +84,8 @@
 
 (use-package go-mode
   :ensure t
+  :config
+  (evil-leader/set-key-for-mode 'go-mode "c" 'projectile-compile-project)
 )
 
 ;; Don't use tabs, only use spaces
@@ -163,7 +165,7 @@
       kept-new-versions      2 ; how many of the newest versions to keep
       kept-old-versions      1) ; and how many of the old
 
-(setq make-backup-files nil) ; stop creating ~ files
+(setq make-backup-files t) ; stop creating ~ files
 
 
 ;; "Forbidden 80-column number"
@@ -385,7 +387,6 @@
   (interactive)
   (progn
     (set-register ?t (cons 'file (current-day-file)))))
-(run-at-time "01:00" nil #'new-day)
 
 ; Auxiliary function
 (defun remove-all-advice (sym)
@@ -431,6 +432,7 @@ thisIsAWord -> this Is A Word
     (kill-new current-file)
     )
   )
+(defalias 'current-file 'show-file-name)
 
 (if (equal fabri-profile 'personal)
     (defun org-mode-auto-insert (title tag)
@@ -686,7 +688,7 @@ The app is chosen from your OS's preference."
 ;;Magit
 (use-package magit
   :init
-  (setq transient-default-level 6)
+  (setq transient-default-level 7)
   :config
   (progn
     (evil-leader/set-key "." 'magit-status)
@@ -1177,6 +1179,9 @@ The app is chosen from your OS's preference."
 (evil-leader/set-key-for-mode 'Info-mode "w" 'Info-follow-nearest-node)
 
 ;; Grep mode
+(setq-default grep-find-ignored-directories
+    (cons "target" grep-find-ignored-directories)
+    )
 (evil-leader/set-key-for-mode 'grep-mode "g" 'recompile)
 (evil-leader/set-key-for-mode 'grep-mode "n" 'next-error)
 
@@ -1394,7 +1399,7 @@ DEADLINE: %^{DEADLINE}t ")
 
 ;;;Org todo redifinitions
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "Marchando(m)" "Waiting(w)" "|" "Waiting but done(b)" "DONE(d)")
+      '((sequence "TODO(t)" "Marchando(m)" "Waiting(w)" "REMINDER(r)" "|" "Waiting but done(b)" "DONE(d)")
         ))
 (if (equal fabri-profile 'personal)
     (setq org-tag-alist '(
@@ -1989,3 +1994,4 @@ universal prefix arg, and only the id with normal prefix arg."
 ;;         ;; (rx (not "(") ")")
 ;;        )
 ;;        )
+(run-at-time "09:30" nil #'new-day)
