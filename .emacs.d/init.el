@@ -86,6 +86,7 @@
   :ensure t
   :config
   (evil-leader/set-key-for-mode 'go-mode "c" 'projectile-compile-project)
+  ;; (add-hook 'before-save-hook #'gofmt-before-save)
 )
 
 ;; Don't use tabs, only use spaces
@@ -687,6 +688,8 @@ The app is chosen from your OS's preference."
 
 ;;Magit
 (use-package magit
+  :ensure
+  t
   :init
   (setq transient-default-level 7)
   :config
@@ -1648,35 +1651,35 @@ DEADLINE: %^{DEADLINE}t ")
   )
 
 ;; Search on browser
-(load-file (concat user-emacs-directory "quick-search/quick-search.el"))
+;(load-file (concat user-emacs-directory "quick-search/quick-search.el"))
 
-(if (equal fabri-profile 'personal)
-    (progn
-      (quick-search/set-preferred-browser "firefox-bin" "")
-      (quick-search/add-search-engine "Google" "https://google.com/search?q=" nil)
-      (quick-search/add-search-engine "Zugaina" "http://gpo.zugaina.org/Search?search=" nil)
-      (quick-search/add-search-engine "Wikipedia" "https://en.wikipedia.org/w/index.php?search=" nil)
-      (quick-search/add-search-engine "Gentoo wiki" "https://wiki.gentoo.org/index.php?search=" nil)
-      (quick-search/add-search-engine "Arch wiki" "https://wiki.archlinux.org/index.php?search=" nil)
-      (quick-search/add-search-engine "Python" "https://docs.python.org/3/search.html?q=" '(python-mode))
-      (quick-search/add-search-engine "Oxford Dictionary" "https://www.oxfordlearnersdictionaries.com/definition/english/" '(org-mode latex-mode LaTeX-mode tex-mode markdown-mode))
-      (quick-search/add-search-engine "Youtube" "https://www.youtube.com/results?search_query=" nil)
-      (quick-search/add-search-engine "C plus plus" "https://cplusplus.com/search.do?q=" '(c++-mode c-mode))
-      (quick-search/add-search-engine "Rust" "https://doc.rust-lang.org/std/?search=" '(rust-mode))
-      )
-  (progn
-
-    (require 'webjump)
-
-    (setq webjump-sites
-          (append '(
-                    ("Google" . [simple-query "www.google.com" "https://google.com/search?q=" ""])
-                    )
-                  webjump-sample-sites))
-
-    )
-  (quick-search/set-preferred-browser "open /Applications/Firefox.app" "-n --args ")
-  )
+; (if (equal fabri-profile 'personal)
+;     (progn
+;       (quick-search/set-preferred-browser "firefox-bin" "")
+;       (quick-search/add-search-engine "Google" "https://google.com/search?q=" nil)
+;       (quick-search/add-search-engine "Zugaina" "http://gpo.zugaina.org/Search?search=" nil)
+;       (quick-search/add-search-engine "Wikipedia" "https://en.wikipedia.org/w/index.php?search=" nil)
+;       (quick-search/add-search-engine "Gentoo wiki" "https://wiki.gentoo.org/index.php?search=" nil)
+;       (quick-search/add-search-engine "Arch wiki" "https://wiki.archlinux.org/index.php?search=" nil)
+;       (quick-search/add-search-engine "Python" "https://docs.python.org/3/search.html?q=" '(python-mode))
+;       (quick-search/add-search-engine "Oxford Dictionary" "https://www.oxfordlearnersdictionaries.com/definition/english/" '(org-mode latex-mode LaTeX-mode tex-mode markdown-mode))
+;       (quick-search/add-search-engine "Youtube" "https://www.youtube.com/results?search_query=" nil)
+;       (quick-search/add-search-engine "C plus plus" "https://cplusplus.com/search.do?q=" '(c++-mode c-mode))
+;       (quick-search/add-search-engine "Rust" "https://doc.rust-lang.org/std/?search=" '(rust-mode))
+;       )
+;   (progn
+; 
+;     (require 'webjump)
+; 
+;     (setq webjump-sites
+;           (append '(
+;                     ("Google" . [simple-query "www.google.com" "https://google.com/search?q=" ""])
+;                     )
+;                   webjump-sample-sites))
+; 
+;     )
+;   (quick-search/set-preferred-browser "open /Applications/Firefox.app" "-n --args ")
+;   )
 
 (evil-leader/set-key "5" 'webjump)
 
@@ -1936,6 +1939,7 @@ DEADLINE: %^{DEADLINE}t ")
       (evil-leader/set-key-for-mode 'ledger-mode "d" 'ledger-report)
       (setq ledger-reports
             '(("bal" "%(binary) -f %(ledger-file) bal --price-db prices.db")
+             ("bal-li" "%(binary) -f %(ledger-file) bal --price-db prices.db -V --exchange $")
              ("reg" "%(binary) -f %(ledger-file) reg --price-db prices.db -S -date")
              ;; ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
              ("account" "%(binary) -f %(ledger-file) reg %(account)")
@@ -1944,7 +1948,7 @@ DEADLINE: %^{DEADLINE}t ")
              ("monthly expenses" "%(binary) -f %(ledger-file) reg ^expenses -M --depth 1 -S -T")
              ("monthly expenses vs monthly income" "%(binary) -f %(ledger-file) --price-db prices.db reg ^expense ^income -M --depth 3 -S -T -V")
              ("real assets" "%(binary) -f %(ledger-file) bal --price-db prices.db ^assets ^liabilities")
-             ("Income vs Expenses charts" "report -f %(ledger-file) -J reg ^income ^expenses --price-db prices.db -V --invert")
+             ("Income vs Expenses charts" "report -f %(ledger-file) -J reg ^income ^expenses --price-db prices.db -V --invert --exchange $")
              )
             )
       ))
