@@ -9,30 +9,6 @@
 		      'personal
 	         'work)))))
 
-(setq languages-used (list
-      'python
-      'c
-      'cpp
-      'rust
-      'go
-      'tex
-      )
-      )
-
-(defun check-lang-used (lang)
-  (when (member lang languages-used)
-    t
-    )
-  )
-
-;; Check if the current profile requires installation
-(defun install-for (lang)
-  (and
-   (when (equal fabri-profile 'work) t)
-   (check-lang-used lang)
-   )
-  )
-
 ;; Email address
 (setq user-full-name "Tomas Fabrizio Orsi")
 (setq user-mail-address
@@ -41,34 +17,19 @@
       "tomas.orsi@lambdaclass.com"
       ))
 
-
-
-
-;;; Get current-day format
-(defun current-day ()
-  (format-time-string "%Y-%m-%d" (current-time))
-  )
-
-(defun current-day-file ()
-  (interactive)
-  (concat "~/Documents/LearningPath/" (current-day) ".org")
-  )
-
+(add-to-list 'load-path (expand-file-name "utils" user-emacs-directory))
+(require 'utils)
 
 
 ; Package manager settings
-(when (equal fabri-profile 'work)
-  (progn
-    (require 'package)
-    (add-to-list 'package-archives
-	      '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-    )
-)
+(require 'package)
+(add-to-list 'package-archives
+	        '("melpa-stable" . "https://stable.melpa.org/packages/") t)
 
+; Always ensure packages are installed
 (setq use-package-always-ensure
-       (when (equal fabri-profile 'work)
-         t)
-      )
+      (when (equal fabri-profile 'work)
+        t))
 
 ; Global look and feel
 
@@ -79,13 +40,9 @@
   (set-face-attribute 'default nil :height 160)
   )
 
-;; Theme
-(use-package gruvbox-theme
-  :ensure t
-  :config
-  (load-theme 'gruvbox-dark-hard t)
-  )
-
+;; Theme, new theme, new world
+(load-theme 'modus-vivendi-tinted t)
+(set-face-attribute 'font-lock-comment-face nil :foreground "#FF470A")
 
 ;; Don't use tabs, only use spaces
 (setq-default indent-tabs-mode nil)
