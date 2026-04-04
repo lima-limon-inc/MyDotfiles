@@ -9,4 +9,4 @@ start-vm:
 
 .PHONY: deploy
 deploy:
-	stow -v -t $(HOME)/ --ignore='^\setup' --ignore=Makefile */ --no-folding --simulate
+	stow -v -t $(HOME)/ --ignore=Makefile */ --no-folding
