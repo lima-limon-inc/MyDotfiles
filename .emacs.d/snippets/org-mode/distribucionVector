@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: distribucionVector
-# key: distv
-# --
-\mathbb{ F }_{\bold{ X } }(x)

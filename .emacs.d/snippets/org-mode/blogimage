@@ -1,6 +1,0 @@
-# key: blim
-# name: blogimage
-# --
-#+ATTR_HTML: :width 600px
-${2:linkAImagen}
-$0

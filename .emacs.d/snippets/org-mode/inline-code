@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: inline-code
-# key: co
-# --
-
-~${1:codigo}~ $0

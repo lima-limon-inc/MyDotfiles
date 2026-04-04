@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: nodopetri
-# key: nodopetri
-# --
-
-${1:nombre} [xlabel = \"${1}\", label="⬤"];

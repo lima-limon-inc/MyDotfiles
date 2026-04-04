@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: integral
-# key: int
-# --
-\\displaystyle\{\int^{${1:arriba}}_{${2:abajo}}\}\} $0

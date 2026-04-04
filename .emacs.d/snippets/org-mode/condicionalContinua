@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: condicionalContinua
-# key: condCon
-# --
-
-f_{\mathcal{ Y } | \mathcal{ X } =x} (y)

@@ -1,4 +1,0 @@
-# key: pn
-# name: shorterPrintln
-# --
-println!("${1:}\{\}", ${2:variableName});

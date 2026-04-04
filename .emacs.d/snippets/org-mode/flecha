@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: flecha
-# key: flecha
-# --
-
-${1:Origen} -> ${2:Destino} [label = \"${3:label}\"];
