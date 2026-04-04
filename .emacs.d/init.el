@@ -435,6 +435,26 @@ thisIsAWord -> this Is A Word
   )
 (defalias 'current-file 'show-file-name)
 
+(defun current-file-project ()
+    "Get current file relative to project root with line number"
+    (interactive)
+    (let* ((relative-path (remove-substring (projectile-project-root) (buffer-file-name)))
+           (result (format "%s:%d" relative-path (line-number-at-pos))))
+      (message result)
+      (kill-new result)))
+
+
+(defun remove-substring (substring-to-remove main-string)
+  "Remove all occurrences of SUBSTRING-TO-REMOVE from MAIN-STRING."
+  (replace-regexp-in-string
+   ;; Escape the substring to treat it as a literal string in the regex
+   (regexp-quote substring-to-remove)
+   ;; Replacement string (empty string to remove)
+   ""
+   ;; The string to operate on
+   main-string
+   ))
+
 (if (equal fabri-profile 'personal)
     (defun org-mode-auto-insert (title tag)
       (interactive
@@ -842,6 +862,10 @@ The app is chosen from your OS's preference."
     ;; (setq lsp-enable-indentation nil)
    )
   )
+
+
+
+
 ;;; Lsp UI
 (use-package lsp-ui
   :config
@@ -900,6 +924,15 @@ The app is chosen from your OS's preference."
 (evil-leader/set-key-for-mode 'go-mode "i" 'lsp-treemacs-symbols)
 ;;; ASM
 (evil-leader/set-key-for-mode 'asm-mode "c" 'projectile-compile-project)
+
+;;; JS/TS
+(use-package typescript-mode
+  :ensure t
+  :config
+    (add-hook 'js-mode-hook #'lsp)
+    (add-hook 'ts-mode-hook #'lsp)
+    (add-hook 'typescript-mode #'lsp)
+)
 
 ;;;Elixir
 (evil-leader/set-key-for-mode 'elixir-mode "c" 'projectile-compile-project)
@@ -992,6 +1025,9 @@ The app is chosen from your OS's preference."
 (setq rust-format-on-save t)
 
 ;;;Cmake
+(use-package cmake-mode
+  :ensure t
+  )
 (evil-leader/set-key-for-mode 'cmake-mode "c" 'projectile-compile-project)
 
 ;;;Makefile
@@ -1722,6 +1758,7 @@ DEADLINE: %^{DEADLINE}t ")
     (evil-leader/set-key-for-mode 'dashboard-mode "SPC" 'dashboard-open)
     ;;; Make dashboard the default when using a client
     (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+    (add-to-list 'dashboard-footer-messages '"Aguante Banfield")
     )
   )
 
@@ -1954,6 +1991,19 @@ DEADLINE: %^{DEADLINE}t ")
       ))
   )
 
+(use-package beacon
+  ;; :ensure t
+  :config
+  (
+   ;; (progn
+   ;; (setq beacon-blink-when-point-moves-vertically t)
+   ;; (setq beacon-blink-when-buffer-changes t)
+   ;; (setq beacon-blink-when-focused t)
+   ;; (setq beacon-blink-when-window-changes t)
+   ;; )
+   )
+  )
+(beacon-mode)
 
 
 ; Final details
@@ -1987,6 +2037,10 @@ universal prefix arg, and only the id with normal prefix arg."
       (kill-new full-message)
       (message full-message)
       )))))
+
+
+
+
 
 
 ;; (defun foo () (interactive)
