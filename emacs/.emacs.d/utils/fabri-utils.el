@@ -278,6 +278,26 @@ X value, then the lambda value aka the mean."
  (define-key calc-mode-map "ze" 'calc-exponentialDistribution)
 ))
 
+(defun current-file-project ()
+    "Get current file relative to project root with line number"
+    (interactive)
+    (let* ((relative-path (remove-substring (projectile-project-root) (buffer-file-name)))
+           (result (format "%s:%d" relative-path (line-number-at-pos))))
+      (message result)
+      (kill-new result)))
+
+
+(defun remove-substring (substring-to-remove main-string)
+  "Remove all occurrences of SUBSTRING-TO-REMOVE from MAIN-STRING."
+  (replace-regexp-in-string
+   ;; Escape the substring to treat it as a literal string in the regex
+   (regexp-quote substring-to-remove)
+   ;; Replacement string (empty string to remove)
+   ""
+   ;; The string to operate on
+   main-string
+   ))
+
 
 
 

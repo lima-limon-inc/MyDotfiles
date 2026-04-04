@@ -180,6 +180,26 @@
   (define-key evil-insert-state-map (kbd "<tab>") 'completion-at-point)
   )
 
+
+;;; enable global-evil-leader-mode before you enable evil-mode, otherwise evil-leader won’t be enabled in initial buffers (*scratch*, *Messages*, …).
+(use-package evil-leader
+  :ensure t
+  :init
+  (global-evil-leader-mode)
+  )
+
+(use-package evil
+  :init
+  (progn
+    ;;; Disable control i feature (compatibilty with org mode)
+    (setq evil-want-C-i-jump nil)
+    (evil-define-key 'normal org-mode-map (kbd "<tab>") #'org-cycle)
+    )
+  :config
+    (evil-mode 1)
+  )
+
+
 ;; Hydra
 ;; For multiple level menus
 (use-package hydra
@@ -263,25 +283,6 @@
 
     )
 
-  )
-
-
-;;; enable global-evil-leader-mode before you enable evil-mode, otherwise evil-leader won’t be enabled in initial buffers (*scratch*, *Messages*, …).
-(use-package evil-leader
-  :ensure t
-  :init
-  (global-evil-leader-mode)
-  )
-
-(use-package evil
-  :init
-  (progn
-    ;;; Disable control i feature (compatibilty with org mode)
-    (setq evil-want-C-i-jump nil)
-    (evil-define-key 'normal org-mode-map (kbd "<tab>") #'org-cycle)
-    )
-  :config
-    (evil-mode 1)
   )
 
 ;;;Makes Ctrl R work
@@ -703,19 +704,19 @@
 
 ;;; Per-language hydras
 (defhydra c-functions () "C functions"
-  ("c" project-compile-project "Compile")
+  ("c" project-compile "Compile")
   ("t" gdb "GDB")
   ("3" ff-find-other-file "Other file")
   )
 (defhydra c++-functions () "C++ functions"
-  ("c" project-compile-project "Compile")
+  ("c" project-compile "Compile")
   ("t" gdb "GDB")
   ("3" ff-find-other-file "Other file")
   )
 (defhydra python-functions () "Python functions")
 (defhydra rust-functions (:color blue) "Rust functions")
 (defhydra default-prog-functions () "Default prog"
-  ("c" project-compile-project "Compile")
+  ("c" project-compile "Compile")
   )
 
 
@@ -810,6 +811,14 @@
 (use-package dockerfile-mode
   )
 
+;; JS/TS
+(use-package typescript-mode
+)
+
+;; Rust mode
+(use-package rust-mode
+  )
+
 ;; Solidy
 (use-package solidity-mode
   )
@@ -831,6 +840,7 @@
     (evil-leader/set-key-for-mode 'dashboard-mode "SPC" 'dashboard-open)
     ;;; Make dashboard the default when using a client
     (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+    (add-to-list 'dashboard-footer-messages '"Aguante Banfield")
     )
   )
 
