@@ -1,4 +1,9 @@
-(setq org-directory (my-emacs-dir "org/work/"))
+; Create "work" directory if missing
+(let (
+      (my-org-dir (my-emacs-dir "org/work/")))
+      (unless (file-directory-p my-org-dir)
+        (make-directory my-org-dir))
+      (setq org-directory (my-emacs-dir "org/work/")))
 (setq org-default-notes-file (concat org-directory "notes.org"))
 
 ;; (setq org-agenda-files (list org-default-notes-file))
