@@ -303,6 +303,8 @@
   ("e" tab-new "New tab")
   ("b" kill-current-buffer "Kill buffer")
   ("r" consult-buffer "Switch to buffer")
+  ("g" better-jumper-jump-backward "Backward")
+  ("t" better-jumper-jump-forward "Forward")
   )
 (evil-leader/set-key "v" 'window-movements/body)
 
@@ -333,6 +335,7 @@
 (defhydra file-functions ()
   "File functions"
   ("[" evil-save-and-close "Save and close file")
+  ("r" reload-file "Reload a file")
   )
 (evil-leader/set-key "[" 'file-functions/body)
 
@@ -564,6 +567,12 @@
   ;; package.
   (marginalia-mode))
 
+
+(use-package better-jumper
+  :config
+  (add-hook 'prog-mode-hook #'turn-on-better-jumper-mode)
+  )
+
 ;; Optionally use the `orderless' completion style.
 (use-package orderless
   :custom
@@ -680,8 +689,15 @@
 (use-package eglot
   :config
   (setq eglot-ignored-server-capabilities '(:inlayHintProvider))
-  :hook ((c-mode . eglot-ensure)
+  :hook (
+         (rust-mode . eglot-ensure)
+         (c-mode . eglot-ensure)
          (c++-mode . eglot-ensure)))
+
+(defhydra eglot-functions () "Eglot functions"
+  ("d" eldoc "Documentation")
+  )
+(evil-leader/set-key "u" 'eglot-functions/body)
 
 ;; Eglot extensions
 (use-package eglot-x
@@ -723,7 +739,9 @@
   ("3" ff-find-other-file "Other file")
   )
 (defhydra python-functions () "Python functions")
-(defhydra rust-functions (:color blue) "Rust functions")
+(defhydra rust-functions () "Rust functions"
+  ("c" project-compile "Compile")
+  )
 (defhydra default-prog-functions () "Default prog"
   ("c" project-compile "Compile")
   )
@@ -749,6 +767,11 @@
   )
 
 ; Emacs built in gadgets 
+
+(evil-leader/set-key-for-mode 'compilation-mode "n" 'next-error)
+(evil-leader/set-key-for-mode 'compilation-mode "c" 'compile)
+(evil-leader/set-key-for-mode 'compilation-mode "g" 'recompile)
+
 ;; Calendar
 ;;; Set calendar style
 (require 'calendar) 
@@ -782,7 +805,7 @@
 
 ;; Ediff
 (setq ediff-keep-variants nil)
-(setq ediff-ancestor-buffer t)
+;; (setq ediff-ancestor-buffer t)
 (setq ediff-split-window-function 'split-window-horizontally)
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (add-hook 'ediff-keymap-setup-hook
@@ -880,5 +903,5 @@
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   )
 
-;; Enable auto insert mode
-(auto-insert-mode t)
+;; ;; Enable auto insert mode
+;; (auto-insert-mode t)
