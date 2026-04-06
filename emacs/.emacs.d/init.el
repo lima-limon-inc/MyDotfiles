@@ -37,7 +37,7 @@
                  (cons 'font (font-xlfd-name
                               (font-spec
                                :family "DejaVu Sans Mono"
-                               :size 16))))
+                               :size 14))))
   (set-face-attribute 'default nil :height 160)
   )
 
@@ -346,7 +346,8 @@
   "Grepers functions"
   ("g" consult-ripgrep "Ripgrep")
   ("/" consult-line "Swiper")
-  ("g" consult-grep "Grep")
+  ("f" consult-grep "Grep")
+  ("r" rgrep "Recursive grep")
   )
 (define-key evil-normal-state-map (kbd "/") 'grep-functions/body)
 
@@ -438,6 +439,17 @@
     )
   )
 
+;; Manage git forges directly from Magit
+;; (use-package forge
+;;   :after magit
+;;   :custom
+;;   (auth-sources '("~/.authinfo.gpg"))
+;;   (epg-pinentry-mode 'loopback)
+;;   (auth-source-debug t)
+;;   :config
+;;   (epa-file-enable)
+;;   )
+
 (use-package git-modes
   :ensure t
   )
@@ -445,25 +457,15 @@
 ;; Raibow delimiters
 (use-package rainbow-delimiters
   :config
-  ;; (progn
-  ;;   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-  ;;   (add-hook 'LaTeX-mode-hook #'rainbow-delimiters-mode)
-  ;;   (add-hook 'org-mode-hook #'rainbow-delimiters-mode)
-  ;;   (add-hook 'graphviz-dot-mode-hook #'rainbow-delimiters-mode)
-  ;;   )
   (rainbow-delimiters-mode)
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
   )
 
 ;;Rainbow-mode
 (use-package rainbow-mode
   :config
-  (progn
-    ;; (add-hook 'c++-mode-hook 'rainbow-mode)
-    ;; (add-hook 'c-mode-hook 'rainbow-mode)
-    ;; (add-hook 'rust-mode-hook 'rainbow-mode)
-    ;; (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
-    (rainbow-mode)
-    )
+  (rainbow-mode)
+  (add-hook 'prog-mode-hook 'rainbow-mode)
   )
 
 ;; TODO Highlighter
@@ -676,8 +678,15 @@
 
 ;; Lsp completion
 (use-package eglot
+  :config
+  (setq eglot-ignored-server-capabilities '(:inlayHintProvider))
   :hook ((c-mode . eglot-ensure)
          (c++-mode . eglot-ensure)))
+
+;; Eglot extensions
+(use-package eglot-x
+  :vc (:url "https://github.com/nemethf/eglot-x.git"
+       :rev :newest))
 
 ;; Yas snippets
 (use-package yasnippet
@@ -769,6 +778,20 @@
 (evil-leader/set-key-for-mode 'dired-mode "c" 'projectile-compile-project)
 ;;; Dired will try to guess destination. If you have to open windows, then it will use the one next to it
 (setq dired-dwim-target t)
+
+
+;; Ediff
+(setq ediff-keep-variants nil)
+(setq ediff-ancestor-buffer t)
+(setq ediff-split-window-function 'split-window-horizontally)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(add-hook 'ediff-keymap-setup-hook
+          (lambda ()
+            ;;; Use "o" to go to ediff C buffer
+            (define-key ediff-mode-map "o" (lambda ()
+                                             (interactive)
+                                             (switch-to-buffer-other-window "*ediff-merge<2>*")))))
+
 
 ;; Ansi-color mode
 (use-package ansi-color
