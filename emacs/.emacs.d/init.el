@@ -20,6 +20,9 @@
 (add-to-list 'load-path (concat user-emacs-directory "utils"))
 (require 'fabri-utils)
 
+(add-to-list 'load-path (concat user-emacs-directory "org"))
+(require 'fabri-org)
+
 
 ; Package manager settings
 (require 'package)
@@ -849,6 +852,7 @@
   :config
   (progn
     (dashboard-setup-startup-hook)
+    (setq dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
     (setq dashboard-items '(
 		        (recents  . 5)
                             ;; (bookmarks . 5)
