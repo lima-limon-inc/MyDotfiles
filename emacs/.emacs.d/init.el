@@ -400,6 +400,12 @@
 ;; Color line
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 
+(defhydra formatting-functions ()
+  "Format functions"
+  ("w" wrap-region "wrap-region")
+)
+(evil-leader/set-key "r" 'formatting-functions/body)
+
 ;;Magit
 (use-package magit
   :init
