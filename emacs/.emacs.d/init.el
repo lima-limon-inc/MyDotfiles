@@ -394,9 +394,6 @@
 ;; Color line
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 
-;; Enable auto insert mode
-(auto-insert-mode t)
-
 ;;Magit
 (use-package magit
   :init
@@ -878,3 +875,6 @@
   ;;; Enable dashboard-dired
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   )
+
+;; Enable auto insert mode
+(auto-insert-mode t)
