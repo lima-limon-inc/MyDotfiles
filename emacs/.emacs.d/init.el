@@ -297,14 +297,16 @@
 ;;; Window related functions
 (defhydra window-movements ()
   "Window movements"
-  ("v" split-window-horizontally "Horizontal split")
+  ("a" split-window-horizontally "Horizontal split")
   ("s" split-window-vertically "Vertical split")
   ("=" toggle-frame-maximized "Maximize")
   ("e" tab-new "New tab")
+  ("4" tab-close "Close tab")
   ("b" kill-current-buffer "Kill buffer")
   ("r" consult-buffer "Switch to buffer")
   ("g" better-jumper-jump-backward "Backward")
   ("t" better-jumper-jump-forward "Forward")
+  ("v" better-jumper-set-jump "Set jump")
   )
 (evil-leader/set-key "v" 'window-movements/body)
 
@@ -402,6 +404,8 @@
 (set-register ?e (cons 'file (my-emacs-dir "init.el")))
 
 ; Text mode
+(use-package markdown-mode
+  )
 (add-hook 'org-mode-hook (lambda () (local-set-key (kbd "C-c /") #'place-question-mark)))
 (add-hook 'LaTeX-mode-hook (lambda () (local-set-key (kbd "C-c /") #'place-question-mark)))
 (add-hook 'markdown-mode-hook (lambda () (local-set-key (kbd "C-c /") #'place-question-mark)))
@@ -550,6 +554,29 @@
   ;; (corfu-history-mode)
   ;; (corfu-popupinfo-mode)
   )
+
+;; Add extensions
+;; (use-package cape
+;;   ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
+;;   ;; Press C-c p ? to for help.
+;;   :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
+;;   ;; Alternatively bind Cape commands individually.
+;;   ;; :bind (("C-c p d" . cape-dabbrev)
+;;   ;;        ("C-c p h" . cape-history)
+;;   ;;        ("C-c p f" . cape-file)
+;;   ;;        ...)
+;;   :init
+;;   ;; Add to the global default value of `completion-at-point-functions' which is
+;;   ;; used by `completion-at-point'.  The order of the functions matters, the
+;;   ;; first function returning a result wins.  Note that the list of buffer-local
+;;   ;; completion functions takes precedence over the global list.
+;;   (add-hook 'completion-at-point-functions #'cape-dabbrev)
+;;   (add-hook 'completion-at-point-functions #'cape-file)
+;;   (add-hook 'completion-at-point-functions #'cape-elisp-block)
+;;   ;; (add-hook 'completion-at-point-functions #'cape-history)
+;;   ;; ...
+;; )
+
 
 ;; Minibuffer
 (use-package vertico
@@ -741,27 +768,6 @@
 (use-package embark-consult
   )
 
-
-;; Lsp completion
-(use-package eglot
-  :config
-  (setq eglot-ignored-server-capabilities '(:inlayHintProvider))
-  :hook (
-         (rust-mode . eglot-ensure)
-         (c-mode . eglot-ensure)
-         (c++-mode . eglot-ensure)))
-
-(defhydra eglot-functions () "Eglot functions"
-  ("d" eldoc "Documentation")
-  ("r" eglot-rename "Rename")
-  )
-(evil-leader/set-key "u" 'eglot-functions/body)
-
-;; Eglot extensions
-(use-package eglot-x
-  :vc (:url "https://github.com/nemethf/eglot-x.git"
-       :rev :newest))
-
 ;; Yas snippets
 (use-package yasnippet
   :config
@@ -775,6 +781,30 @@
     (defalias 'yas-edit-snipet 'yas-visit-snippet-file)
     )
   )
+
+
+;; Lsp completion
+(use-package eglot
+  :config
+  (setq eglot-ignored-server-capabilities '(:inlayHintProvider))
+  :hook (
+         (rust-mode . eglot-ensure)
+         (c-mode . eglot-ensure)
+         (c++-mode . eglot-ensure)
+         ))
+
+(defhydra eglot-functions () "Eglot functions"
+  ("d" eldoc "Documentation")
+  ("r" eglot-rename "Rename")
+  ("u" eglot-code-actions "Actions")
+  )
+(evil-leader/set-key "u" 'eglot-functions/body)
+
+;; Eglot extensions
+(use-package eglot-x
+  :vc (:url "https://github.com/nemethf/eglot-x.git"
+       :rev :newest))
+
 
 
 ;; GDB
@@ -856,7 +886,7 @@
 (add-hook 'dired-mode-hook (lambda () (local-set-key (kbd "C-o") #'nil)))
 (add-hook 'dired-mode-hook (lambda () (local-set-key (kbd "v") #'evil-visual-char)))
 (evil-leader/set-key-for-mode 'dired-mode "u" 'dired-toggle-read-only)
-(evil-leader/set-key-for-mode 'dired-mode "c" 'projectile-compile-project)
+(evil-leader/set-key-for-mode 'dired-mode "c" 'project-compile)
 ;;; Dired will try to guess destination. If you have to open windows, then it will use the one next to it
 (setq dired-dwim-target t)
 
