@@ -15,18 +15,28 @@
 (setq org-capture-templates
       `(
         ("t" "New todo" plain
-                (file ,(function prompt-file-name)) "* TODO %?"))
+                (file ,(function prompt-file-name)) "* TODO %? [%]"))
         )
 
 (defhydra org-functions ()
   "Org related functions"
     ("a" org-agenda "Agenda")
     ("c" org-capture "Capture")
+    ("u" org-todo "TODO States")
     )
 (evil-leader/set-key "o" 'org-functions/body)
 
+; Log done tasks
+(setq org-log-done 'time)
+
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "WAIT(w@/!)" "|" "DONE(d!)" "CANCELED(c@)")))
+      '((sequence "TODO(t)" "BLOCKED(b@/!)" "REVIEW(r!)" "|" "DONE(d)" "CANCELED(c@)")))
+
+(setq org-todo-keyword-faces
+      '(("BLOCKED" . modus-themes-fg-blue)
+        ("REVIEW" . "purple")
+        ("CANCELED" . (:foreground "#44bc44" :underline (:color "red")))
+        ))
 
 
 (provide 'fabri-org)
