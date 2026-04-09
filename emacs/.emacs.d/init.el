@@ -790,9 +790,11 @@
 ;; Configure Tempel
 (use-package tempel
   :bind (
-         ("C-<tab>" . tempel-next)
+         ;; ("C-<tab>" . tempel-next)
          ("M-+" . tempel-complete) ;; Alternative tempel-expand
-         ("M-*" . tempel-insert))
+         ("M-*" . tempel-insert)
+         :map tempel-map
+         ("<tab>" . tempel-next))
 
   :init
 
