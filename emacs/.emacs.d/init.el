@@ -191,7 +191,11 @@
   (define-key evil-insert-state-map (kbd "DEL") nil)
   (define-key evil-insert-state-map (kbd "C-i") nil)
   (define-key evil-normal-state-map (kbd "C-i") nil)
-  (define-key evil-insert-state-map (kbd "<tab>") 'completion-at-point)
+  ;; (define-key evil-insert-state-map (kbd "<tab>") 'completion-at-point)
+
+  ;; Done to enable corfu complete candiates to work
+  (define-key evil-insert-state-map (kbd "C-n") nil)
+  (define-key evil-insert-state-map (kbd "C-p") nil)
   )
 
 
@@ -537,6 +541,10 @@
   ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
   ;; (corfu-on-exact-match 'insert) ;; Configure handling of exact matches
 
+  :bind
+  (:map corfu-map ("C-n" . corfu-next))
+  (:map corfu-map ("C-p" . corfu-previous))
+
   ;; Enable Corfu only for certain modes. See also `global-corfu-modes'.
   ;; :hook ((prog-mode . corfu-mode)
   ;;        (shell-mode . corfu-mode)
@@ -782,9 +790,11 @@
 ;; Configure Tempel
 (use-package tempel
   :bind (
-         ("C-<tab>" . tempel-next)
+         ;; ("C-<tab>" . tempel-next)
          ("M-+" . tempel-complete) ;; Alternative tempel-expand
-         ("M-*" . tempel-insert))
+         ("M-*" . tempel-insert)
+         :map tempel-map
+         ("<tab>" . tempel-next))
 
   :init
 
@@ -904,6 +914,7 @@
 (evil-leader/set-key-for-mode 'compilation-mode "n" 'next-error)
 (evil-leader/set-key-for-mode 'compilation-mode "c" 'compile)
 (evil-leader/set-key-for-mode 'compilation-mode "g" 'recompile)
+(setq compilation-skip-threshold 2)
 
 ;; Calendar
 ;;; Set calendar style
@@ -921,7 +932,7 @@
 ;; Dired
 (setq dired-listing-switches "-alhF")
 ;;; Create new files with leader o
-(evil-leader/set-key-for-mode 'dired-mode "o" 'dired-create-empty-file)
+(evil-leader/set-key-for-mode 'dired-mode "e" 'dired-create-empty-file)
 (evil-leader/set-key-for-mode 'dired-mode "i" 'open-with)
 ;;;Enable drag and drop
 (setq dired-mouse-drag-files t)
