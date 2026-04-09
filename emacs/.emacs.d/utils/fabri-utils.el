@@ -12,10 +12,6 @@
         (setq display-line-numbers 'relative))
     (setq display-line-numbers 'relative)))
 
-;; Get string for subdirectory in emacs directory
-(defun my-emacs-dir (directory)
-  (concat user-emacs-directory directory))
-
 
 ;;;Cancel backspace in order to force me to not move my hands
 (defun nothing-delete ()
@@ -298,8 +294,80 @@ X value, then the lambda value aka the mean."
    main-string
    ))
 
+(defhydra hydra-zoom ()
+  "Zoom"
+  ("i" text-scale-increase "in")
+  ("o" text-scale-decrease "out"))
+
+(evil-leader/set-key "z" 'hydra-zoom/body)
+
+(defhydra hydra-clock ()
+  "Clock"
+  ("i" org-clock-in "Clock in")
+  ("o" org-clock-out "Clock out")
+  ("r" org-clock-report "Clock report")
+  ("c" org-timer-set-timer "Countdown")
+  ("p" org-timer-pause-or-continue "Pause or continue")
+  )
+
+;; Evil numbers
+(defhydra hydra-increment-number ()
+  "Evil increment numbers"
+  ("i" evil-numbers/inc-at-pt "increment")
+  ("o" evil-numbers/inc-at-pt-incremental "increment incremental")
+  ("d" evil-numbers/dec-at-pt "decrement")
+  ("s" evil-numbers/dec-at-pt-incremental "decrement incremental")
+  )
+(evil-leader/set-key "1" 'hydra-increment-number/body)
+(use-package evil-numbers
+  :ensure t
+  )
 
 
+;; Footnote
+(defhydra hydra-footnote ()
+  "Footnote action"
+  ("j" org-footnote-new "include")
+  ("k" org-footnote-normalize "normalize")
+  )
+
+(defhydra hydra-move-buffers ()
+  "Move between buffers"
+  ("n" next-buffer "Next buffer")
+  ("p" previous-buffer "Previous buffer")
+  )
+
+(evil-leader/set-key "8" 'hydra-move-buffers/body)
+
+(defhydra hydra-ispell ()
+  "Ispell actions"
+  ("l" set-ispell-language "change language")
+  ("r" ispell-region "ispell region")
+  ("b" ispell "ispell buffer")
+  )
+(defalias 'ispell-full 'hydra-ispell/body)
+(defalias 'spellcheck-full 'hydra-ispell/body)
+
+(defhydra hydra-adjust-windows ()
+  "Adjust window size"
+  ("h" shrink-window-horizontally "Shrink horizontally")
+  ("l" enlarge-window-horizontally "Enlarge horizontally")
+  ("k" enlarge-window "Enlarge vertically")
+  ("j" (enlarge-window -1) "Shrkink vertically")
+  )
+
+(evil-leader/set-key "C-t" 'hydra-adjust-windows/body)
+
+;; Narrow-to-region
+(defalias 'select-region-start 'narrow-to-region)
+(defalias 'select-region-stop 'widen)
+
+(defhydra hydra-select-region ()
+  "Select some text from a buffer"
+  ("j" select-region-start "Select a region")
+  ("f" select-region-stop "Show entire buffer")
+  )
+(evil-leader/set-key "C-e" 'hydra-select-region/body)
 
 
 (provide 'fabri-utils)
