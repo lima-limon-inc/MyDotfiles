@@ -192,9 +192,6 @@
   (define-key evil-normal-state-map (kbd "C-i") nil)
   ;; (define-key evil-insert-state-map (kbd "<tab>") 'completion-at-point)
 
-  ;; Done to enable corfu complete candiates to work
-  (define-key evil-insert-state-map (kbd "C-n") nil)
-  (define-key evil-insert-state-map (kbd "C-p") nil)
   )
 
 
@@ -214,6 +211,9 @@
     )
   :config
     (evil-mode 1)
+    ;; Unbind C-n/C-p in insert state so corfu-next/previous work
+    (define-key evil-insert-state-map (kbd "C-n") nil)
+    (define-key evil-insert-state-map (kbd "C-p") nil)
   )
 
 
