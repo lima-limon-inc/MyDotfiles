@@ -46,6 +46,7 @@
     ("c" org-capture "Capture" :exit t)
     ("u" org-todo "TODO States" :exit t)
     ("t" org-set-tags-command "Tag" :exit t)
+    ("d" org-deadline "Deadline" :exit t)
     )
 (evil-leader/set-key "o" 'org-functions/body)
 
@@ -64,19 +65,44 @@
         ))
 
 ; Used tags
-(setq org-tag-alist '(
-                      ; Repos de Miden
-                      (:startgroup . nil)
-                      ("vm" . ?v)
-                      ("compiler" . ?C)
-                      ("client" . ?c)
-                      ("midenup" . ?m)
-                      ("faucet" . ?f)
-                      (:endgroup . nil)
-                      ; Tipo de tarea
-                      ("review" . ?r)
-                      ("pr" . ?p)
-                      ("discussion" . ?d)
-                      ))
+(if (equal fabri-profile 'work)
+    (setq org-tag-alist '(
+                        ; Repos de Miden
+                        (:startgroup . nil)
+                        ("vm" . ?v)
+                        ("compiler" . ?C)
+                        ("client" . ?c)
+                        ("midenup" . ?m)
+                        ("faucet" . ?f)
+                        (:endgroup . nil)
+                        ; Tipo de tarea
+                        ("review" . ?r)
+                        ("pr" . ?p)
+                        ("discussion" . ?d)
+                        ))
+    (setq org-tag-alist '(
+                        ; Materias de la facu
+                        (:startgroup . nil)
+                        ("is1" . ?i)
+                        ("numerico" . ?n)
+                        ("fisica" . ?f)
+                        (:endgroup . nil)
+                        ("tp" . ?t)
+                        ("examen" . ?e)
+                        ("tarea" . ?h)
+                        )))
+
+
+
+; Keybind
+;================================= Org agenda ==================================
+(use-package org-agenda
+  :ensure nil
+  :bind
+  (:map org-agenda-mode-map
+        ("j" . org-agenda-next-line)
+        ("k" . org-agenda-previous-line)
+        ("l" . right-char)
+        ("h" . left-char)))
 
 (provide 'fabri-org)

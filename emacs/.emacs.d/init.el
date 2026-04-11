@@ -45,7 +45,7 @@
                  (cons 'font (font-xlfd-name
                               (font-spec
                                :family "DejaVu Sans Mono"
-                               :size 14))))
+                               :size 15))))
     (add-to-list 'default-frame-alist
                  (cons 'font (font-xlfd-name
                               (font-spec
@@ -212,6 +212,7 @@
     ;;; Disable control i feature (compatibilty with org mode)
     (setq evil-want-C-i-jump nil)
     (evil-define-key 'normal org-mode-map (kbd "<tab>") #'org-cycle)
+    (add-to-list 'evil-emacs-state-modes 'dashboard-mode)
     )
   :config
     (evil-mode 1)
@@ -921,7 +922,7 @@
 (defhydra calc-functions ()
   "Calc functions"
   ("c" calc "Calc" :exit t)
-  ("v" full-cal "Full Calc" :exit t)
+  ("v" full-calc "Full Calc" :exit t)
   )
 
 (evil-leader/set-key "C-c" 'calc-functions/body)
