@@ -1,8 +1,11 @@
-; Create "work" directory if missing
+; Create org directories if missing
 (let (
-      (my-org-dir (my-emacs-dir "org/work/")))
+      (my-org-dir (my-emacs-dir "org/work/"))
+      (my-non-work-dir (my-emacs-dir "org/non-work/")))
       (unless (file-directory-p my-org-dir)
         (make-directory my-org-dir))
+      (unless (file-directory-p my-non-work-dir)
+        (make-directory my-non-work-dir))
       (setq org-directory (my-emacs-dir "org/work/")))
 (setq org-default-notes-file (concat org-directory "notes.org"))
 
@@ -13,20 +16,36 @@
 (setq org-agenda-todo-list-sublevels nil)
 
 
-(defun prompt-file-name ()
-  (concat org-directory (read-string "File name: ") ".org"))
+(defun prompt-file-name (type)
+  (let ((dir (cond
+              ((eq type 'work) (my-emacs-dir "org/work/"))
+              ((eq type 'non-work) (my-emacs-dir "org/non-work/")))))
+    (concat dir (read-string "File name: ") ".org")))
 
 (setq org-capture-templates
       `(
-        ("t" "New todo" plain (file ,(function prompt-file-name))
-         "* TODO %? [%] \n:PROPERTIES:\n:CREATED: %U\n:END:\n\n"))
-        )
+        ("t" "New todo" plain (file ,(lambda () (prompt-file-name 'work)))
+         "* TODO %? [%]
+:PROPERTIES:
+:CREATED: %U
+:ISSUE:
+:PR:
+:END:
+")
+        ("n" "Non-work todo" plain (file ,(lambda () (prompt-file-name 'non-work)))
+         "* TODO %? [%]
+:PROPERTIES:
+:CREATED: %U
+:END:
+")
+        ))
 
 (defhydra org-functions ()
   "Org related functions"
-    ("a" org-agenda "Agenda")
-    ("c" org-capture "Capture")
-    ("u" org-todo "TODO States")
+    ("a" org-agenda "Agenda" :exit t)
+    ("c" org-capture "Capture" :exit t)
+    ("u" org-todo "TODO States" :exit t)
+    ("t" org-set-tags-command "Tag" :exit t)
     )
 (evil-leader/set-key "o" 'org-functions/body)
 
@@ -34,14 +53,30 @@
 (setq org-log-done 'time)
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "WIP(w!)" "BLOCKED(b@/!)" "REVIEW(r!)" "|" "DONE(d)" "CANCELED(c@)")))
+      '((sequence "TODO(t)" "WIP(w!)" "BLOCKED(b@/!)" "REVIEW(r!)" "UNREPLIED(u!)" "|" "DONE(d)" "CANCELED(c@)")))
 
 (setq org-todo-keyword-faces
       '(("BLOCKED" . modus-themes-fg-blue)
         ("WIP" . modus-themes-fg-yellow)
+        ("UNREPLIED" . "orange")
         ("REVIEW" . "purple")
         ("CANCELED" . (:foreground "#44bc44" :underline (:color "red")))
         ))
 
+; Used tags
+(setq org-tag-alist '(
+                      ; Repos de Miden
+                      (:startgroup . nil)
+                      ("vm" . ?v)
+                      ("compiler" . ?C)
+                      ("client" . ?c)
+                      ("midenup" . ?m)
+                      ("faucet" . ?f)
+                      (:endgroup . nil)
+                      ; Tipo de tarea
+                      ("review" . ?r)
+                      ("pr" . ?p)
+                      ("discussion" . ?d)
+                      ))
 
 (provide 'fabri-org)

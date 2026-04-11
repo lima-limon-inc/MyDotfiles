@@ -46,7 +46,11 @@
                               (font-spec
                                :family "DejaVu Sans Mono"
                                :size 14))))
-  (set-face-attribute 'default nil :height 160)
+    (add-to-list 'default-frame-alist
+                 (cons 'font (font-xlfd-name
+                              (font-spec
+                               :family "DejaVu Sans Mono"
+                               :size 16))))
   )
 
 ;; Theme, new theme, new world
@@ -304,13 +308,15 @@
   ("u" highlight-symbol-at-point "Current symbol")
   ("d" unhighlight-regexp "Unhighlight (C-u)")
   )
+(evil-leader/set-key "y" 'highlight-functions/body)
 
 ;;; Grep related functions
 (defhydra grep-functions ()
   "Grepers functions"
   ("g" consult-ripgrep "Ripgrep")
   ("/" consult-line "Swiper")
-  ("f" (lambda () (interactive) (setq current-prefix-arg '(4)) (call-interactively 'consult-grep)) "Async grep")
+  ;; ("f" (lambda () (interactive) (setq current-prefix-arg '(4)) (call-interactively 'consult-grep)) "Async grep")
+  ("f" consult-grep "Async grep")
   ("r" rgrep "Recursive grep")
   ("h" grep "grep")
   ("u" highlight-functions/body "Highlight menu" :exit t)
@@ -408,6 +414,13 @@
 
     (advice-add 'magit-push-current-to-pushremote :before #'query-magit-push-upstream)
     )
+  )
+
+(use-package forge
+  :after magit
+  :custom
+  (epa-pinentry-mode 'loopback)
+  (auth-sources '("~/.authinfo.gpg"))
   )
 
 ;; Manage git forges directly from Magit
@@ -781,9 +794,9 @@
          ))
 
 (defhydra eglot-functions () "Eglot functions"
-  ("d" eldoc "Documentation")
-  ("r" eglot-rename "Rename")
-  ("u" eglot-code-actions "Actions")
+  ("d" eldoc "Documentation" :exit t)
+  ("r" eglot-rename "Rename" :exit t)
+  ("u" eglot-code-actions "Actions" :exit t)
   )
 (evil-leader/set-key "u" 'eglot-functions/body)
 
@@ -907,8 +920,8 @@
 ;; Emacs cal
 (defhydra calc-functions ()
   "Calc functions"
-  ("c" calc "Calc")
-  ("v" full-cal "Full Calc")
+  ("c" calc "Calc" :exit t)
+  ("v" full-cal "Full Calc" :exit t)
   )
 
 (evil-leader/set-key "C-c" 'calc-functions/body)
