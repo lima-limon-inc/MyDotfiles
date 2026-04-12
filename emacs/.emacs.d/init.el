@@ -19,23 +19,24 @@
 
 
 ; Package manager settings
-(require 'package)
-(add-to-list 'package-archives
-	        '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
+(use-package package
+  :ensure nil
+  :config
+    (add-to-list 'package-archives
+                '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+    (add-to-list 'package-archives
+                '("melpa" . "http://melpa.org/packages/") t)
+    ;; Packages from lower-priority archives will not be shown in the menu, if the
+    ;; same package is available from a higher-priority archive
+    (setq package-archive-priorities '(("gnu" . 10)
+                                       ("melpa-stable" . 5)
+                                       ("melpa" . 0))))
 
-
-;; Packages from lower-priority archives will not be shown in the menu, if the
-;; same package is available from a higher-priority archive
-(setq package-archive-priorities '(("gnu" . 10)
-                                   ("melpa-stable" . 5)
-                                   ("melpa" . 0)
-                                   ))
-
-
-; Always ensure packages are installed
-(setq use-package-always-ensure t)
+(use-package use-package-ensure
+  :ensure nil
+  :config
+  ; Always ensure packages are installed
+  (setq use-package-always-ensure t))
 
 ; Global look and feel
 
@@ -199,28 +200,57 @@
   )
 
 
-;;; enable global-evil-leader-mode before you enable evil-mode, otherwise evil-leader won’t be enabled in initial buffers (*scratch*, *Messages*, …).
+;;; enable global-evil-leader-mode before you enable evil-mode, otherwise
+;;; evil-leader won’t be enabled in initial buffers (*scratch*, *Messages*, …).
 (use-package evil-leader
   :ensure t
   :init
   (global-evil-leader-mode)
+  :config
+  ;; Sets the leader key to be space
+  (evil-leader/set-leader "<SPC>")
+  ;; Move between said windows
+  (evil-leader/set-key "h" 'evil-window-left)
+  (evil-leader/set-key "l" 'evil-window-right)
+  (evil-leader/set-key "k" 'evil-window-up)
+  (evil-leader/set-key "j" 'evil-window-down)
+  ;; Run :wa with les typing
+  (evil-leader/set-key "RET" 'evil-write-all)
+  ;;Map meta x to leader :. A sort of mix of vim and emacs
+  (evil-leader/set-key ";" 'execute-extended-command)
   )
 
 (use-package evil
+  ; enable global-evil-leader-mode before you enable evil-mode, otherwise
+  ; evil-leader won’t be enabled in initial buffers (*scratch*, *Messages*).
+  :after evil-leader
   :init
-  (progn
-    ;;; Disable control i feature (compatibilty with org mode)
-    (setq evil-want-C-i-jump nil)
-    (evil-define-key 'normal org-mode-map (kbd "<tab>") #'org-cycle)
-    (add-to-list 'evil-emacs-state-modes 'dashboard-mode)
-    )
   :config
+    (add-to-list 'evil-emacs-state-modes 'Info-mode)
+    (add-to-list 'evil-emacs-state-modes 'world-clock-mode)
+    (evil-set-initial-state 'Info-mode 'emacs)
+    ; Modes that should be in Emacs mode
+    ; Start evil mode
     (evil-mode 1)
-    ;; Unbind C-n/C-p in insert state so corfu-next/previous work
-    (define-key evil-insert-state-map (kbd "C-n") nil)
-    (define-key evil-insert-state-map (kbd "C-p") nil)
-  )
-
+    ;;;Makes Ctrl R work
+    (evil-set-undo-system 'undo-redo)
+  :bind
+    (:map evil-insert-state-map
+      ("C-n" . nil)             ; Unbind C-n and C-p in insert mode so that
+      ("C-p" . nil)             ; corfu takes precedence
+      ("C-<backspace>" . nothing-delete) ; Unmap delete
+      ("<backspace>" . nothing-delete)   ; Unmap delete
+    :map evil-normal-state-map
+      ("DEL" . nothing-delete)           ; Unmap delete
+      ("<deletechar>" . nothing-delete)  ; Unmap delete
+      ("C-<backspace>" . nothing-delete) ; Unmap delete
+      ("g c" . comment-or-uncomment-region) ; g c comments a region
+      ("g i" . indent-region)               ; g i indents a region
+      ("<up>" . nothing-move)    ; Unbind arrow keys
+      ("<down>" . nothing-move)  ; Unbind arrow keys
+      ("<right>" . nothing-move) ; Unbind arrow keys
+      ("<left>" . nothing-move)  ; Unbind arrow keys
+    ))
 
 ;; Hydra
 ;; For multiple level menus
@@ -235,16 +265,6 @@
 
 (add-to-list 'load-path (concat user-emacs-directory "utils"))
 (require 'fabri-utils)
-
-
-
-
-
-;;;Makes Ctrl R work
-(evil-set-undo-system 'undo-redo)
-
-;;; Sets the leader key to be space
-(evil-leader/set-leader "<SPC>")
 
 ;;; Window related functions
 (defhydra window-movements ()
@@ -262,11 +282,6 @@
   )
 (evil-leader/set-key "v" 'window-movements/body)
 
-;;; Move between said windows
-(evil-leader/set-key "h" 'evil-window-left)
-(evil-leader/set-key "l" 'evil-window-right)
-(evil-leader/set-key "k" 'evil-window-up)
-(evil-leader/set-key "j" 'evil-window-down)
 ;;; Shell
 (defhydra shell-commands ()
   "Shell commands"
@@ -281,9 +296,6 @@
 ;; Shell mode config
 (evil-leader/set-key-for-mode 'shell-mode "p" 'comint-previous-input)
 (evil-leader/set-key-for-mode 'shell-mode "n" 'comint-next-input)
-
-;;; Run :wa with les typing
-(evil-leader/set-key "RET" 'evil-write-all)
 
 ;;; File related functions
 (defhydra file-functions ()
@@ -324,6 +336,12 @@
   )
 (define-key evil-normal-state-map (kbd "/") 'grep-functions/body)
 
+(use-package project
+  :ensure nil
+  :config
+  (evil-leader/set-key "c" 'project-compile)
+  )
+
 ;; Grep mode
 ;(setq-default grep-find-ignored-directories
 ;    (cons "target" grep-find-ignored-directories)
@@ -331,27 +349,6 @@
 (evil-leader/set-key-for-mode 'grep-mode "g" 'recompile)
 (evil-leader/set-key-for-mode 'grep-mode "n" 'next-error)
 
-;;;Map meta x to leader :. A sort of mix of vim and emacs
-(evil-leader/set-key ";" 'execute-extended-command)
-
-;;;Comment a region out imitating tim pope's plugin
-(define-key evil-normal-state-map (kbd "g c") 'comment-or-uncomment-region)
-
-;;;Indent region
-(define-key evil-normal-state-map (kbd "g i") 'indent-region)
-
-
-; Don't delete
-(define-key evil-normal-state-map (kbd "DEL") 'nothing-delete)
-(define-key evil-insert-state-map (kbd "C-<backspace>") 'nothing-delete)
-(define-key evil-normal-state-map (kbd "C-<backspace>") 'nothing-delete)
-
-
-; Don't move with arrow keys
-(define-key evil-normal-state-map (kbd "<up>") 'nothing-move)
-(define-key evil-normal-state-map (kbd "<down>") 'nothing-move)
-(define-key evil-normal-state-map (kbd "<right>") 'nothing-move)
-(define-key evil-normal-state-map (kbd "<left>") 'nothing-move)
 
 ;;Registers
 ;;; Register with files I open often
@@ -380,42 +377,39 @@
   :init
   (setq transient-default-level 7)
   :config
-  (progn
-    (evil-leader/set-key "." 'magit-status)
-    (setq magit-blame-styles
-          '((margin
-             (margin-width . 52)
-             (margin-format . ("%H %a %f"))
-             (margin-face . magit-blame-margin)
-             (margin-body-face . magit-blame-dimmed)
-             (show-message . t))))
+  (evil-leader/set-key "." 'magit-status)
+  (setq magit-blame-styles
+        '((margin
+           (margin-width . 52)
+           (margin-format . ("%H %a %f"))
+           (margin-face . magit-blame-margin)
+           (margin-body-face . magit-blame-dimmed)
+           (show-message . t))))
 
-    (defalias 'magit-co-authored-by 'git-commit-co-authored)
-    (defalias 'co-authored-by 'git-commit-co-authored)
-    (defalias 'mablame 'magit-blame)
-    (defalias 'ma-show-current-blame 'magit-show-commit)
+  (defalias 'magit-co-authored-by 'git-commit-co-authored)
+  (defalias 'co-authored-by 'git-commit-co-authored)
+  (defalias 'mablame 'magit-blame)
+  (defalias 'ma-show-current-blame 'magit-show-commit)
 
-    (defun my-wrap-lines ()
-      "Disable `truncate-lines' in the current buffer."
-      (setq truncate-lines nil))
+  (defun my-wrap-lines ()
+    "Disable `truncate-lines' in the current buffer."
+    (setq truncate-lines nil))
 
-    (add-hook 'magit-status-mode-hook #'my-wrap-lines)
-    (add-hook 'magit-diff-mode-hook #'my-wrap-lines)
+  (add-hook 'magit-status-mode-hook #'my-wrap-lines)
+  (add-hook 'magit-diff-mode-hook #'my-wrap-lines)
 
-    ;; Protect against accident pushes to main
-    (defun query-magit-push-upstream (args)
-      (when-let ((branch (magit-get-current-branch)))
-        (when (or (string-equal branch "master") (string-equal branch "main"))
-	     (unless (yes-or-no-p (format "WARNING: ARE YOU SURE YOU WANT TO PUSH \"%s\" BRANCH TO \"%s\"? "
-                                       branch
-                                       (magit-get "branch" branch "remote")))
-	       (user-error "Pushed aborted")))))
+  ;; Protect against accident pushes to main
+  (defun query-magit-push-upstream (args)
+    (when-let ((branch (magit-get-current-branch)))
+      (when (or (string-equal branch "master") (string-equal branch "main"))
+	   (unless (yes-or-no-p (format "WARNING: ARE YOU SURE YOU WANT TO PUSH \"%s\" BRANCH TO \"%s\"? "
+                                     branch
+                                     (magit-get "branch" branch "remote")))
+	     (user-error "Pushed aborted")))))
 
-    (advice-add 'magit-push-current-to-upstream :before #'query-magit-push-upstream)
+  (advice-add 'magit-push-current-to-upstream :before #'query-magit-push-upstream)
 
-    (advice-add 'magit-push-current-to-pushremote :before #'query-magit-push-upstream)
-    )
-  )
+  (advice-add 'magit-push-current-to-pushremote :before #'query-magit-push-upstream))
 
 (use-package forge
   :after magit
@@ -789,7 +783,6 @@
   :config
   (setq eglot-ignored-server-capabilities '(:inlayHintProvider))
   :hook (
-         (rust-mode . eglot-ensure)
          (c-mode . eglot-ensure)
          (c++-mode . eglot-ensure)
          ))
@@ -857,6 +850,11 @@
 
 ; Emacs built in gadgets 
 
+;; (provide 'compile)
+;; (use-package compile
+;;   :ensure nil
+;;   )
+
 (evil-leader/set-key-for-mode 'compilation-mode "n" 'next-error)
 (evil-leader/set-key-for-mode 'compilation-mode "c" 'compile)
 (evil-leader/set-key-for-mode 'compilation-mode "g" 'recompile)
@@ -864,7 +862,7 @@
 
 ;; Calendar
 ;;; Set calendar style
-(require 'calendar) 
+(require 'calendar)
 (calendar-set-date-style 'european)
 
 ;;; Set sunset times
@@ -876,34 +874,42 @@
 (setq calendar-week-start-day 1) ; 0:Sunday, 1:Monday
 
 ;; Dired
-(setq dired-listing-switches "-alhF")
-;;; Create new files with leader o
-(evil-leader/set-key-for-mode 'dired-mode "e" 'dired-create-empty-file)
-(evil-leader/set-key-for-mode 'dired-mode "i" 'open-with)
-;;;Enable drag and drop
-(setq dired-mouse-drag-files t)
-;;;Unbinds g key so that i can use gt to change window
-(add-hook 'dired-mode-hook (lambda () (local-set-key (kbd "g") #'nil)))
-(add-hook 'dired-mode-hook (lambda () (local-set-key (kbd "p") #'revert-buffer)))
-(add-hook 'dired-mode-hook (lambda () (local-set-key (kbd "C-o") #'nil)))
-(add-hook 'dired-mode-hook (lambda () (local-set-key (kbd "v") #'evil-visual-char)))
+(use-package dired
+  :ensure nil
+  :custom
+  (setq dired-listing-switches "-alhF")
+  ;;; Dired will try to guess destination. If you have to open windows, then it
+  ;;; will use the one next to it
+  (setq dired-dwim-target t)
+  ;;; Enable drag and drop
+  (setq dired-mouse-drag-files t)
+  :bind
+  (:map dired-mode-map
+        ("e" . dired-create-empty-file)
+        ("i" . open-with)
+        ("b" . dired-toggle-read-only) ; Edit files as a buffer
+        ("g" . nil)                    ; Unbinds g key so that I can use gt to change window
+        ("p" . revert-buffer)          ; Refresh buffer
+   )
+  )
+;; (add-hook 'dired-mode-hook (lambda () (local-set-key (kbd "p") #'revert-buffer)))
+;; (add-hook 'dired-mode-hook (lambda () (local-set-key (kbd "C-o") #'nil)))
+;; (add-hook 'dired-mode-hook (lambda () (local-set-key (kbd "v") #'evil-visual-char)))
 (evil-leader/set-key-for-mode 'dired-mode "u" 'dired-toggle-read-only)
-(evil-leader/set-key-for-mode 'dired-mode "c" 'project-compile)
-;;; Dired will try to guess destination. If you have to open windows, then it will use the one next to it
-(setq dired-dwim-target t)
 
 
 ;; Ediff
-(setq ediff-keep-variants nil)
-;; (setq ediff-ancestor-buffer t)
-(setq ediff-split-window-function 'split-window-horizontally)
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-(add-hook 'ediff-keymap-setup-hook
-          (lambda ()
-            ;;; Use "o" to go to ediff C buffer
-            (define-key ediff-mode-map "o" (lambda ()
-                                             (interactive)
-                                             (switch-to-buffer-other-window "*ediff-merge<2>*")))))
+(use-package ediff
+  :ensure nil
+  :config
+  (setq ediff-keep-variants nil)
+  (setq ediff-show-ancestor t)
+  (setq ediff-split-window-function 'split-window-horizontally)
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+  :bind
+  (:map ediff-mode-map
+        ("o" . other-window)))
+
 
 
 ;; Ansi-color mode
@@ -953,7 +959,9 @@
 
 ;; Rust mode
 (use-package rust-mode
-  )
+  :hook (
+         (rust-mode . eglot-ensure)
+         ))
 
 ;; Solidy
 (use-package solidity-mode
@@ -961,24 +969,24 @@
 
 ;;Dashboard
 (use-package dashboard
-  :ensure t
+  :init
+  (add-to-list 'evil-emacs-state-modes 'dashboard-mode)
   :config
-  (progn
-    (dashboard-setup-startup-hook)
-    (setq dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
-    (setq dashboard-items '(
-		        (recents  . 5)
-                            ;; (bookmarks . 5)
-                            ;; (projects . 5)
-                            (agenda . 10)
-                            (registers . 5)
-		        ))
-    (setq dashboard-set-file-icons t)
-    (evil-leader/set-key-for-mode 'dashboard-mode "SPC" 'dashboard-open)
+  (dashboard-setup-startup-hook)
+  (setq dashboard-projects-backend 'project-el)
+  (setq dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
+  (setq dashboard-items '(
+		                ;; (recents  . 5)
+                          ;; (bookmarks . 5)
+                          (projects . 10)
+                          (agenda . 10)
+                          (registers . 5)
+		                ))
+  (setq dashboard-set-file-icons t)
+  (evil-leader/set-key-for-mode 'dashboard-mode "SPC" 'dashboard-open)
     ;;; Make dashboard the default when using a client
-    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
-    (add-to-list 'dashboard-footer-messages '"Aguante Banfield")
-    )
+  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+  (add-to-list 'dashboard-footer-messages '"Aguante Banfield")
   )
 
 
