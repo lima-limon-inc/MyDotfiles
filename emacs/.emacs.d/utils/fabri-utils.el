@@ -26,6 +26,11 @@
   (message "Use hjkl to move")
   )
 
+(defun nothing ()
+  "Functions that does nothing"
+  (interactive)
+  )
+
 ; Remove all advice
 (defun remove-all-advice (sym)
   "Remove all advices from symbol SYM."
@@ -368,6 +373,26 @@ X value, then the lambda value aka the mean."
   ("f" select-region-stop "Show entire buffer")
   )
 (evil-leader/set-key "C-e" 'hydra-select-region/body)
+
+;=================================== Alias ====================================
+;;; Undefine
+(defalias 'undefun 'fmakunbound)
+;;; Reload file
+(defalias 'reload-file 'revert-buffer)
+;;; Fill mode alias
+(defalias 'wrap-region 'fill-paragraph)
+;;; Restart emacs
+(defalias 'resma 'restart-emacs)
+;;; Ispell
+(defalias 'ispell-change-language 'ispell-change-dictionary)
+(defalias 'set-ispell-language 'ispell-change-dictionary)
+;; Dired
+(defalias 'unix-find 'find-name-dired)
+;; Find file
+(defalias 'find-file-recursive 'find-name-dired)
+;; Find file
+(defalias 'sort-region 'sort-lines)
+
 
 
 (provide 'fabri-utils)

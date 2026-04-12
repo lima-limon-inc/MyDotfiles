@@ -56,7 +56,7 @@
 
 ;; Theme, new theme, new world
 (load-theme 'modus-vivendi-tinted t)
-(set-face-attribute 'font-lock-comment-face nil :foreground "#FF470A")
+(set-face-attribute 'font-lock-comment-face nil :foreground "#FF5900")
 
 ;; Don't use tabs, only use spaces
 (setq-default indent-tabs-mode nil)
@@ -137,30 +137,10 @@
 			    ("Europe/Rome" "Rome")
 			    ("Europe/Madrid" "Madrid")
 			    ("America/New_York" "New York")
-			    ("America/Buenos_Aires" "Buenos Aires")
-			    ))
+			    ("America/Buenos_Aires" "Buenos Aires")))
 
 ;; Add newlines at the end of the file
 (setq require-final-newline 'visit-save)
-
-;; Misc alias
-;;; Undefine
-(defalias 'undefun 'fmakunbound)
-;;; Reload file
-(defalias 'reload-file 'revert-buffer)
-;;; Fill mode alias
-(defalias 'wrap-region 'fill-paragraph)
-;;; Restart emacs
-(defalias 'resma 'restart-emacs)
-;;; Ispell
-(defalias 'ispell-change-language 'ispell-change-dictionary)
-(defalias 'set-ispell-language 'ispell-change-dictionary)
-;; Dired
-(defalias 'unix-find 'find-name-dired)
-;; Find file
-(defalias 'find-file-recursive 'find-name-dired)
-;; Find file
-(defalias 'sort-region 'sort-lines)
 
 ;; Zone when idle
 (when (equal fabri-profile 'work)
@@ -199,7 +179,6 @@
 
   )
 
-
 ;;; enable global-evil-leader-mode before you enable evil-mode, otherwise
 ;;; evil-leader won’t be enabled in initial buffers (*scratch*, *Messages*, …).
 (use-package evil-leader
@@ -235,12 +214,15 @@
     ;;;Makes Ctrl R work
     (evil-set-undo-system 'undo-redo)
   :bind
-    (:map evil-insert-state-map
+    (:map evil-motion-state-map
+      ("RET" . nil)             ; Unbind C-n and C-p in insert mode so that
+    :map evil-insert-state-map
       ("C-n" . nil)             ; Unbind C-n and C-p in insert mode so that
       ("C-p" . nil)             ; corfu takes precedence
       ("C-<backspace>" . nothing-delete) ; Unmap delete
       ("<backspace>" . nothing-delete)   ; Unmap delete
     :map evil-normal-state-map
+      ("RET" . nothing)                  ; Unmap delete
       ("DEL" . nothing-delete)           ; Unmap delete
       ("<deletechar>" . nothing-delete)  ; Unmap delete
       ("C-<backspace>" . nothing-delete) ; Unmap delete
@@ -851,27 +833,29 @@
 ; Emacs built in gadgets 
 
 ;; (provide 'compile)
-;; (use-package compile
-;;   :ensure nil
-;;   )
-
-(evil-leader/set-key-for-mode 'compilation-mode "n" 'next-error)
-(evil-leader/set-key-for-mode 'compilation-mode "c" 'compile)
-(evil-leader/set-key-for-mode 'compilation-mode "g" 'recompile)
-(setq compilation-skip-threshold 2)
+(use-package compile
+  :ensure nil
+  :config
+  (setq compilation-skip-threshold 2)
+  :bind
+  (:map compilation-mode-map
+        ("n" . next-error)
+        ("c" . compile)
+        ("g" . recompile)))
 
 ;; Calendar
-;;; Set calendar style
-(require 'calendar)
-(calendar-set-date-style 'european)
 
-;;; Set sunset times
-(setq calendar-latitude -34.37)
-(setq calendar-longitude -58.38)
-(setq calendar-location-name "Buenos Aires, Argentina")
+(use-package calendar
+  :ensure nil
+  :config
+  (calendar-set-date-style 'european) ; Set calendar style
+  (setq calendar-latitude -34.37)     ; Set latitude
+  (setq calendar-longitude -58.38)    ; Set longitude
+  (setq calendar-location-name "Buenos Aires, Argentina") ; Location name
+  (setq calendar-week-start-day 1) ; 0:Sunday, 1:Monday
+  )
 
-;; Start the week on monday
-(setq calendar-week-start-day 1) ; 0:Sunday, 1:Monday
+
 
 ;; Dired
 (use-package dired
@@ -890,12 +874,10 @@
         ("b" . dired-toggle-read-only) ; Edit files as a buffer
         ("g" . nil)                    ; Unbinds g key so that I can use gt to change window
         ("p" . revert-buffer)          ; Refresh buffer
-   )
-  )
+   ))
 ;; (add-hook 'dired-mode-hook (lambda () (local-set-key (kbd "p") #'revert-buffer)))
 ;; (add-hook 'dired-mode-hook (lambda () (local-set-key (kbd "C-o") #'nil)))
 ;; (add-hook 'dired-mode-hook (lambda () (local-set-key (kbd "v") #'evil-visual-char)))
-(evil-leader/set-key-for-mode 'dired-mode "u" 'dired-toggle-read-only)
 
 
 ;; Ediff
@@ -914,14 +896,12 @@
 
 ;; Ansi-color mode
 (use-package ansi-color
-  :config
-  (progn
-    (defun my/ansi-colorize-buffer ()
-      (let ((buffer-read-only nil))
-        (ansi-color-apply-on-region (point-min) (point-max))))
-
-    (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)
-    )
+  :init
+  (defun my/ansi-colorize-buffer ()
+    (let ((buffer-read-only nil))
+      (ansi-color-apply-on-region (point-min) (point-max))))
+  :hook
+  (compilation-filter .  my/ansi-colorize-buffer)
   )
 
 ;; Emacs cal
