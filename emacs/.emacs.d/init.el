@@ -1005,6 +1005,8 @@
   (setq rfc-mode-directory (my-emacs-dir "rfc"))
   :hook (
          (rfc-mode . (lambda () (setq-local show-trailing-whitespace nil)))))
+(use-package htmlize
+  )
 
 ;; ;; Enable auto insert mode
 ;; (auto-insert-mode t)
