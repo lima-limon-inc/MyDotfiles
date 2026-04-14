@@ -164,21 +164,6 @@
 
 
 ; Global keybindings
-;; Evil
-;;;Unbinds evil's ret/space/tab key so that is uses the normal emacs key
-(with-eval-after-load 'evil-maps
-  ;; (define-key evil-motion-state-map (kbd "SPC") nil)
-  ;; (define-key evil-motion-state-map (kbd "RET") nil)
-  ;; (define-key evil-motion-state-map (kbd "TAB") nil)
-  (define-key evil-motion-state-map (kbd "\\") nil)
-  (define-key evil-insert-state-map (kbd "DEL") nil)
-  (define-key evil-insert-state-map (kbd "DEL") nil)
-  (define-key evil-insert-state-map (kbd "C-i") nil)
-  (define-key evil-normal-state-map (kbd "C-i") nil)
-  ;; (define-key evil-insert-state-map (kbd "<tab>") 'completion-at-point)
-
-  )
-
 ;;; enable global-evil-leader-mode before you enable evil-mode, otherwise
 ;;; evil-leader won’t be enabled in initial buffers (*scratch*, *Messages*, …).
 (use-package evil-leader
@@ -219,8 +204,8 @@
     :map evil-insert-state-map
       ("C-n" . nil)             ; Unbind C-n and C-p in insert mode so that
       ("C-p" . nil)             ; corfu takes precedence
-      ("C-<backspace>" . nothing-delete) ; Unmap delete
-      ("<backspace>" . nothing-delete)   ; Unmap delete
+      ;; ("C-<backspace>" . nothing-delete) ; Unmap delete
+      ;; ("<backspace>" . nothing-delete)   ; Unmap delete
     :map evil-normal-state-map
       ("RET" . nothing)                  ; Unmap delete
       ("DEL" . nothing-delete)           ; Unmap delete
@@ -273,8 +258,20 @@
   ("v" shell "Shell")
   )
 (evil-leader/set-key "&" 'shell-commands/body)
-;; Term mode config
-(evil-leader/set-key-for-mode 'term-mode "p" 'term-paste)
+
+(use-package term
+  :init
+  (add-to-list 'evil-emacs-state-modes 'term-mode)
+  (evil-set-initial-state 'term-mode 'emacs)
+  :bind
+  (:map term-mode-map
+        ("C-h" . help)
+  :map term-raw-map
+        ("C-h" . help))
+  :ensure nil
+  :hook (
+         (term-mode . (lambda () (setq-local show-trailing-whitespace nil))))
+  )
 ;; Shell mode config
 (evil-leader/set-key-for-mode 'shell-mode "p" 'comint-previous-input)
 (evil-leader/set-key-for-mode 'shell-mode "n" 'comint-next-input)
@@ -328,8 +325,14 @@
 ;(setq-default grep-find-ignored-directories
 ;    (cons "target" grep-find-ignored-directories)
 ;    )
-(evil-leader/set-key-for-mode 'grep-mode "g" 'recompile)
-(evil-leader/set-key-for-mode 'grep-mode "n" 'next-error)
+(use-package grep
+  :ensure nil
+  :config
+  (evil-leader/set-key "c" 'project-compile)
+  :bind
+  (:map grep-mode-map
+        ("g" . recompile)
+        ("n" . next-error)))
 
 
 ;;Registers
@@ -339,10 +342,10 @@
 ; Text mode
 (use-package markdown-mode
   )
+
 (add-hook 'org-mode-hook (lambda () (local-set-key (kbd "C-c /") #'place-question-mark)))
 (add-hook 'LaTeX-mode-hook (lambda () (local-set-key (kbd "C-c /") #'place-question-mark)))
 (add-hook 'markdown-mode-hook (lambda () (local-set-key (kbd "C-c /") #'place-question-mark)))
-
 
 ; Programming configuration
 ;; Color line
@@ -464,8 +467,13 @@
   ;; (corfu-on-exact-match 'insert) ;; Configure handling of exact matches
 
   :bind
-  (:map corfu-map ("C-n" . corfu-next))
-  (:map corfu-map ("C-p" . corfu-previous))
+  (:map prog-mode-map
+   ("<tab>" . completion-at-point)
+   :map corfu-map
+   ("C-n" . corfu-next)
+   ("C-p" . corfu-previous)
+   ("<backspace>" . evil-delete-backward-char)
+   )
 
   ;; Enable Corfu only for certain modes. See also `global-corfu-modes'.
   ;; :hook ((prog-mode . corfu-mode)
@@ -905,6 +913,18 @@
   )
 
 ;; Emacs cal
+(use-package calc
+  :init
+  (add-to-list 'evil-emacs-state-modes 'calc-mode)
+  (evil-set-initial-state 'calc-mode 'emacs)
+  :ensure nil
+  :bind
+  (:map calc-mode-map
+        ("g t" . tab-bar-switch-to-next-tab)
+        ("g T" . tab-bar-switch-to-prev-tab)
+        )
+  )
+
 (defhydra calc-functions ()
   "Calc functions"
   ("c" calc "Calc" :exit t)
@@ -912,9 +932,6 @@
   )
 
 (evil-leader/set-key "C-c" 'calc-functions/body)
-
-(add-hook 'calc-mode-hook (lambda () (local-set-key (kbd "g t") 'tab-bar-switch-to-next-tab)))
-(add-hook 'calc-mode-hook (lambda () (local-set-key (kbd "g T") 'tab-bar-switch-to-prev-tab)))
 
 
 ; Additional extensions
@@ -980,6 +997,14 @@
   ;;; Enable dashboard-dired
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   )
+
+(use-package rfc-mode
+  :init
+  (add-to-list 'evil-emacs-state-modes 'rfc-mode)
+  :config
+  (setq rfc-mode-directory (my-emacs-dir "rfc"))
+  :hook (
+         (rfc-mode . (lambda () (setq-local show-trailing-whitespace nil)))))
 
 ;; ;; Enable auto insert mode
 ;; (auto-insert-mode t)
