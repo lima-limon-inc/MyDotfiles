@@ -12,6 +12,14 @@
 ;; (setq org-agenda-files (list org-default-notes-file))
 (setq org-agenda-files (list org-directory))
 
+
+; Sort by todo state
+(setq org-agenda-sorting-strategy
+      '((agenda todo-state-up priority-down time-up)
+        (todo todo-state-up priority-down category-keep)
+        (tags todo-state-up priority-down category-keep)
+        (search category-keep)))
+
 ;; Only show top level todo items
 (setq org-agenda-todo-list-sublevels nil)
 
