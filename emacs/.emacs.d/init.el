@@ -359,17 +359,17 @@
 
 ;;Magit
 (use-package magit
-  :init
-  (setq transient-default-level 7)
+  :custom
+  (transient-default-level 7)
+  (magit-blame-styles
+   '((margin
+      (margin-width . 52)
+      (margin-format . ("%H %a %f"))
+      (margin-face . magit-blame-margin)
+      (margin-body-face . magit-blame-dimmed)
+      (show-message . t))))
   :config
   (evil-leader/set-key "." 'magit-status)
-  (setq magit-blame-styles
-        '((margin
-           (margin-width . 52)
-           (margin-format . ("%H %a %f"))
-           (margin-face . magit-blame-margin)
-           (margin-body-face . magit-blame-dimmed)
-           (show-message . t))))
 
   (defalias 'magit-co-authored-by 'git-commit-co-authored)
   (defalias 'co-authored-by 'git-commit-co-authored)
@@ -434,25 +434,23 @@
 
 ;; TODO Highlighter
 (use-package hl-todo
+  :custom
+  (hl-todo-keyword-faces
+   '(("TODO"      . "#FF0000")
+     ("FIXME"     . "#FF0000")
+     ("ERROR"     . "#FF0000")
+     ("DEBUG"     . "#A020F0")
+     ("GOTCHA"    . "#FF4500")
+     ("HELP"      . "#F5601B")
+     ("WARNING"   . "#E6DB10")
+     ("ATTENTION" . "#0bb552")
+     ("STUB"      . "#1E90FF")
+     ("IWASHERE"  . "#C60CFA")
+     ("QUESTION"  . "#12E6DB")
+     ("IMPORTANT" . "#FF0019")
+     ("NOTE"      . "#1A02EB")))
   :config
-  (progn
-    (setq hl-todo-keyword-faces
-	'(("TODO"      . "#FF0000")
-	  ("FIXME"     . "#FF0000")
-	  ("ERROR"     . "#FF0000")
-	  ("DEBUG"     . "#A020F0")
-	  ("GOTCHA"    . "#FF4500")
-	  ("HELP"      . "#F5601B")
-	  ("WARNING"   . "#E6DB10")
-	  ("ATTENTION" . "#0bb552")
-	  ("STUB"      . "#1E90FF")
-	  ("IWASHERE"  . "#C60CFA")
-	  ("QUESTION"  . "#12E6DB")
-	  ("IMPORTANT" . "#FF0019")
-	  ("NOTE"      . "#1A02EB")
-	  ))
-    (add-hook 'prog-mode-hook #'hl-todo-mode)
-    )
+  (add-hook 'prog-mode-hook #'hl-todo-mode)
   )
 
 ;; Completion mode
@@ -479,18 +477,18 @@
   ;; :hook ((prog-mode . corfu-mode)
   ;;        (shell-mode . corfu-mode)
   ;;        (eshell-mode . corfu-mode))
-  :config
+  :custom
   ;; `completion-at-point' is often bound to M-TAB.
-  (setq tab-always-indent 'complete)
+  (tab-always-indent 'complete)
 
   ;; Emacs 30 and newer: Disable Ispell completion function.
   ;; Try `cape-dict' as an alternative.
-  (setq text-mode-ispell-word-completion nil)
+  (text-mode-ispell-word-completion nil)
 
   ;; Hide commands in M-x which do not apply to the current mode.  Corfu
   ;; commands are hidden, since they are not used via M-x. This setting is
   ;; useful beyond Corfu.
-  (setq read-extended-command-predicate #'command-completion-default-include-p)
+  (read-extended-command-predicate #'command-completion-default-include-p)
 
   :init
 
@@ -529,14 +527,13 @@
 
 ;; Minibuffer
 (use-package vertico
-  :config
+  :custom
   ;; Enable context menu. `vertico-multiform-mode' adds a menu in the minibuffer
   ;; to switch display modes.
-  ;; (setq context-menu-mode t)
+  ;; (context-menu-mode t)
   ;; Do not allow the cursor in the minibuffer prompt
-  (setq minibuffer-prompt-properties
+  (minibuffer-prompt-properties
    '(read-only t cursor-intangible t face minibuffer-prompt))
-  ;; :custom
   ;; (vertico-scroll-margin 0) ;; Different scroll margin
   ;; (vertico-count 20) ;; Show more candidates
   ;; (vertico-resize t) ;; Grow and shrink the Vertico minibuffer
@@ -642,14 +639,19 @@
   ;; register formatting, adds thin separator lines, register sorting and hides
   ;; the window mode line.
   (advice-add #'register-preview :override #'consult-register-window)
-  (setq register-preview-delay 0.5)
-
-  ;; Use Consult to select xref locations with preview
-  (setq xref-show-xrefs-function #'consult-xref
-        xref-show-definitions-function #'consult-xref)
 
   ;; Configure other variables and modes in the :config section,
   ;; after lazily loading the package.
+  :custom
+  ;; Tweak the register preview delay
+  (register-preview-delay 0.5)
+  ;; Use Consult to select xref locations with preview
+  (xref-show-xrefs-function #'consult-xref)
+  (xref-show-definitions-function #'consult-xref)
+  ;; Optionally configure the narrowing key.
+  ;; Both < and C-+ work reasonably well.
+  (consult-narrow-key "<") ;; "C-+"
+
   :config
 
   ;; Optionally configure preview. The default value
@@ -668,10 +670,6 @@
    ;; :preview-key "M-."
    :preview-key '(:debounce 0.4 any))
 
-  ;; Optionally configure the narrowing key.
-  ;; Both < and C-+ work reasonably well.
-  (setq consult-narrow-key "<") ;; "C-+"
-
   ;; Optionally make narrowing help available in the minibuffer.
   ;; You may want to use `embark-prefix-help-command' or which-key instead.
   ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
@@ -687,10 +685,11 @@
    ; ("C-h B" . embark-bindings) ;; alternative for `describe-bindings'
    )
 
-  :init
+  :custom
   ;; Optionally replace the key help with a completing-read interface
-  (setq prefix-help-command #'embark-prefix-help-command)
+  (prefix-help-command #'embark-prefix-help-command)
 
+  :init
   ;; Show the Embark target at point via Eldoc. You may adjust the
   ;; Eldoc strategy, if you want to see the documentation from
   ;; multiple providers. Beware that using this can be a little
@@ -770,8 +769,9 @@
 
 ;; Lsp completion
 (use-package eglot
-  :config
-  (setq eglot-ignored-server-capabilities '(:inlayHintProvider))
+  :ensure nil
+  :custom
+  (eglot-ignored-server-capabilities '(:inlayHintProvider))
   :hook (
          (c-mode . eglot-ensure)
          (c++-mode . eglot-ensure)
@@ -843,8 +843,8 @@
 ;; (provide 'compile)
 (use-package compile
   :ensure nil
-  :config
-  (setq compilation-skip-threshold 2)
+  :custom
+  (compilation-skip-threshold 2)
   :bind
   (:map compilation-mode-map
         ("n" . next-error)
@@ -855,12 +855,13 @@
 
 (use-package calendar
   :ensure nil
+  :custom
+  (calendar-latitude -34.37)                               ; Set latitude
+  (calendar-longitude -58.38)                              ; Set longitude
+  (calendar-location-name "Buenos Aires, Argentina")       ; Location name
+  (calendar-week-start-day 1)                              ; 0:Sunday, 1:Monday
   :config
   (calendar-set-date-style 'european) ; Set calendar style
-  (setq calendar-latitude -34.37)     ; Set latitude
-  (setq calendar-longitude -58.38)    ; Set longitude
-  (setq calendar-location-name "Buenos Aires, Argentina") ; Location name
-  (setq calendar-week-start-day 1) ; 0:Sunday, 1:Monday
   )
 
 
@@ -869,12 +870,12 @@
 (use-package dired
   :ensure nil
   :custom
-  (setq dired-listing-switches "-alhF")
+  (dired-listing-switches "-alhF")
   ;;; Dired will try to guess destination. If you have to open windows, then it
   ;;; will use the one next to it
-  (setq dired-dwim-target t)
+  (dired-dwim-target t)
   ;;; Enable drag and drop
-  (setq dired-mouse-drag-files t)
+  (dired-mouse-drag-files t)
   :bind
   (:map dired-mode-map
         ("e" . dired-create-empty-file)
@@ -891,19 +892,21 @@
 ;; Ediff
 (use-package ediff
   :ensure nil
-  :config
-  (setq ediff-keep-variants nil)
-  (setq ediff-show-ancestor t)
-  (setq ediff-split-window-function 'split-window-horizontally)
-  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
-  :bind
-  (:map ediff-mode-map
-        ("o" . other-window)))
+  :custom
+  (ediff-keep-variants nil)
+  (ediff-show-ancestor t)
+  (ediff-split-window-function 'split-window-horizontally)
+  (ediff-window-setup-function 'ediff-setup-windows-plain)
+  ;; :bind
+  ;; (:map ediff-mode-map
+  ;;       ("o" . other-window)))
+  )
 
 
 
 ;; Ansi-color mode
 (use-package ansi-color
+  :ensure nil
   :init
   (defun my/ansi-colorize-buffer ()
     (let ((buffer-read-only nil))
@@ -998,15 +1001,19 @@
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   )
 
-(use-package rfc-mode
-  :init
-  (add-to-list 'evil-emacs-state-modes 'rfc-mode)
-  :config
-  (setq rfc-mode-directory (my-emacs-dir "rfc"))
-  :hook (
-         (rfc-mode . (lambda () (setq-local show-trailing-whitespace nil)))))
+;; (use-package rfc-mode
+;;   :init
+;;   (add-to-list 'evil-emacs-state-modes 'rfc-mode)
+;;   :config
+;;   (rfc-mode-directory (my-emacs-dir "rfc"))
+;;   :hook (
+;;          (rfc-mode . (lambda () (setq-local show-trailing-whitespace nil)))))
 (use-package htmlize
   )
+
+;; RSS feed
+(setq newsticker-url-list '("Andrew Kelley" "https://andrewkelley.me/rss.xml"))
+
 
 ;; ;; Enable auto insert mode
 ;; (auto-insert-mode t)
