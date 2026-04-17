@@ -90,6 +90,9 @@
                         ("tp" . ?t)
                         ("examen" . ?e)
                         ("tarea" . ?h)
+                        (:startgroup . nil)
+                        ("personal" . ?p)
+                        (:endgroup . nil)
                         )))
 
 

@@ -987,6 +987,10 @@
     ;;; Make dashboard the default when using a client
   (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
   (add-to-list 'dashboard-footer-messages '"Aguante Banfield")
+  :bind
+    (:map dashboard-mode-map
+      ("f" . find-file)             ; Unbind C-n and C-p in insert mode so that
+    )
   )
 
 
@@ -1011,8 +1015,21 @@
 (use-package htmlize
   )
 
+(use-package adoc-mode
+  )
+
 ;; RSS feed
-(setq newsticker-url-list '("Andrew Kelley" "https://andrewkelley.me/rss.xml"))
+(use-package newst-backend
+  :ensure nil
+  :init
+  (add-to-list 'evil-emacs-state-modes 'newsticker-treeview-mode)
+  (evil-set-initial-state 'newsticker-treeview-mode 'emacs)
+  :config
+  (progn
+   (add-to-list 'newsticker-url-list '("Andrew Kelley" "https://andrewkelley.me/rss.xml"))
+   (add-to-list 'newsticker-url-list '("Ryan Fleury" "https://www.dgtlgrove.com/feed"))
+   )
+  )
 
 
 ;; ;; Enable auto insert mode
