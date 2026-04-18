@@ -969,30 +969,32 @@
 
 ;;Dashboard
 (use-package dashboard
+  ; Done because :bind defers loading
+  :demand t
   :init
   (add-to-list 'evil-emacs-state-modes 'dashboard-mode)
-  :config
-  (dashboard-setup-startup-hook)
-  (setq dashboard-projects-backend 'project-el)
-  (setq dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
-  (setq dashboard-items '(
+  :custom
+  (dashboard-projects-backend 'project-el)
+  (dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
+  (dashboard-items '(
 		                ;; (recents  . 5)
                           ;; (bookmarks . 5)
                           (projects . 10)
                           (agenda . 10)
                           (registers . 5)
 		                ))
-  (setq dashboard-set-file-icons t)
-  (evil-leader/set-key-for-mode 'dashboard-mode "SPC" 'dashboard-open)
-    ;;; Make dashboard the default when using a client
-  (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+  (dashboard-set-file-icons t)
+   ;;; Make dashboard the default when using a client
+  (initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+  :config
   (add-to-list 'dashboard-footer-messages '"Aguante Banfield")
+  (evil-leader/set-key-for-mode 'dashboard-mode "SPC" 'dashboard-open)
+  (dashboard-setup-startup-hook)
   :bind
     (:map dashboard-mode-map
       ("f" . find-file)             ; Unbind C-n and C-p in insert mode so that
     )
   )
-
 
 (use-package all-the-icons
   :ensure t
