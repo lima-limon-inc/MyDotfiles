@@ -55,6 +55,7 @@
     ("u" org-todo "TODO States" :exit t)
     ("t" org-set-tags-command "Tag" :exit t)
     ("d" org-deadline "Deadline" :exit t)
+    ("i" org-insert-structure-template "Template" :exit t)
     )
 (evil-leader/set-key "o" 'org-functions/body)
 
