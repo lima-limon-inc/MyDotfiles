@@ -36,8 +36,8 @@
          "* TODO %? [%]
 :PROPERTIES:
 :CREATED: %U
-:ISSUE:
-:PR:
+:ISSUE: 
+:PR: 
 :END:
 ")
         ("n" "Non-work todo" plain (file ,(lambda () (prompt-file-name 'non-work)))
@@ -55,6 +55,7 @@
     ("u" org-todo "TODO States" :exit t)
     ("t" org-set-tags-command "Tag" :exit t)
     ("d" org-deadline "Deadline" :exit t)
+    ("s" org-store-link "Store link" :exit t)
     )
 (evil-leader/set-key "o" 'org-functions/body)
 
@@ -62,7 +63,7 @@
 (setq org-log-done 'time)
 
 (setq org-todo-keywords
-      '((sequence "TODO(t)" "WIP(w!)" "BLOCKED(b@/!)" "REVIEW(r!)" "UNREPLIED(u!)" "|" "DONE(d)" "CANCELED(c@)")))
+      '((sequence "TODO(t!)" "WIP(w!)" "BLOCKED(b@/!)" "REVIEW(r!)" "UNREPLIED(u!)" "|" "DONE(d)" "CANCELED(c@)")))
 
 (setq org-todo-keyword-faces
       '(("BLOCKED" . modus-themes-fg-blue)

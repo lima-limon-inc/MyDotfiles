@@ -328,11 +328,9 @@
 (use-package grep
   :ensure nil
   :config
-  (evil-leader/set-key "c" 'project-compile)
-  :bind
-  (:map grep-mode-map
-        ("g" . recompile)
-        ("n" . next-error)))
+  (evil-leader/set-key-for-mode 'grep-mode "g" 'recompile)
+  (evil-leader/set-key-for-mode 'grep-mode "p" 'previous-error)
+  (evil-leader/set-key-for-mode 'grep-mode "n" 'next-error))
 
 
 ;;Registers
