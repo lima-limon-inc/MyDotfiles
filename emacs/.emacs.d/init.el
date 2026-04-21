@@ -58,6 +58,7 @@
 (load-theme 'modus-vivendi-tinted t)
 (set-face-attribute 'font-lock-comment-face nil :foreground "#FF5900")
 
+
 ;; Don't use tabs, only use spaces
 (setq-default indent-tabs-mode nil)
 
@@ -446,6 +447,7 @@
      ("IWASHERE"  . "#C60CFA")
      ("QUESTION"  . "#12E6DB")
      ("IMPORTANT" . "#FF0019")
+     ("LOGBOOK"   . "#0E9CB5")
      ("NOTE"      . "#1A02EB")))
   :config
   (add-hook 'prog-mode-hook #'hl-todo-mode)
@@ -1005,13 +1007,13 @@
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   )
 
-;; (use-package rfc-mode
-;;   :init
-;;   (add-to-list 'evil-emacs-state-modes 'rfc-mode)
-;;   :config
-;;   (rfc-mode-directory (my-emacs-dir "rfc"))
-;;   :hook (
-;;          (rfc-mode . (lambda () (setq-local show-trailing-whitespace nil)))))
+(use-package rfc-mode
+  :init
+  (add-to-list 'evil-emacs-state-modes 'rfc-mode)
+  :custom
+  (rfc-mode-directory (my-emacs-dir "rfc"))
+  :hook (
+         (rfc-mode . (lambda () (setq-local show-trailing-whitespace nil)))))
 (use-package htmlize
   )
 
