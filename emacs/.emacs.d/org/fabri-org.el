@@ -57,7 +57,8 @@
     ("t" org-set-tags-command "Tag" :exit t)
     ("d" org-deadline "Deadline" :exit t)
     ("s" org-store-link "Store link" :exit t)
-    ("i" org-timestamp "Insert timestamp" :exit t)
+    ("m" org-timestamp "Insert timestamp" :exit t)
+    ("i" org-insert-structure-template "Template" :exit t)
     )
 (evil-leader/set-key "o" 'org-functions/body)
 

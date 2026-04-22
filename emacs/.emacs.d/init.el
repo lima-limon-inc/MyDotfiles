@@ -975,6 +975,7 @@
   :demand t
   :init
   (add-to-list 'evil-emacs-state-modes 'dashboard-mode)
+  (setq dashboard-set-file-icons t)
   :custom
   (dashboard-projects-backend 'project-el)
   (dashboard-filter-agenda-entry 'dashboard-no-filter-agenda)
@@ -985,7 +986,6 @@
                           (agenda . 10)
                           (registers . 5)
 		                ))
-  (dashboard-set-file-icons t)
    ;;; Make dashboard the default when using a client
   (initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
   :config
@@ -1009,6 +1009,9 @@
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
   )
 
+(use-package all-the-icons-ibuffer :ensure t
+  :hook (ibuffer-mode . all-the-icons-ibuffer-mode))
+
 (use-package rfc-mode
   :init
   (add-to-list 'evil-emacs-state-modes 'rfc-mode)
@@ -1016,6 +1019,8 @@
   (rfc-mode-directory (my-emacs-dir "rfc"))
   :hook (
          (rfc-mode . (lambda () (setq-local show-trailing-whitespace nil)))))
+
+
 (use-package htmlize
   )
 
