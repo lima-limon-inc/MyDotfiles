@@ -62,8 +62,11 @@
 ;; Don't use tabs, only use spaces
 (setq-default indent-tabs-mode nil)
 
-;; Show trailing whitespace
-(setq-default show-trailing-whitespace t)
+;; Show trailing whitespace, only in prog mode
+(add-hook 'prog-mode-hook
+      (lambda ()
+        (setq-local show-trailing-whitespace t)))
+
 
 ;; Menus
 ;;;Disable scrollbar, menu and tool bar
@@ -860,7 +863,6 @@
   (calendar-longitude -58.38)                              ; Set longitude
   (calendar-location-name "Buenos Aires, Argentina")       ; Location name
   (calendar-week-start-day 1)                              ; 0:Sunday, 1:Monday
-  :config
   (calendar-set-date-style 'european) ; Set calendar style
   )
 
@@ -1030,6 +1032,7 @@
   (progn
    (add-to-list 'newsticker-url-list '("Andrew Kelley" "https://andrewkelley.me/rss.xml"))
    (add-to-list 'newsticker-url-list '("Ryan Fleury" "https://www.dgtlgrove.com/feed"))
+   (add-to-list 'newsticker-url-list '("Chris Wellons" "https://nullprogram.com/feed/"))
    )
   )
 
