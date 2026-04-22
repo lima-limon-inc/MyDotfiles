@@ -58,11 +58,15 @@
 (load-theme 'modus-vivendi-tinted t)
 (set-face-attribute 'font-lock-comment-face nil :foreground "#FF5900")
 
+
 ;; Don't use tabs, only use spaces
 (setq-default indent-tabs-mode nil)
 
-;; Show trailing whitespace
-(setq-default show-trailing-whitespace t)
+;; Show trailing whitespace, only in prog mode
+(add-hook 'prog-mode-hook
+      (lambda ()
+        (setq-local show-trailing-whitespace t)))
+
 
 ;; Menus
 ;;;Disable scrollbar, menu and tool bar
@@ -328,11 +332,9 @@
 (use-package grep
   :ensure nil
   :config
-  (evil-leader/set-key "c" 'project-compile)
-  :bind
-  (:map grep-mode-map
-        ("g" . recompile)
-        ("n" . next-error)))
+  (evil-leader/set-key-for-mode 'grep-mode "g" 'recompile)
+  (evil-leader/set-key-for-mode 'grep-mode "p" 'previous-error)
+  (evil-leader/set-key-for-mode 'grep-mode "n" 'next-error))
 
 
 ;;Registers
@@ -448,6 +450,7 @@
      ("IWASHERE"  . "#C60CFA")
      ("QUESTION"  . "#12E6DB")
      ("IMPORTANT" . "#FF0019")
+     ("LOGBOOK"   . "#0E9CB5")
      ("NOTE"      . "#1A02EB")))
   :config
   (add-hook 'prog-mode-hook #'hl-todo-mode)
@@ -860,7 +863,6 @@
   (calendar-longitude -58.38)                              ; Set longitude
   (calendar-location-name "Buenos Aires, Argentina")       ; Location name
   (calendar-week-start-day 1)                              ; 0:Sunday, 1:Monday
-  :config
   (calendar-set-date-style 'european) ; Set calendar style
   )
 
@@ -1010,13 +1012,15 @@
 (use-package all-the-icons-ibuffer :ensure t
   :hook (ibuffer-mode . all-the-icons-ibuffer-mode))
 
-;; (use-package rfc-mode
-;;   :init
-;;   (add-to-list 'evil-emacs-state-modes 'rfc-mode)
-;;   :config
-;;   (rfc-mode-directory (my-emacs-dir "rfc"))
-;;   :hook (
-;;          (rfc-mode . (lambda () (setq-local show-trailing-whitespace nil)))))
+(use-package rfc-mode
+  :init
+  (add-to-list 'evil-emacs-state-modes 'rfc-mode)
+  :custom
+  (rfc-mode-directory (my-emacs-dir "rfc"))
+  :hook (
+         (rfc-mode . (lambda () (setq-local show-trailing-whitespace nil)))))
+
+
 (use-package htmlize
   )
 
@@ -1033,6 +1037,7 @@
   (progn
    (add-to-list 'newsticker-url-list '("Andrew Kelley" "https://andrewkelley.me/rss.xml"))
    (add-to-list 'newsticker-url-list '("Ryan Fleury" "https://www.dgtlgrove.com/feed"))
+   (add-to-list 'newsticker-url-list '("Chris Wellons" "https://nullprogram.com/feed/"))
    )
   )
 
