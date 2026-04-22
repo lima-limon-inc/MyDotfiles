@@ -1036,6 +1036,11 @@
    )
   )
 
+(use-package tex
+  :ensure auctex
+  :defer t)
+
+
 
 ;; ;; Enable auto insert mode
 ;; (auto-insert-mode t)
