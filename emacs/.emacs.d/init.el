@@ -1034,6 +1034,8 @@
   :init
   (add-to-list 'evil-emacs-state-modes 'newsticker-treeview-mode)
   (evil-set-initial-state 'newsticker-treeview-mode 'emacs)
+  :custom
+  (newsticker-retrieval-interval 21600) ; Update every 6 hours
   :config
   (progn
    (add-to-list 'newsticker-url-list '("Andrew Kelley" "https://andrewkelley.me/rss.xml"))
@@ -1083,3 +1085,5 @@
 ;;              (format "No files have changed between %s and %s"
 ;;                      revA revB)))
 ;;         fileB))
+
+;; (setq-local mode-line-format (format "%s" org-mode-line-string))
