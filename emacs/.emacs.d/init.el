@@ -994,7 +994,8 @@
   (dashboard-setup-startup-hook)
   :bind
     (:map dashboard-mode-map
-      ("f" . find-file)             ; Unbind C-n and C-p in insert mode so that
+      ("f" . find-file)
+      ("o" . org-functions/body)
     )
   )
 
