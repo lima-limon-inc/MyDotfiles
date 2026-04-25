@@ -1042,6 +1042,7 @@
    (add-to-list 'newsticker-url-list '("Andrew Kelley" "https://andrewkelley.me/rss.xml"))
    (add-to-list 'newsticker-url-list '("Ryan Fleury" "https://www.dgtlgrove.com/feed"))
    (add-to-list 'newsticker-url-list '("Chris Wellons" "https://nullprogram.com/feed/"))
+   (add-to-list 'newsticker-url-list '("Karl Voit" "https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-and-content.xml"))
    )
   )
 
