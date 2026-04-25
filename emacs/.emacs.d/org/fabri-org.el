@@ -91,6 +91,7 @@
                         ("review" . ?r)
                         ("pr" . ?p)
                         ("discussion" . ?d)
+                        ("research" . ?R)
                         ))
     (setq org-tag-alist '(
                         ; Materias de la facu
