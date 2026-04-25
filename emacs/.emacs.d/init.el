@@ -899,10 +899,11 @@
   (ediff-show-ancestor t)
   (ediff-split-window-function 'split-window-horizontally)
   (ediff-window-setup-function 'ediff-setup-windows-plain)
-  ;; :bind
-  ;; (:map ediff-mode-map
-  ;;       ("o" . other-window)))
-  )
+  :config
+  (add-hook 'ediff-keymap-setup-hook
+            (lambda ()
+              (define-key ediff-mode-map (kbd "SPC") nil)
+              (define-key ediff-mode-map (kbd "DEL") nil))))
 
 
 
