@@ -238,7 +238,7 @@
 (require 'fabri-utils)
 
 ;;; Window related functions
-(defhydra window-movements ()
+(defhydra window-movements (:color blue)
   "Window movements"
   ("a" split-window-horizontally "Horizontal split")
   ("s" split-window-vertically "Vertical split")
@@ -997,6 +997,7 @@
     (:map dashboard-mode-map
       ("f" . find-file)
       ("o" . org-functions/body)
+      ("v" . window-movements/body)
     )
   )
 
