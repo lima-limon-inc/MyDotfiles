@@ -857,6 +857,9 @@
 ;; Calendar
 
 (use-package calendar
+  :init
+  (add-to-list 'evil-emacs-state-modes 'calendar-mode)
+  (evil-set-initial-state 'calendar-mode 'emacs)
   :ensure nil
   :custom
   (calendar-latitude -34.37)                               ; Set latitude
@@ -998,6 +1001,7 @@
       ("f" . find-file)
       ("o" . org-functions/body)
       ("v" . window-movements/body)
+      ("x" . execute-extended-command)
     )
   )
 
@@ -1038,12 +1042,15 @@
   (evil-set-initial-state 'newsticker-treeview-mode 'emacs)
   :custom
   (newsticker-retrieval-interval 21600) ; Update every 6 hours
+  (newsticker-sort-method 'sort-by-time)
   :config
   (progn
    (add-to-list 'newsticker-url-list '("Andrew Kelley" "https://andrewkelley.me/rss.xml"))
    (add-to-list 'newsticker-url-list '("Ryan Fleury" "https://www.dgtlgrove.com/feed"))
    (add-to-list 'newsticker-url-list '("Chris Wellons" "https://nullprogram.com/feed/"))
    (add-to-list 'newsticker-url-list '("Karl Voit" "https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-and-content.xml"))
+   (add-to-list 'newsticker-url-list '("Arseny Kapoulkine" "https://zeux.io/feed/"))
+;; https://www.sebastianaaltonen.com/
    )
   )
 
