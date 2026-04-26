@@ -1058,6 +1058,12 @@
   :ensure auctex
   :defer t)
 
+(use-package fireplace
+  :init
+  (add-to-list 'evil-emacs-state-modes 'fireplace-mode)
+  (evil-set-initial-state 'fireplace-mode 'emacs)
+  )
+
 
 
 ;; ;; Enable auto insert mode
