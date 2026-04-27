@@ -1034,23 +1034,29 @@
 (use-package adoc-mode
   )
 
+
+
+
 ;; RSS feed
 (use-package newst-backend
   :ensure nil
   :init
   (add-to-list 'evil-emacs-state-modes 'newsticker-treeview-mode)
   (evil-set-initial-state 'newsticker-treeview-mode 'emacs)
+  (defun newsticker-add-feed (name url)
+    (add-to-list 'newsticker-url-list (list name url)))
   :custom
   (newsticker-retrieval-interval 21600) ; Update every 6 hours
   (newsticker-sort-method 'sort-by-time)
   :config
   (progn
-   (add-to-list 'newsticker-url-list '("Andrew Kelley" "https://andrewkelley.me/rss.xml"))
-   (add-to-list 'newsticker-url-list '("Ryan Fleury" "https://www.dgtlgrove.com/feed"))
-   (add-to-list 'newsticker-url-list '("Chris Wellons" "https://nullprogram.com/feed/"))
-   (add-to-list 'newsticker-url-list '("Karl Voit" "https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-and-content.xml"))
-   (add-to-list 'newsticker-url-list '("Arseny Kapoulkine" "https://zeux.io/feed/"))
-;; https://www.sebastianaaltonen.com/
+   (newsticker-add-feed "Andrew Kelley" "https://andrewkelley.me/rss.xml")
+   (newsticker-add-feed "Ryan Fleury" "https://www.dgtlgrove.com/feed")
+   (newsticker-add-feed "Chris Wellons" "https://nullprogram.com/feed/")
+   (newsticker-add-feed "Karl Voit" "https://karl-voit.at/feeds/lazyblorg-all.atom_1.0.links-and-content.xml")
+   (newsticker-add-feed "Arseny Kapoulkine" "https://zeux.io/feed/")
+   (newsticker-add-feed "Aaron Biever" "https://blog.aaronbieber.com/posts/index.xml")
+   (newsticker-add-feed "Gentoo" "https://www.gentoo.org/feeds/news.xml")
    )
   )
 
@@ -1102,3 +1108,10 @@
 ;;         fileB))
 
 ;; (setq-local mode-line-format (format "%s" org-mode-line-string))
+;; (evil-add-hjkl-bindings occur-mode-map 'emacs
+;;   (kbd "/")       'evil-search-forward
+;;   (kbd "n")       'evil-search-next
+;;   (kbd "N")       'evil-search-previous
+;;   (kbd "C-d")     'evil-scroll-down
+;;   (kbd "C-u")     'evil-scroll-up
+;;   (kbd "C-w C-w") 'other-window)
