@@ -7,6 +7,18 @@ setup:
 start-vm:
 	$(MAKE) -C setup start
 
+IGNORED_DIRS := claude/
+
+stowed:
+	stow -v -t $(HOME)/ --ignore=Makefile $(filter-out $(IGNORED_DIRS),$(wildcard */)) --no-folding --no
+
+.PHONY: $(IGNORED_DIRS)
+$(IGNORED_DIRS):
+	$(MAKE) -C $@
+
+.PHONY: custom
+custom: $(IGNORED_DIRS)
+
+
 .PHONY: deploy
-deploy:
-	stow -v -t $(HOME)/ --ignore=Makefile */ --no-folding
+deploy: stowed custom
