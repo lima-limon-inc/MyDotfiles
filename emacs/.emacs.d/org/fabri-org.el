@@ -15,9 +15,9 @@
 
 ; Sort by todo state
 (setq org-agenda-sorting-strategy
-      '((agenda todo-state-up priority-down time-up)
-        (todo todo-state-up priority-down category-keep)
-        (tags todo-state-up priority-down category-keep)
+      '((agenda todo-state-up priority-down deadline-up)
+        (todo todo-state-up priority-down deadline-up category-keep)
+        (tags todo-state-up priority-down deadline-up category-keep)
         (search category-keep)))
 
 ;; Only show top level todo items

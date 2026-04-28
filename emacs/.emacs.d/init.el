@@ -1057,8 +1057,12 @@
    (newsticker-add-feed "Arseny Kapoulkine" "https://zeux.io/feed/")
    (newsticker-add-feed "Aaron Biever" "https://blog.aaronbieber.com/posts/index.xml")
    (newsticker-add-feed "Gentoo" "https://www.gentoo.org/feeds/news.xml")
+   (newsticker-add-feed "George Hotz" "https://geohot.github.io/blog/feed.xml")
+   (newsticker-add-feed "Pluralistic" "https://pluralistic.net/feed")
    )
-  )
+  (add-hook 'newsticker-treeview-item-mode
+            (lambda ()
+              (visual-line-mode))))
 
 (use-package tex
   :ensure auctex
