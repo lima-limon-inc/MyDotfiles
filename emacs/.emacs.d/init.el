@@ -1034,9 +1034,6 @@
 (use-package adoc-mode
   )
 
-
-
-
 ;; RSS feed
 (use-package newst-backend
   :ensure nil
@@ -1074,6 +1071,11 @@
   (evil-set-initial-state 'fireplace-mode 'emacs)
   )
 
+(use-package image-mode
+  :ensure nil
+  :init
+  (add-to-list 'evil-emacs-state-modes 'image-mode)
+  (evil-set-initial-state 'image-mode 'emacs))
 
 
 ;; ;; Enable auto insert mode
