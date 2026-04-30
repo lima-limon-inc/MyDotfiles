@@ -1,16 +1,44 @@
+;; -*- lexical-binding: t; -*-
+
 ; Create org directories if missing
+(setq fabri-org/note-types (list
+                           'work      ; Work related tasks
+                           'personal  ; Personal stuff
+                           'school    ; College
+                           'later     ; Notes that aren't TODO's, simply captured to not forget things.
+                           ))
+
+; TODO: Don't do these one by one
+(defun fabri-org/note-dir (type)
+  (pcase type
+    ('work     (my-emacs-dir "org/work/"))
+    ('personal (my-emacs-dir "org/personal/"))
+    ('school   (my-emacs-dir "org/school/"))
+    ('later    (my-emacs-dir "org/later/"))
+    ))
+
+(defun fabri-org/default-type ()
+  ; High level stuff
+  (pcase fabri-profile
+    ('work     'work)
+    ('personal 'school)
+    ))
+
 (let (
-      (my-org-dir (my-emacs-dir "org/work/"))
-      (my-non-work-dir (my-emacs-dir "org/non-work/")))
-      (unless (file-directory-p my-org-dir)
-        (make-directory my-org-dir))
-      (unless (file-directory-p my-non-work-dir)
-        (make-directory my-non-work-dir))
-      (setq org-directory (my-emacs-dir "org/work/")))
-(setq org-default-notes-file (concat org-directory "notes.org"))
+      (dirs (mapcar
+             (lambda (type) (fabri-org/note-dir type))
+             fabri-org/note-types)))
+  (mapc
+   (lambda (dir) (unless (file-directory-p dir) (make-directory dir)))
+   dirs)
+  (setq org-directory (list
+                       (fabri-org/note-dir (fabri-org/default-type))
+                       (fabri-org/note-dir 'personal)
+                       )))
+(setq org-default-notes-file (concat (fabri-org/note-dir 'personal) "notes.org"))
 
 ;; (setq org-agenda-files (list org-default-notes-file))
-(setq org-agenda-files (list org-directory))
+(setq org-agenda-files org-directory)
 
 
 ; Sort by todo state
@@ -24,30 +52,38 @@
 (setq org-agenda-todo-list-sublevels nil)
 
 
-(defun prompt-file-name (type)
-  (let ((dir (cond
-              ((eq type 'work) (my-emacs-dir "org/work/"))
-              ((eq type 'non-work) (my-emacs-dir "org/non-work/")))))
+(defun fabri-org/prompt-file-name (type)
+  (let ((dir (fabri-org/note-dir type)))
     (concat dir (read-string "File name: ") ".org")))
 
-(setq org-capture-templates
-      `(
-        ("t" "New todo" plain (file ,(lambda () (prompt-file-name 'work)))
-         "* TODO %? [%]
+(defun fabri--org/file-header (type)
+  (let ((tag-name (symbol-name type))
+        (header   (pcase type
+                    ('work     "
 :PROPERTIES:
 :CREATED: %U
 :ISSUE: 
 :PR: 
 :END:
-
 ")
-        ("n" "Non-work todo" plain (file ,(lambda () (prompt-file-name 'non-work)))
-         "* TODO %? [%]
+                    (_         "
 :PROPERTIES:
 :CREATED: %U
 :END:
-")
-        ))
+"))))
+  (format "#+FILETAGS: :%s:
+* TODO %%? [%%]
+%s
+" tag-name header)))
+
+(defun fabri-org/create-template (type)
+  (let ((shortcut       (substring (symbol-name type) 0 1))
+        (title          (format "New %s task" (symbol-name type))))
+  `(,shortcut  ,title plain (file ,(lambda () (fabri-org/prompt-file-name type))) ,(fabri--org/file-header type))))
+
+
+(setq org-capture-templates
+      (mapcar 'fabri-org/create-template fabri-org/note-types))
 
 (defhydra org-functions ()
   "Org related functions"
