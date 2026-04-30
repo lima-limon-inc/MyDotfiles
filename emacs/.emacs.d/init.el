@@ -1056,8 +1056,9 @@
    (newsticker-add-feed "Gentoo" "https://www.gentoo.org/feeds/news.xml")
    (newsticker-add-feed "George Hotz" "https://geohot.github.io/blog/feed.xml")
    (newsticker-add-feed "Pluralistic" "https://pluralistic.net/feed")
+   (newsticker-add-feed "Mitchell Hashimoto" "https://mitchellh.com/feed.xml")
    )
-  (add-hook 'newsticker-treeview-item-mode
+  (add-hook 'newsticker-treeview-item-mode-hook
             (lambda ()
               (visual-line-mode))))
 
