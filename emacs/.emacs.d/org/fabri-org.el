@@ -56,7 +56,8 @@
     ("u" org-todo "TODO States" :exit t)
     ("t" org-set-tags-command "Tag" :exit t)
     ("d" org-deadline "Deadline" :exit t)
-    ("s" org-store-link "Store link" :exit t)
+    ("s" org-schedule "Schedule" :exit t)
+    ("l" org-store-link "Store link" :exit t)
     ("m" org-timestamp "Insert timestamp" :exit t)
     ("i" org-insert-structure-template "Template" :exit t)
     )
@@ -84,13 +85,12 @@
 (if (equal fabri-profile 'work)
     (setq org-tag-alist '(
                         ; Repos de Miden
-                        (:startgroup . nil)
                         ("vm" . ?v)
                         ("compiler" . ?C)
                         ("client" . ?c)
                         ("midenup" . ?m)
                         ("faucet" . ?f)
-                        (:endgroup . nil)
+                        (:newline . nil)
                         ; Tipo de tarea
                         ("review" . ?r)
                         ("pr" . ?p)
