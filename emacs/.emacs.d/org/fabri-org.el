@@ -8,24 +8,22 @@
                            'later     ; Notes that aren't TODO's, simply captured to not forget things.
                            ))
 
-; TODO: Don't do these one by one
+(setq fabri-org/default-notes-dir (my-emacs-dir "notes/"))
+
 (defun fabri-org/note-dir (type)
-  (pcase type
-    ('work     (my-emacs-dir "org/work/"))
-    ('personal (my-emacs-dir "org/personal/"))
-    ('school   (my-emacs-dir "org/school/"))
-    ('later    (my-emacs-dir "org/later/"))
-    ))
+  (unless (memq type fabri-org/note-types)
+    (error (format "%s is not a recognized note types" (symbol-name type))))
+
+  (let ((type-string (symbol-name type)))
+    (concat fabri-org/default-notes-dir type-string)))
 
 (defun fabri-org/default-type ()
   ; High level stuff
   (pcase fabri-profile
     ('work     'work)
-    ('personal 'school)
-    ))
+    ('personal 'school)))
 
-(let (
-      (dirs (mapcar
+(let ((dirs (mapcar
              (lambda (type) (fabri-org/note-dir type))
              fabri-org/note-types)))
   (mapc
