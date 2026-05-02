@@ -10,6 +10,7 @@
 
 (setq fabri-org/default-notes-dir (my-emacs-dir "notes/"))
 
+; Returns this function's corresponding note directory as a string
 (defun fabri-org/note-dir (type)
   (unless (memq type fabri-org/note-types)
     (error (format "%s is not a recognized note types" (symbol-name type))))
@@ -23,16 +24,22 @@
     ('work     'work)
     ('personal 'school)))
 
-(let ((dirs (mapcar
-             (lambda (type) (fabri-org/note-dir type))
-             fabri-org/note-types)))
-  (mapc
-   (lambda (dir) (unless (file-directory-p dir) (make-directory dir)))
-   dirs)
-  (setq org-directory (list
-                       (fabri-org/note-dir (fabri-org/default-type))
-                       (fabri-org/note-dir 'personal)
-                       )))
+; Creates notes directories directory
+(unless (file-directory-p fabri-org/default-notes-dir)
+  (make-directory fabri-org/default-notes-dir))
+
+(mapc
+ (lambda (type)
+   (let ((dir-name (fabri-org/note-dir type)))
+     (unless (file-directory-p dir-name)
+       (make-directory dir-name))))
+ fabri-org/note-types)
+
+(setq org-directory (list
+                     (fabri-org/note-dir (fabri-org/default-type))
+                     (fabri-org/note-dir 'personal)
+                     ))
+
 (setq org-default-notes-file (concat (fabri-org/note-dir 'personal) "notes.org"))
 
 ;; (setq org-agenda-files (list org-default-notes-file))
