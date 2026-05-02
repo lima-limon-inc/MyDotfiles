@@ -1122,3 +1122,19 @@
 ;;   (kbd "C-d")     'evil-scroll-down
 ;;   (kbd "C-u")     'evil-scroll-up
 ;;   (kbd "C-w C-w") 'other-window)
+(use-package web-mode
+  :ensure t
+  :custom
+  (web-mode-code-indent-offset 2)
+  (web-mode-markup-indent-offset 2)
+  (web-mode-css-indent-offset 2)
+  :mode
+  (("\\.phtml\\'" . web-mode)
+   ("\\.tsx\\'" . web-mode)
+   ("\\.tpl\\'" . web-mode)
+   ("\\.tpl\\'" . web-mode)
+   ("\\.[agj]sp\\'" . web-mode)
+   ("\\.as[cp]x\\'" . web-mode)
+   ("\\.erb\\'" . web-mode)
+   ("\\.mustache\\'" . web-mode)
+   ("\\.djhtml\\'" . web-mode)))
