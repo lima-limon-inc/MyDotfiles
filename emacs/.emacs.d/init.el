@@ -1138,3 +1138,15 @@
    ("\\.erb\\'" . web-mode)
    ("\\.mustache\\'" . web-mode)
    ("\\.djhtml\\'" . web-mode)))
+
+(use-package epa
+  :init
+  (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
+  (evil-set-initial-state 'epa-key-list-mode 'emacs)
+  )
+
+(use-package epa-file
+  :ensure nil
+  :config
+  (epa-file-enable)
+  )
