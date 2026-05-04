@@ -8,33 +8,38 @@
                            'later     ; Notes that aren't TODO's, simply captured to not forget things.
                            ))
 
-; TODO: Don't do these one by one
+(setq fabri-org/default-notes-dir (my-emacs-dir "notes/"))
+
+; Returns this function's corresponding note directory as a string
 (defun fabri-org/note-dir (type)
-  (pcase type
-    ('work     (my-emacs-dir "org/work/"))
-    ('personal (my-emacs-dir "org/personal/"))
-    ('school   (my-emacs-dir "org/school/"))
-    ('later    (my-emacs-dir "org/later/"))
-    ))
+  (unless (memq type fabri-org/note-types)
+    (error (format "%s is not a recognized note types" (symbol-name type))))
+
+  (let ((type-string (symbol-name type)))
+    (concat fabri-org/default-notes-dir type-string "/")))
 
 (defun fabri-org/default-type ()
   ; High level stuff
   (pcase fabri-profile
     ('work     'work)
-    ('personal 'school)
-    ))
+    ('personal 'school)))
 
-(let (
-      (dirs (mapcar
-             (lambda (type) (fabri-org/note-dir type))
-             fabri-org/note-types)))
-  (mapc
-   (lambda (dir) (unless (file-directory-p dir) (make-directory dir)))
-   dirs)
-  (setq org-directory (list
-                       (fabri-org/note-dir (fabri-org/default-type))
-                       (fabri-org/note-dir 'personal)
-                       )))
+; Creates notes directories directory
+(unless (file-directory-p fabri-org/default-notes-dir)
+  (make-directory fabri-org/default-notes-dir))
+
+(mapc
+ (lambda (type)
+   (let ((dir-name (fabri-org/note-dir type)))
+     (unless (file-directory-p dir-name)
+       (make-directory dir-name))))
+ fabri-org/note-types)
+
+(setq org-directory (list
+                     (fabri-org/note-dir (fabri-org/default-type))
+                     (fabri-org/note-dir 'personal)
+                     ))
+
 (setq org-default-notes-file (concat (fabri-org/note-dir 'personal) "notes.org"))
 
 ;; (setq org-agenda-files (list org-default-notes-file))
@@ -94,6 +99,7 @@
     ("l" org-store-link "Store link" :exit t)
     ("m" org-timestamp "Insert timestamp" :exit t)
     ("i" org-insert-structure-template "Template" :exit t)
+    ("r" org-toggle-checkbox "Checkbox" :exit t)
     )
 (evil-leader/set-key "o" 'org-functions/body)
 

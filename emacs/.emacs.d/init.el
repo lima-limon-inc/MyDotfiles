@@ -1059,8 +1059,10 @@
    (newsticker-add-feed "Gentoo" "https://www.gentoo.org/feeds/news.xml")
    (newsticker-add-feed "George Hotz" "https://geohot.github.io/blog/feed.xml")
    (newsticker-add-feed "Pluralistic" "https://pluralistic.net/feed")
+   (newsticker-add-feed "Mitchell Hashimoto" "https://mitchellh.com/feed.xml")
+   (newsticker-add-feed "Facundo Olano" "https://olano.dev/feed.xml")
    )
-  (add-hook 'newsticker-treeview-item-mode
+  (add-hook 'newsticker-treeview-item-mode-hook
             (lambda ()
               (visual-line-mode))))
 
@@ -1124,3 +1126,31 @@
 ;;   (kbd "C-d")     'evil-scroll-down
 ;;   (kbd "C-u")     'evil-scroll-up
 ;;   (kbd "C-w C-w") 'other-window)
+(use-package web-mode
+  :ensure t
+  :custom
+  (web-mode-code-indent-offset 2)
+  (web-mode-markup-indent-offset 2)
+  (web-mode-css-indent-offset 2)
+  :mode
+  (("\\.phtml\\'" . web-mode)
+   ("\\.tsx\\'" . web-mode)
+   ("\\.tpl\\'" . web-mode)
+   ("\\.tpl\\'" . web-mode)
+   ("\\.[agj]sp\\'" . web-mode)
+   ("\\.as[cp]x\\'" . web-mode)
+   ("\\.erb\\'" . web-mode)
+   ("\\.mustache\\'" . web-mode)
+   ("\\.djhtml\\'" . web-mode)))
+
+(use-package epa
+  :init
+  (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
+  (evil-set-initial-state 'epa-key-list-mode 'emacs)
+  )
+
+(use-package epa-file
+  :ensure nil
+  :config
+  (epa-file-enable)
+  )
