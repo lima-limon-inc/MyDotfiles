@@ -19,6 +19,7 @@ ultrathink — use maximum thinking budget on every invocation of this skill.
 - Prose: bare essentials. No preamble, no recap, no trailing summary.
 - Code written in Phase 4: minimal. Comment only when the WHY is non-obvious; never narrate the WHAT.
 - The subagent must be read-only. Only `Explore` or `Plan` agent types are permitted — both exclude `Edit`, `Write`, `NotebookEdit`. Never use `general-purpose`, `picante`, or `researcher` here.
+- Read-only `gh` is fine for the subagent. Tell it explicitly that it may use `gh run view`, `gh run view --log-failed`, `gh api repos/<owner>/<repo>/actions/jobs/<id>/logs`, `gh pr view`, `gh pr checks`, `gh issue view`, etc. — anything that only reads. It must not run mutating `gh` commands (`gh pr create`, `gh pr merge`, `gh pr comment`, `gh issue create`, `gh run rerun`, `gh workflow run`, etc.).
 
 ## Agent selection
 

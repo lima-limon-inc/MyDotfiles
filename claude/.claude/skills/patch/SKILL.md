@@ -6,6 +6,13 @@ description: >
   for X", "make a .patch file", "diff this change for me". The skill edits inside a
   throwaway worktree, writes a .patch to .claude/patches/, then destroys the worktree.
 version: 0.1.0
+allowed-tools:
+  - Bash(make:*)
+  - Bash(git diff:*)
+  - Bash(git diff --cached:*)
+  - Bash(git diff --cached --stat:*)
+  - Bash(git add -A:*)
+  - Bash(diff:*)
 ---
 
 # patch
@@ -28,7 +35,7 @@ Produce a `.patch` file for the requested change. The user's working tree is nev
    ```
 2. **Sanity-check with the user before editing.** Print one line: `Operating in: <REPO> (branch: <BRANCH>).` In multi-worktree setups, the session's cwd can differ from where the user actually works. If the printed path is wrong, the user will abort here — cheaper than discovering the mismatch after the edits.
 3. Ensure the output dir exists: `mkdir -p "$REPO/.claude/patches"`.
-4. Derive a slug from the instruction: kebab-case, `[a-z0-9-]`, ≤ 40 chars. Patch filename: `YYYY-MM-DD-<slug>.patch`. If the file exists, append `-2`, `-3`, …
+4. Derive a slug from the instruction: kebab-case, `[a-z0-9-]`, ≤ 40 chars. Patch filename: `YYYY-MM-DD-HHMMSS-<slug>.patch` (local time, e.g. `2026-04-30-143022-fix-foo.patch`). If the file exists, append `-2`, `-3`, …
 5. `EnterWorktree` (name optional — the worktree is ephemeral).
 6. Make the edits inside the worktree, per the user's instruction.
 7. Build the patch (absolute path so it writes to the main repo, not the worktree):
