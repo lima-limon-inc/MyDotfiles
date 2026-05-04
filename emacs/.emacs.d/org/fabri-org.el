@@ -101,6 +101,7 @@
     ("l" org-store-link "Store link" :exit t)
     ("m" org-timestamp "Insert timestamp" :exit t)
     ("i" org-insert-structure-template "Template" :exit t)
+    ("r" org-toggle-checkbox "Checkbox" :exit t)
     )
 (evil-leader/set-key "o" 'org-functions/body)
 
