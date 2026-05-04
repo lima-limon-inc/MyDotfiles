@@ -16,7 +16,7 @@
     (error (format "%s is not a recognized note types" (symbol-name type))))
 
   (let ((type-string (symbol-name type)))
-    (concat fabri-org/default-notes-dir type-string)))
+    (concat fabri-org/default-notes-dir type-string "/")))
 
 (defun fabri-org/default-type ()
   ; High level stuff
