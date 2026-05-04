@@ -853,6 +853,9 @@
         ("n" . next-error)
         ("c" . compile)
         ("g" . recompile)))
+(evil-leader/set-key-for-mode 'compilation-mode "n" 'next-error)
+(evil-leader/set-key-for-mode 'compilation-mode "c" 'compile)
+(evil-leader/set-key-for-mode 'compilation-mode "g" 'recompile)
 
 ;; Calendar
 
