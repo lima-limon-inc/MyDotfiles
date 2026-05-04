@@ -59,15 +59,13 @@
 (defun fabri--org/file-header (type)
   (let ((tag-name (symbol-name type))
         (header   (pcase type
-                    ('work     "
-:PROPERTIES:
+                    ('work     ":PROPERTIES:
 :CREATED: %U
 :ISSUE: 
 :PR: 
 :END:
 ")
-                    (_         "
-:PROPERTIES:
+                    (_         ":PROPERTIES:
 :CREATED: %U
 :END:
 "))))
@@ -126,6 +124,7 @@
                         ("client" . ?c)
                         ("midenup" . ?m)
                         ("faucet" . ?f)
+                        ("protocol" . ?P)
                         (:newline . nil)
                         ; Tipo de tarea
                         ("review" . ?r)
