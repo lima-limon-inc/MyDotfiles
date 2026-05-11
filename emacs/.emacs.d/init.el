@@ -872,6 +872,21 @@
   (calendar-set-date-style 'european) ; Set calendar style
   )
 
+(use-package holidays
+  :ensure nil
+  :config
+  (setq holiday-general-holidays nil
+        holiday-local-holidays nil
+        holiday-christian-holidays nil
+        holiday-hebrew-holidays nil
+        holiday-islamic-holidays nil
+        holiday-bahai-holidays nil
+        holiday-oriental-holidays nil
+        holiday-solar-holidays nil
+        )
+  (setq holiday-other-holidays '((holiday-fixed 5 25 "25 de Mayo")))
+  )
+
 
 
 ;; Dired
@@ -1153,4 +1168,7 @@
   :ensure nil
   :config
   (epa-file-enable)
+  )
+
+(use-package subed
   )
