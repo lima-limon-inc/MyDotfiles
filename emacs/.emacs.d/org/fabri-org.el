@@ -48,13 +48,13 @@
 
 ; Sort by todo state
 (setq org-agenda-sorting-strategy
-      '((agenda todo-state-up priority-down deadline-up)
+      '((agenda time-up todo-state-up priority-down deadline-up)
         (todo todo-state-up priority-down deadline-up category-keep)
         (tags todo-state-up priority-down deadline-up category-keep)
         (search category-keep)))
 
-;; Only show top level todo items
-(setq org-agenda-todo-list-sublevels nil)
+;; Show top level todo items in a agenda
+(setq org-agenda-todo-list-sublevels t)
 
 
 (defun fabri-org/prompt-file-name (type)
@@ -98,8 +98,10 @@
     ("s" org-schedule "Schedule" :exit t)
     ("l" org-store-link "Store link" :exit t)
     ("m" org-timestamp "Insert timestamp" :exit t)
-    ("i" org-insert-structure-template "Template" :exit t)
+    ("k" org-insert-structure-template "Template" :exit t)
     ("r" org-toggle-checkbox "Checkbox" :exit t)
+    ("i" org-clock-in "Clock in" :exit t)
+    ("o" org-clock-out "Clock out" :exit t)
     )
 (evil-leader/set-key "o" 'org-functions/body)
 
