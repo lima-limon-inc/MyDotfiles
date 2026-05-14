@@ -56,6 +56,9 @@
 ;; Show top level todo items in a agenda
 (setq org-agenda-todo-list-sublevels t)
 
+;; Don't indent
+(setq org-src-preserve-indentation t)
+
 
 (defun fabri-org/prompt-file-name (type)
   (let ((dir (fabri-org/note-dir type)))
