@@ -61,8 +61,11 @@
 
 
 (defun fabri-org/prompt-file-name (type)
-  (let ((dir (fabri-org/note-dir type)))
-    (concat dir (read-string "File name: ") ".org")))
+  (let* ((dir (fabri-org/note-dir type))
+         (file-name (read-file-name "File name: " dir nil nil)))
+    (if (string-equal (file-name-extension file-name) "org")
+        file-name
+        (concat file-name ".org"))))
 
 (defun fabri--org/file-header (type)
   (let ((tag-name (symbol-name type))
