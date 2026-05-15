@@ -69,6 +69,14 @@
         file-name
         (concat file-name ".org"))))
 
+(defun fabri--org/prompt-tag ()
+  (let* (
+         (choices (cons "None" (project-known-project-roots)))
+         (chosen-project (completing-read "Project: " choices)))
+    (if (string-equal chosen-project "None")
+        ""
+        (format "[[file:%s]]" chosen-project))))
+
 (defun fabri--org/file-header (type)
   (let ((tag-name (symbol-name type))
         (header   (pcase type
@@ -76,6 +84,7 @@
 :CREATED: %U
 :ISSUE: 
 :PR: 
+:REPOSITORY: :%(fabri--org/prompt-tag)
 :END:
 ")
                     (_         ":PROPERTIES:
@@ -83,7 +92,7 @@
 :END:
 "))))
   (format "#+FILETAGS: :%s:
-* TODO %%? [%%]
+* TODO %%? [%%] %%^g
 %s
 " tag-name header)))
 
