@@ -36,9 +36,11 @@
  fabri-org/note-types)
 
 (setq org-directory (list
-                     (fabri-org/note-dir (fabri-org/default-type))
-                     (fabri-org/note-dir 'personal)
-                     ))
+                     (fabri-org/note-dir (fabri-org/default-type))))
+
+(when (eq fabri-profile 'personal)
+  (add-to-list 'org-directory (fabri-org/note-dir 'personal))
+  )
 
 (setq org-default-notes-file (concat (fabri-org/note-dir 'personal) "notes.org"))
 
