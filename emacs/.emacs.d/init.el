@@ -138,10 +138,12 @@
 
 ;; World clock
 (setq zoneinfo-style-world-list '(
-			    ("Europe/Rome" "Rome")
-			    ("Europe/Madrid" "Madrid")
-			    ("America/New_York" "New York")
-			    ("America/Buenos_Aires" "Buenos Aires")))
+			    ("America/New_York" "New York (USA)")
+			    ("America/Buenos_Aires" "Buenos Aires (Argentina)")
+			    ("Europe/Belgrade" "Belgrade (Serbia)")
+			    ("Europe/Berlin" "Berlin (Germany)")
+			    ("Israel" "Israel")
+                   ))
 
 ;; Add newlines at the end of the file
 (setq require-final-newline 'visit-save)
@@ -993,6 +995,7 @@
 
 ;;Dashboard
 (use-package dashboard
+  :ensure t
   ; Done because :bind defers loading
   :demand t
   :init
@@ -1007,13 +1010,13 @@
                           (projects . 10)
                           (agenda . 10)
                           (registers . 5)
-		                ))
-   ;;; Make dashboard the default when using a client
+     	                ))
+  ;;; Make dashboard the default when using a client
   (initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
   :config
+  (dashboard-setup-startup-hook)
   (add-to-list 'dashboard-footer-messages '"Aguante Banfield")
   (evil-leader/set-key-for-mode 'dashboard-mode "SPC" 'dashboard-open)
-  (dashboard-setup-startup-hook)
   :bind
     (:map dashboard-mode-map
       ("f" . find-file)
