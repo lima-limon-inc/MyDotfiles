@@ -61,7 +61,10 @@
 ;; Don't indent
 (setq org-src-preserve-indentation t)
 
+;; Org file as registers
+(set-register ?o (cons 'file (my-emacs-dir (concat "org/" "fabri-org.el"))))
 
+;; Functions
 (defun fabri-org/prompt-file-name (type)
   (let* ((dir (fabri-org/note-dir type))
          (file-name (read-file-name "File name: " dir nil nil)))
