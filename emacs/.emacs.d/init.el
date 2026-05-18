@@ -138,10 +138,12 @@
 
 ;; World clock
 (setq zoneinfo-style-world-list '(
-			    ("Europe/Rome" "Rome")
-			    ("Europe/Madrid" "Madrid")
-			    ("America/New_York" "New York")
-			    ("America/Buenos_Aires" "Buenos Aires")))
+			    ("America/New_York" "New York (USA)")
+			    ("America/Buenos_Aires" "Buenos Aires (Argentina)")
+			    ("Europe/Belgrade" "Belgrade (Serbia)")
+			    ("Europe/Berlin" "Berlin (Germany)")
+			    ("Israel" "Israel")
+                   ))
 
 ;; Add newlines at the end of the file
 (setq require-final-newline 'visit-save)
