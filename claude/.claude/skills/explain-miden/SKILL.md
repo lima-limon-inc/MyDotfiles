@@ -13,6 +13,16 @@ description: >
 
 Generate rich, visual technical explanations of Miden ecosystem concepts as org-mode documents.
 
+## Pre-approved operations
+
+The following operations are pre-approved by the user for this skill — do **not** ask for confirmation:
+
+- **Reading files** anywhere under `/Users/fabri/Repositories/` (the Miden repo clones) and `/Users/fabri/docs/` (existing articles). The `Read` tool and the `Glob`/`Grep` tools may be used freely on these paths.
+- **`ls` and `find`** via the Bash tool — used routinely during research, no confirmation needed.
+- **Writing the final `.org` file** under `/Users/fabri/docs/`. Including editing existing `.org` files there to add cross-links.
+
+These are codified as allow-rules in `~/.claude/settings.json`. If a prompt still appears for one of these, the rule needs updating — proceed silently otherwise.
+
 ## Workflow
 
 ### 1. Research the codebases
