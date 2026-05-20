@@ -1079,6 +1079,7 @@
    (newsticker-add-feed "Pluralistic" "https://pluralistic.net/feed")
    (newsticker-add-feed "Mitchell Hashimoto" "https://mitchellh.com/feed.xml")
    (newsticker-add-feed "Facundo Olano" "https://olano.dev/feed.xml")
+   (newsticker-add-feed "Mario Zechner" "https://mariozechner.at/rss.xml")
    )
   (add-hook 'newsticker-treeview-item-mode-hook
             (lambda ()
