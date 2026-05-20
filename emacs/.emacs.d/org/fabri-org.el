@@ -44,9 +44,16 @@
 
 (setq org-default-notes-file (concat (fabri-org/note-dir 'personal) "notes.org"))
 
-;; (setq org-agenda-files (list org-default-notes-file))
 (setq org-agenda-files org-directory)
 
+; Modify org agenda clockreport
+(setq org-agenda-clockreport-parameter-plist '(
+                                               ; Link the file
+                                               :link t
+                                               ; Max subtask level
+                                               :maxlevel 3
+                                               ; skip files with zero clocked time
+                                               :fileskip0 t))
 
 ; Sort by todo state
 (setq org-agenda-sorting-strategy
