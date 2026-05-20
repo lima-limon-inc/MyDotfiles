@@ -55,6 +55,9 @@
                                                ; skip files with zero clocked time
                                                :fileskip0 t))
 
+; Don't show done scheduled tasks
+(setq org-agenda-skip-scheduled-if-done t)
+
 ; Sort by todo state
 (setq org-agenda-sorting-strategy
       '((agenda time-up todo-state-up priority-down deadline-up)
