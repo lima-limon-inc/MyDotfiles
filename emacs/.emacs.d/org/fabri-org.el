@@ -137,8 +137,8 @@
 
 (setq org-todo-keywords
       (if (equal fabri-profile 'work)
-          '((sequence "TODO(t!)" "WIP(w!)" "BLOCKED(b@/!)" "REVIEW(r!)" "UNREPLIED(u!)" "|" "DONE(d)" "CANCELED(c@)"))
-          '((sequence "TODO(t!)" "WIP(w!)" "BLOCKED(b@/!)" "|" "CALIFICANDO(c!)" "DONE(d)" "CANCELED(C@)"))
+          '((sequence "TODO(t!)" "WIP(w!)" "BLOCKED(b@/!)" "REVIEW(r!)" "UNREPLIED(u!)" "|" "DONE(d!)" "CANCELED(c@)"))
+          '((sequence "TODO(t!)" "WIP(w!)" "BLOCKED(b@/!)" "|" "CALIFICANDO(c!)" "DONE(d!)" "CANCELED(C@)"))
         ))
 
 (setq org-todo-keyword-faces
