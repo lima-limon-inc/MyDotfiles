@@ -19,7 +19,7 @@ The following operations are pre-approved by the user for this skill — do **no
 
 - **Reading files** anywhere under `/Users/fabri/Repositories/` (the Miden repo clones) and `/Users/fabri/docs/` (existing articles). The `Read` tool and the `Glob`/`Grep` tools may be used freely on these paths.
 - **`ls` and `find`** via the Bash tool — used routinely during research, no confirmation needed.
-- **Writing the final `.org` file** under `/Users/fabri/docs/`. Including editing existing `.org` files there to add cross-links.
+- **Writing the final `.org` file** under `/Users/fabri/docs/miden/`. Including editing existing `.org` files there to add cross-links.
 
 These are codified as allow-rules in `~/.claude/settings.json`. If a prompt still appears for one of these, the rule needs updating — proceed silently otherwise.
 
@@ -48,7 +48,7 @@ Record every file you reference — you will need these for footnotes.
 
 ### 2. Generate the org-mode file
 
-Write a single `.org` file to `/Users/fabri/docs/{topic}.org`.
+Write a single `.org` file to `/Users/fabri/docs/miden/{topic}.org`.
 
 Structure:
 
@@ -128,7 +128,7 @@ Use the actual file paths you read during research.
 
 ### 6. Cross-link related articles
 
-After writing the new `.org` file, check whether any other `.org` file already in `/Users/fabri/docs/` covers a related Miden topic. For each related article found:
+After writing the new `.org` file, check whether any other `.org` file already in `/Users/fabri/docs/miden/` covers a related Miden topic. For each related article found:
 
 1. **In the new article**, append a `* Related articles` heading (place it just before `* Footnotes`) that lists the related pages as org links:
    ```org
@@ -144,7 +144,7 @@ Use relative filename links (`file:foo.org`) so the references work both in Emac
 
 ## Checklist before delivering
 
-- [ ] `.org` file written to `/Users/fabri/docs/`
+- [ ] `.org` file written to `/Users/fabri/docs/miden/`
 - [ ] `#+DATE:` header present with generation date
 - [ ] All factual claims have footnotes
 - [ ] All footnote links point to real files on the correct GitHub branch
@@ -152,4 +152,4 @@ Use relative filename links (`file:foo.org`) so the references work both in Emac
 - [ ] No colors in diagrams — everything grayscale
 - [ ] At least one annotated code example with walkthrough
 - [ ] No `[fn:N]` references inside table cells
-- [ ] Related articles in `/Users/fabri/docs/` cross-linked both ways under a `* Related articles` heading
+- [ ] Related articles in `/Users/fabri/docs/miden/` cross-linked both ways under a `* Related articles` heading
