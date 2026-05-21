@@ -167,6 +167,8 @@
                         ; Tipo de tarea
                         ("review" . ?r)
                         ("pr" . ?p)
+                        ("bug" . ?b)
+                        ("idea" . ?i)
                         ("discussion" . ?d)
                         ("research" . ?R)
                         ))
