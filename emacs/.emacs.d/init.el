@@ -138,6 +138,7 @@
 
 ;; World clock
 (setq zoneinfo-style-world-list '(
+			    ("America/Montreal" "Montreal (Canada)")
 			    ("America/New_York" "New York (USA)")
 			    ("America/Buenos_Aires" "Buenos Aires (Argentina)")
 			    ("Europe/Belgrade" "Belgrade (Serbia)")
