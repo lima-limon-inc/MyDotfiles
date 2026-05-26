@@ -46,6 +46,9 @@
 
 (setq org-agenda-files org-directory)
 
+; Enforce todo dependencies
+(setq org-enforce-todo-dependencies t)
+
 ; Modify org agenda clockreport
 (setq org-agenda-clockreport-parameter-plist '(
                                                ; Link the file
@@ -54,6 +57,8 @@
                                                :maxlevel 3
                                                ; skip files with zero clocked time
                                                :fileskip0 t))
+; Don't show warnings
+(setq warning-suppress-types (append warning-suppress-types '((org-element-cache))))
 
 ; Don't show done scheduled tasks
 (setq org-agenda-skip-scheduled-if-done t)
@@ -145,10 +150,10 @@
         ))
 
 (setq org-todo-keyword-faces
-      '(("BLOCKED"        . modus-themes-fg-blue)
-        ("WIP"            . modus-themes-fg-yellow)
-        ("UNREPLIED"      . "orange")
+      '(("WIP"            . modus-themes-fg-yellow)
+        ("BLOCKED"        . modus-themes-fg-blue)
         ("REVIEW"         . "purple")
+        ("UNREPLIED"      . "orange")
         ("CALIFICANDO"    . "purple")
         ("CANCELED"       . (:foreground "#44bc44" :underline (:color "red")))
         ))
