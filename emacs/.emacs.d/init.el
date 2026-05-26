@@ -137,14 +137,15 @@
 (setq vc-follow-symlinks t)
 
 ;; World clock
-(setq zoneinfo-style-world-list '(
-			    ("America/Montreal" "Montreal (Canada)")
-			    ("America/New_York" "New York (USA)")
-			    ("America/Buenos_Aires" "Buenos Aires (Argentina)")
-			    ("Europe/Belgrade" "Belgrade (Serbia)")
-			    ("Europe/Berlin" "Berlin (Germany)")
-			    ("Israel" "Israel")
-                   ))
+(setq zoneinfo-style-world-list (if (equal fabri-profile 'personal)
+        '(("America/Buenos_Aires" "Buenos Aires (Argentina)")
+          ("Europe/Rome" "Rome (Italy)"))
+        '(("America/Montreal" "Montreal (Canada)")
+          ("America/New_York" "New York (USA)")
+          ("America/Buenos_Aires" "Buenos Aires (Argentina)")
+          ("Europe/Belgrade" "Belgrade (Serbia)")
+          ("Europe/Berlin" "Berlin (Germany)")
+          ("Israel" "Israel"))))
 
 ;; Add newlines at the end of the file
 (setq require-final-newline 'visit-save)
