@@ -35,10 +35,10 @@ Record every file or URL you reference — you will need these for footnotes.
 
 ### 2. Generate the org-mode file
 
-Write a single `.org` file under `docs/{project-or-type}/{topic}.org` in the current working directory. The subdirectory should be:
+Write a single `.org` file under `$HOME/docs/{project-or-type}/{topic}.org`. Always write under `$HOME/docs`, never the current repo's `docs/` directory (it is often a real documentation site). The subdirectory should be:
 
-- **The project name** for code-related topics (e.g. `docs/postgres/`, `docs/react/`, `docs/linux-kernel/`). Derive it from the basename of the repo root, or from `git remote get-url origin`.
-- **A type/category name** when no single project applies (e.g. `docs/protocols/`, `docs/algorithms/`, `docs/languages/`, `docs/tools/`).
+- **The project name** for code-related topics (e.g. `$HOME/docs/postgres/`, `$HOME/docs/react/`, `$HOME/docs/linux-kernel/`). Derive it from the basename of the repo root, or from `git remote get-url origin`.
+- **A type/category name** when no single project applies (e.g. `$HOME/docs/protocols/`, `$HOME/docs/algorithms/`, `$HOME/docs/languages/`, `$HOME/docs/tools/`).
 
 Create the directory if it does not exist. If the user specifies a different output location, honor that instead.
 
@@ -137,7 +137,7 @@ Use relative filename links (`file:foo.org`) so the references work both in Emac
 
 ## Checklist before delivering
 
-- [ ] `.org` file written under `docs/{project-or-type}/`
+- [ ] `.org` file written under `$HOME/docs/{project-or-type}/`
 - [ ] `#+DATE:` header present with generation date
 - [ ] All factual claims have footnotes
 - [ ] All footnote links point to real files on the correct branch, or to real, reachable URLs
