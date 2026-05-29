@@ -472,8 +472,9 @@
   ;; (corfu-on-exact-match 'insert) ;; Configure handling of exact matches
 
   :bind
-  (:map prog-mode-map
-   ("<tab>" . completion-at-point)
+  (
+   ;; :map prog-mode-map
+   ("C-<tab>" . completion-at-point)
    :map corfu-map
    ("C-n" . corfu-next)
    ("C-p" . corfu-previous)
@@ -486,7 +487,7 @@
   ;;        (eshell-mode . corfu-mode))
   :custom
   ;; `completion-at-point' is often bound to M-TAB.
-  (tab-always-indent 'complete)
+  ;; (tab-always-indent 'complete)
 
   ;; Emacs 30 and newer: Disable Ispell completion function.
   ;; Try `cape-dict' as an alternative.
