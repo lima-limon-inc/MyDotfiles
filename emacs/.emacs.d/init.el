@@ -169,6 +169,8 @@
       (rename-uniquely))))
 (ad-activate 'shell-command)
 
+; Generic Aliases
+(defalias 'set-tab-name 'tab-rename)
 
 
 ; Global keybindings
