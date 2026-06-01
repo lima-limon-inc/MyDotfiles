@@ -46,6 +46,9 @@
 
 (setq org-agenda-files org-directory)
 
+; Leave a newline between headers
+(setq org-blank-before-new-entry '((heading . t) (plain-list-item . auto)))
+
 ; Enforce todo dependencies
 (setq org-enforce-todo-dependencies t)
 
