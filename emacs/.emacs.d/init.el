@@ -1181,3 +1181,7 @@
 
 (use-package subed
   )
+
+(use-package browse-at-remote
+  :bind (("C-c g g" . browse-at-remote)
+         ("C-c g k" . browse-at-remote-kill)))

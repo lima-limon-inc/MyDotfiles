@@ -7,29 +7,10 @@ description: >
   throwaway worktree, writes a .patch to patches/, then destroys the worktree.
 version: 0.1.0
 allowed-tools:
-  - Bash(make:*)
-  - Bash(mkdir:*)
-  - Bash(ls:*)
-  - Bash(cp:*)
-  - Bash(echo:*)
-  - Bash(wc:*)
-  - Bash(date:*)
-  - Bash(git diff:*)
-  - Bash(git diff --cached:*)
-  - Bash(git diff --cached --stat:*)
-  - Bash(git -C * diff:*)
-  - Bash(git -C * status:*)
-  - Bash(git -C * rev-parse:*)
-  - Bash(git add -A:*)
-  - Bash(git add:*)
-  - Bash(git checkout:*)
-  - Bash(git fetch:*)
-  - Bash(git log:*)
-  - Bash(git status:*)
-  - Bash(git rev-parse:*)
-  - Bash(git branch:*)
-  - Bash(git show:*)
-  - Bash(diff:*)
+  # The skill runs entirely in a throwaway worktree (and never pushes), so every
+  # command it issues — git plumbing, cp/mkdir, and the project's open-ended verify
+  # step (cargo/make/npm/pytest/...) — is pre-approved and must not prompt.
+  - Bash
   - Read
   - Edit
   - Edit(**)
@@ -51,7 +32,7 @@ Produce a `.patch` file for the requested change. The user's working tree is nev
 
 - Keep prose terse. No preamble, no recap.
 - Edit inside a throwaway worktree — never the main tree.
-- **Edits inside the worktree (paths under `**/.claude/worktrees/**`) must not prompt for permission.** The worktree is throwaway and removed at the end of the skill — there is no risk to the user's tree, so do not ask. The `allowed-tools` list grants `Edit`, `Write`, `mkdir`, `git checkout`, `git fetch`, etc. for exactly this reason. If the harness still prompts, treat that as a bug to fix in the skill, not a checkpoint to bother the user with.
+- **Edits and shell commands inside the worktree must not prompt for permission.** The worktree is throwaway and removed at the end of the skill — there is no risk to the user's tree, so do not ask. The `allowed-tools` list grants `Edit`, `Write`, and a blanket `Bash` (git plumbing, cp/mkdir, and the project's verify step like `cargo build`) for exactly this reason. If the harness still prompts, treat that as a bug to fix in the skill, not a checkpoint to bother the user with.
 - Never `git push` from the worktree (the throwaway branch isn't meant to be published).
 - `git commit` inside the throwaway worktree is allowed but unnecessary — the stage-mirror flow below produces a clean diff without one.
 - Do not leave the worktree behind.
