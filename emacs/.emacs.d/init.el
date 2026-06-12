@@ -689,6 +689,10 @@
 (use-package embark
   :ensure t
 
+  :init
+  (add-to-list 'evil-emacs-state-modes 'embark-collect-mode)
+  (evil-set-initial-state 'embark-collect-mode 'emacs)
+
   :bind
   (("C-;" . embark-act)         ;; pick some comfortable binding
    ("C-'" . embark-dwim)        ;; good alternative: M-.
