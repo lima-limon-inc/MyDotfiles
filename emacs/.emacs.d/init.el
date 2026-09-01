@@ -169,6 +169,8 @@
       (rename-uniquely))))
 (ad-activate 'shell-command)
 
+; Generic Aliases
+(defalias 'set-tab-name 'tab-rename)
 
 
 ; Global keybindings
@@ -686,6 +688,10 @@
 
 (use-package embark
   :ensure t
+
+  :init
+  (add-to-list 'evil-emacs-state-modes 'embark-collect-mode)
+  (evil-set-initial-state 'embark-collect-mode 'emacs)
 
   :bind
   (("C-;" . embark-act)         ;; pick some comfortable binding
@@ -1206,3 +1212,7 @@
 
 (use-package eldoc-cmake
   :hook (cmake-mode . eldoc-cmake-enable))
+
+(use-package browse-at-remote
+  :bind (("C-c g g" . browse-at-remote)
+         ("C-c g k" . browse-at-remote-kill)))
