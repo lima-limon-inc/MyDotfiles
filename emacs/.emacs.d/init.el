@@ -780,6 +780,18 @@
   :ensure nil
   :custom
   (eglot-ignored-server-capabilities '(:inlayHintProvider))
+  :config
+  (defun toggle-eglot-flymake()
+    (interactive)
+    (if flymake-mode
+        (progn
+          (setq eglot-stay-out-of '(flymake))
+          (flymake-mode 0))
+      (setq eglot-stay-out-of nil)
+      (flymake-mode 1))
+    ;; Restart eglot
+    (call-interactively 'eglot-shutdown)
+    (call-interactively 'eglot))
   :hook (
          (c-mode . eglot-ensure)
          (c++-mode . eglot-ensure)
@@ -992,6 +1004,16 @@
          (rust-mode . eglot-ensure)
          ))
 
+;; Rust mode
+(use-package go-mode
+  :hook (
+         (go-mode . eglot-ensure)
+         (before-save . gofmt-before-save)
+         )
+  )
+
+(use-package go-eldoc)
+
 ;; Solidy
 (use-package solidity-mode
   )
@@ -1165,17 +1187,22 @@
    ("\\.mustache\\'" . web-mode)
    ("\\.djhtml\\'" . web-mode)))
 
-(use-package epa
-  :init
-  (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
-  (evil-set-initial-state 'epa-key-list-mode 'emacs)
-  )
+;; (use-package epa
+;;   :init
+;;   (add-to-list 'evil-emacs-state-modes 'epa-key-list-mode)
+;;   (evil-set-initial-state 'epa-key-list-mode 'emacs)
+;;   )
 
-(use-package epa-file
-  :ensure nil
-  :config
-  (epa-file-enable)
-  )
+;; (use-package epa-file
+;;   :ensure nil
+;;   :config
+;;   (epa-file-enable)
+  ;; )
 
 (use-package subed
   )
+
+(use-package cmake-mode)
+
+(use-package eldoc-cmake
+  :hook (cmake-mode . eldoc-cmake-enable))
